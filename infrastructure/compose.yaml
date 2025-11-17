@@ -1,0 +1,75 @@
+services:
+  kdg-db:
+    image: postgres:17.2-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: 'kdg'
+      POSTGRES_USER: 'kdg'
+      POSTGRES_PASSWORD: 'kdg'
+      # Tell PostgreSQL to use our custom pg_hba.conf after initdb
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - '2345:5432'
+    networks:
+     - backend
+
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./pg_hba.conf:/docker-entrypoint-initdb.d/pg_hba.conf
+
+  app_rabbitmq:
+    image: rabbitmq:3.13.7-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: 'user'
+      RABBITMQ_DEFAULT_PASS: 'password'
+    ports:
+      - "5672:5672" #AMQP
+      - "15672:15672" #MGMT
+    networks:
+      - backend
+    volumes:
+      - ./rabbitmq/data/:/var/lib/rabbitmq/
+      - ./rabbitmq/log/:/var/log/rabbitmq/
+
+  idp_mysql:
+      image: mysql:9.0.1
+      volumes:
+        - ./idp_mysql_data:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: 'root'
+        MYSQL_DATABASE: 'keycloak'
+        MYSQL_USER: 'keycloak'
+        MYSQL_PASSWORD: 'password'
+      ports:
+        - '3307:3306'
+      networks:
+        - kc
+
+  idp_keycloak:
+      image: quay.io/keycloak/keycloak:26.3
+      environment:
+        KEYCLOAK_ADMIN: 'admin'
+        KEYCLOAK_ADMIN_PASSWORD: 'admin'
+        KC_DB: 'mysql'
+        KC_DB_URL_HOST: 'idp_mysql'
+        KC_DB_URL_DATABASE: 'keycloak'
+        KC_DB_USERNAME: 'keycloak'
+        KC_DB_PASSWORD: 'password'
+      command: start-dev
+      ports:
+        - "8180:8080"
+      depends_on:
+        - idp_mysql
+      networks:
+        - kc
+
+volumes:
+  db-data:
+
+networks:
+    kc:
+      name: kc-network
+      driver: bridge
+    backend:
+      name: back-network
+      driver: bridge
