@@ -7,6 +7,7 @@ plugins {
 group = "banditGame"
 version = "0.0.1-SNAPSHOT"
 
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -23,34 +24,31 @@ repositories {
     mavenCentral()
 }
 
+extra["springModulithVersion"] = "1.4.1"
+val springModulithVersion: String by extra
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.modulith:spring-modulith-bom:$springModulithVersion")
+    }
+}
 
 dependencies {
-
-    // Lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-
-    // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    // Database
     runtimeOnly("org.postgresql:postgresql")
-
-    // Keycloak
+    implementation("org.springframework.modulith:spring-modulith-starter-core")
+    implementation("org.springframework.modulith:spring-modulith-core")
     implementation("org.keycloak:keycloak-admin-client:26.0.0")
-
-    // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // rabbitmq
     implementation("org.springframework.boot:spring-boot-starter-amqp")
-
 }
 
 tasks.withType<Test> {
