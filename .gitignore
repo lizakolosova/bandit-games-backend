@@ -42,3 +42,6 @@ bin/
 ### Mac OS ###
 .DS_Store
 .idea/
+/infrastructure/idp_mysql_data/
+/infrastructure/pg_hba.conf/
+/infrastructure/rabbitmq/
