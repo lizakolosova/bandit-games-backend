@@ -1,0 +1,1 @@
+CREATE SCHEMA kdg_platform;
