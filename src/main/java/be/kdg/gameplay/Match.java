@@ -21,7 +21,6 @@ public class Match {
     private LocalDateTime finishedAt;
 
     private PlayerId winnerPlayerId;
-
     private GameState currentState;
 
     public Match(MatchId matchId, GameId gameId, List<PlayerId> players, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, PlayerId winnerPlayerId, GameState currentState) {
@@ -33,6 +32,13 @@ public class Match {
         this.finishedAt = finishedAt;
         this.winnerPlayerId = winnerPlayerId;
         this.currentState = currentState;
+    }
+
+    public Match(MatchId matchId, GameId gameId, List<PlayerId> players) {
+        this.matchId = matchId;
+        this.gameId = gameId;
+        this.players = players;
+        this.status = MatchStatus.PENDING;
     }
 
     public void start(GameState initialState) {

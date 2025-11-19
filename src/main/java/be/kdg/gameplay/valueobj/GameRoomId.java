@@ -1,7 +1,14 @@
 package be.kdg.gameplay.valueobj;
 
-public record GameRoomId(GameRoomId uuid) {
-    public static GameRoomId of(GameRoomId uuid) {
+import be.kdg.common.valueobj.AchievementId;
+
+import java.util.UUID;
+
+public record GameRoomId(UUID uuid) {
+    public static GameRoomId of(UUID uuid) {
         return new GameRoomId(uuid);
+    }
+    public static GameRoomId create() {
+        return new GameRoomId(UUID.randomUUID());
     }
 }
