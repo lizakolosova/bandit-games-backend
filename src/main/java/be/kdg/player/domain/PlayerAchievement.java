@@ -27,5 +27,25 @@ public class PlayerAchievement {
         this.gameId = gameId;
         this.unlockedAt = unlockedAt;
     }
+
+    public PlayerAchievementId getPlayerAchievementId() {
+        return playerAchievementId;
+    }
+
+    public PlayerId getPlayerId() {
+        return playerId;
+    }
+
+    public AchievementId getAchievementId() {
+        return achievementId;
+    }
+
+    public GameId getGameId() {
+        return gameId;
+    }
+
+    public LocalDateTime getUnlockedAt() {
+        return unlockedAt;
+    }
 }
 

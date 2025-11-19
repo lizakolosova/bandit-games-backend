@@ -17,6 +17,7 @@ public class Player {
 
     private final Set<FavouriteGame> favouriteGames = new HashSet<>();
     private final Set<Friend> friends = new HashSet<>();
+    private final Set<PlayerAchievement> achievements = new HashSet<>();
 
     public Player(PlayerId playerId, String username, String email, String pictureUrl) {
         this.playerId = playerId;
@@ -32,8 +33,40 @@ public class Player {
     }
 
     public void addFavouriteGame(UUID gameId) {
-        favouriteGames.add(new FavouriteGame(gameId, LocalDateTime.now()));
+        favouriteGames.add(new FavouriteGame(gameId, LocalDateTime.now(), null, null));
         // we'll have an event here
+    }
+
+    public PlayerId getPlayerId() {
+        return playerId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public Set<FavouriteGame> getFavouriteGames() {
+        return favouriteGames;
+    }
+
+    public Set<Friend> getFriends() {
+        return friends;
+    }
+
+    public Set<PlayerAchievement> getAchievements() {
+        return achievements;
     }
 }
 
