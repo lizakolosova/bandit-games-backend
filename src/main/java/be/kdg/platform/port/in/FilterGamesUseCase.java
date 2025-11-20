@@ -1,0 +1,10 @@
+package be.kdg.platform.port.in;
+
+import be.kdg.platform.domain.Game;
+
+import java.util.List;
+
+public interface FilterGamesUseCase {
+    List<Game> filter(FilterGamesCommand command);
+}
+
