@@ -3,6 +3,7 @@ package be.kdg.platform.adapter.out;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -97,6 +98,10 @@ public class GameJpaEntity {
 
     public int getAverageMinutes() {
         return averageMinutes;
+    }
+
+    public Set<AchievementDefinitionJpaEntity> getAchievements() {
+        return achievements;
     }
 }
 

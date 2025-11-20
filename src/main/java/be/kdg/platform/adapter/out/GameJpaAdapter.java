@@ -2,9 +2,11 @@ package be.kdg.platform.adapter.out;
 
 import be.kdg.common.valueobj.GameId;
 import be.kdg.platform.adapter.out.mapper.GameMapper;
+import be.kdg.platform.adapter.out.mapper.GameWithAchievementsMapper;
 import be.kdg.platform.domain.Game;
 import be.kdg.platform.port.out.AddGamePort;
 import be.kdg.platform.port.out.LoadGamePort;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,9 +22,10 @@ public class GameJpaAdapter implements LoadGamePort, AddGamePort {
     }
 
     @Override
+    @Transactional
     public Optional<Game> loadById(GameId id) {
-        return this.games.findById(id.uuid())
-                .map(GameMapper::toDomain);
+        return games.findById(id.uuid())
+                .map(GameWithAchievementsMapper::toDomain);
     }
 
     @Override

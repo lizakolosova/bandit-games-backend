@@ -50,7 +50,7 @@ public class GameController {
     }
 
     @PostMapping
-    public ResponseEntity<GameDetailsDto> createGame(@RequestBody AddGameRequest request) {
+    public ResponseEntity<GameDto> createGame(@RequestBody AddGameRequest request) {
 
         AddGameCommand command = new AddGameCommand(
                 request.name(),
@@ -65,7 +65,7 @@ public class GameController {
 
         Game game = addGameUseCase.createGame(command);
 
-        return ResponseEntity.ok(GameDetailsDto.toDetailsDto(game));
+        return ResponseEntity.ok(GameDto.toDto(game));
     }
 
     @GetMapping("/filter")
