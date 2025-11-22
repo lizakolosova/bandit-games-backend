@@ -1,5 +1,6 @@
 package be.kdg.gameplay.domain;
 
+import be.kdg.common.exception.MatchException;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.gameplay.domain.valueobj.MatchId;
 import be.kdg.common.valueobj.PlayerId;
@@ -45,7 +46,7 @@ public class Match {
 
     public void updateState() {
         if (status != MatchStatus.IN_PROGRESS)
-            throw new IllegalStateException("Match not active");
+            throw MatchException.notActive();
     }
 
     public void finish(PlayerId winner) {

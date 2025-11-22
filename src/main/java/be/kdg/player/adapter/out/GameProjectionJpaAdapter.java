@@ -1,5 +1,6 @@
 package be.kdg.player.adapter.out;
 
+import be.kdg.common.exception.NotFoundException;
 import be.kdg.player.domain.GameProjection;
 import be.kdg.player.port.out.LoadGameProjectionPort;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class GameProjectionJpaAdapter implements LoadGameProjectionPort {
     @Override
     public GameProjection loadProjection(UUID gameId) {
         var entity = games.findById(gameId)
-                .orElseThrow(() -> new IllegalArgumentException("Game projection not found"));
+                .orElseThrow(() -> NotFoundException.game(gameId));
 
         return new GameProjection(
                 entity.getGameId(),
