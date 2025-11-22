@@ -6,8 +6,9 @@ import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.adapter.out.*;
 import be.kdg.player.domain.Player;
 import be.kdg.player.domain.PlayerAchievement;
-import be.kdg.player.domain.valueobj.FavouriteGame;
+import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.valueobj.Friend;
+import be.kdg.player.domain.valueobj.GameLibraryId;
 
 import java.time.Duration;
 
@@ -22,18 +23,21 @@ public class PlayerJpaMapper {
                 entity.getPictureUrl()
         );
 
-        entity.getFavouriteGames().forEach(f ->
-                domain.getFavouriteGames().add(
-                        new FavouriteGame(
-                                f.getGameId(),
-                                f.getAddedAt(),
-                                f.getLastPlayedAt(),
-                                f.getTotalPlaytimeSeconds() == null
-                                        ? null
-                                        : Duration.ofSeconds(f.getTotalPlaytimeSeconds())
-                        )
-                )
-        );
+        entity.getGameLibraries().forEach(gl -> {
+
+            GameLibrary lib = new GameLibrary(
+                    GameLibraryId.of(gl.getId()),
+                    gl.getGameId(),
+                    gl.getAddedAt(),
+                    gl.getLastPlayedAt(),
+                    gl.getTotalPlaytimeSeconds() == null
+                            ? Duration.ZERO
+                            : Duration.ofSeconds(gl.getTotalPlaytimeSeconds()),
+                    gl.isFavourite()
+            );
+
+            domain.getGameLibraries().add(lib);
+        });
 
         entity.getFriends().forEach(f ->
                 domain.getFriends().add(
@@ -54,34 +58,43 @@ public class PlayerJpaMapper {
         return domain;
     }
 
-    public PlayerJpaEntity toEntity(Player player) {
+    public PlayerJpaEntity toEntity(Player domain) {
 
         PlayerJpaEntity entity = new PlayerJpaEntity(
-                player.getPlayerId().uuid(),
-                player.getUsername(),
-                player.getEmail(),
-                player.getPictureUrl(),
-                player.getCreatedAt()
+                domain.getPlayerId().uuid(),
+                domain.getUsername(),
+                domain.getEmail(),
+                domain.getPictureUrl(),
+                domain.getCreatedAt()
         );
 
-        player.getFavouriteGames().forEach(f ->
-                entity.getFavouriteGames().add(
-                        new FavouriteGameEmbeddable(
-                                f.gameId(),
-                                f.addedAt(),
-                                f.lastPlayedAt(),
-                                f.totalPlaytime() == null ? null : f.totalPlaytime().toSeconds()
-                        )
-                )
-        );
+        domain.getGameLibraries().forEach(gl -> {
 
-        player.getFriends().forEach(f ->
+            GameLibraryJpaEntity jpa = new GameLibraryJpaEntity(
+                    gl.getGameLibraryId().uuid(),
+                    entity,
+                    gl.getGameId()
+            );
+
+            jpa.setAddedAt(gl.getAddedAt());
+            jpa.setLastPlayedAt(gl.getLastPlayedAt());
+            jpa.setTotalPlaytimeSeconds(
+                    gl.getTotalPlaytime() == null
+                            ? 0L
+                            : gl.getTotalPlaytime().getSeconds()
+            );
+            jpa.setFavourite(gl.isFavourite());
+
+            entity.getGameLibraries().add(jpa);
+        });
+
+        domain.getFriends().forEach(f ->
                 entity.getFriends().add(
                         new FriendEmbeddable(f.friendId(), f.since())
                 )
         );
 
-        player.getAchievements().forEach(a -> {
+        domain.getAchievements().forEach(a -> {
             PlayerAchievementJpaEntity achEntity =
                     new PlayerAchievementJpaEntity(
                             a.getPlayerAchievementId().uuid(),

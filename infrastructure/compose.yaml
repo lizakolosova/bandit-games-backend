@@ -32,7 +32,7 @@ services:
       - ./rabbitmq/log/:/var/log/rabbitmq/
 
   idp_mysql:
-      image: mysql:9.0.1
+      image: mysql:8.4
       volumes:
         - ./idp_mysql_data:/var/lib/mysql
       environment:
@@ -48,8 +48,8 @@ services:
   idp_keycloak:
       image: quay.io/keycloak/keycloak:26.3
       environment:
-        KEYCLOAK_ADMIN: 'admin'
-        KEYCLOAK_ADMIN_PASSWORD: 'admin'
+        KC_BOOTSTRAP_ADMIN_USERNAME: 'admin'
+        KC_BOOTSTRAP_ADMIN_PASSWORD: 'admin'
         KC_DB: 'mysql'
         KC_DB_URL_HOST: 'idp_mysql'
         KC_DB_URL_DATABASE: 'keycloak'

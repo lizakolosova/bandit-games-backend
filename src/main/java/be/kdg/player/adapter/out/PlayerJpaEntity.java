@@ -22,13 +22,9 @@ public class PlayerJpaEntity {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "player_favourite_games",
-            schema = "kdg_player",
-            joinColumns = @JoinColumn(name = "player_id")
-    )
-    private Set<FavouriteGameEmbeddable> favouriteGames = new HashSet<>();
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<GameLibraryJpaEntity> gameLibraries = new HashSet<>();
+
 
     @ElementCollection
     @CollectionTable(
@@ -57,7 +53,7 @@ public class PlayerJpaEntity {
     public String getPictureUrl() { return pictureUrl; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 
-    public Set<FavouriteGameEmbeddable> getFavouriteGames() { return favouriteGames; }
+    public Set<GameLibraryJpaEntity> getGameLibraries() { return gameLibraries; }
     public Set<FriendEmbeddable> getFriends() { return friends; }
     public Set<PlayerAchievementJpaEntity> getAchievements() { return achievements; }
 }

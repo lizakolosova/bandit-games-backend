@@ -45,8 +45,8 @@ public class Game {
                                                 String description,
                                                 String howToUnlock) {
 
-        var id = AchievementId.create();
-        var def = new AchievementDefinition(id, name, description, howToUnlock);
+        AchievementId id = AchievementId.create();
+        AchievementDefinition def = new AchievementDefinition(id, name, description, howToUnlock);
 
         achievements.add(def);
         return def;
