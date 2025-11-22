@@ -1,6 +1,5 @@
 package be.kdg.player.domain;
 
-import be.kdg.player.domain.valueobj.FavouriteGame;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 
@@ -15,9 +14,9 @@ public class Player {
     private String pictureUrl;
     private LocalDateTime createdAt;
 
-    private final Set<FavouriteGame> favouriteGames = new HashSet<>();
-    private final Set<Friend> friends = new HashSet<>();
-    private final Set<PlayerAchievement> achievements = new HashSet<>();
+    private Set<GameLibrary> gameLibraries = new HashSet<>();
+    private Set<Friend> friends = new HashSet<>();
+    private Set<PlayerAchievement> achievements = new HashSet<>();
 
     public Player(PlayerId playerId, String username, String email, String pictureUrl) {
         this.playerId = playerId;
@@ -32,9 +31,31 @@ public class Player {
         // we'll have an event here
     }
 
-    public void addFavouriteGame(UUID gameId) {
-        favouriteGames.add(new FavouriteGame(gameId, LocalDateTime.now(), null, null));
+    public GameLibrary addGameToLibrary(UUID gameId) {
+        GameLibrary library = new GameLibrary(gameId);
+        gameLibraries.add(library);
+        return library;
         // we'll have an event here
+    }
+
+    public boolean canPlay(UUID gameId) {
+        return gameLibraries.stream()
+                .anyMatch(f -> f.getGameId().equals(gameId));
+    }
+
+    public void addToFavourites(UUID gameId) {
+        GameLibrary entry = findGameInLibrary(gameId);
+        if (entry == null) {
+            throw new IllegalStateException("Game not in library");
+        }
+        entry.markAsFavourite();
+    }
+
+    public GameLibrary findGameInLibrary(UUID gameId) {
+        return gameLibraries.stream()
+                .filter(g -> g.getGameId().equals(gameId))
+                .findFirst()
+                .orElse(null);
     }
 
     public PlayerId getPlayerId() {
@@ -57,8 +78,8 @@ public class Player {
         return pictureUrl;
     }
 
-    public Set<FavouriteGame> getFavouriteGames() {
-        return favouriteGames;
+    public Set<GameLibrary> getGameLibraries() {
+        return gameLibraries;
     }
 
     public Set<Friend> getFriends() {
