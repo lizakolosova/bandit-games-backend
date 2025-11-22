@@ -7,6 +7,7 @@ import be.kdg.player.adapter.in.response.GameLibraryDto;
 import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
 import be.kdg.player.adapter.in.request.RegisterPlayerRequest;
 import be.kdg.player.adapter.in.response.PlayerDto;
+import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,8 +46,8 @@ public class PlayerController {
 
         RegisterPlayerCommand command =
                 new RegisterPlayerCommand(playerId, username, email);
-        PlayerDto result = registerPlayerUseCase.register(command);
-        return ResponseEntity.ok(result);
+        Player result = registerPlayerUseCase.register(command);
+        return ResponseEntity.ok(new PlayerDto(result.getPlayerId().uuid(), result.getUsername(), result.getEmail(), result.getPictureUrl(), result.getCreatedAt()));
     }
 
     @GetMapping("/library")

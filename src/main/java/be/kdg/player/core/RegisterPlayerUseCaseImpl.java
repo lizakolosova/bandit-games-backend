@@ -24,7 +24,7 @@ public class RegisterPlayerUseCaseImpl implements RegisterPlayerUseCase {
     }
 
     @Override
-    public PlayerDto register(RegisterPlayerCommand command) {
+    public Player register(RegisterPlayerCommand command) {
         PlayerId playerId = PlayerId.of(command.playerId());
 
         Player player = loadPlayerPort.loadById(playerId)
@@ -37,8 +37,8 @@ public class RegisterPlayerUseCaseImpl implements RegisterPlayerUseCase {
 
         updatePlayerPort.update(player);
 
-        return new PlayerDto(
-                player.getPlayerId().uuid(),
+        return new Player(
+                player.getPlayerId(),
                 player.getUsername(),
                 player.getEmail(),
                 player.getPictureUrl(),

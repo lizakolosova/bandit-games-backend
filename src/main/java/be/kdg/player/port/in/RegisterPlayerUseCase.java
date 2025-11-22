@@ -1,10 +1,7 @@
 package be.kdg.player.port.in;
 
-import be.kdg.common.valueobj.PlayerId;
-import be.kdg.player.adapter.in.response.PlayerDto;
-
-import java.time.LocalDateTime;
+import be.kdg.player.domain.Player;
 
 public interface RegisterPlayerUseCase {
-    PlayerDto register(RegisterPlayerCommand command);
+    Player register(RegisterPlayerCommand command);
 }
