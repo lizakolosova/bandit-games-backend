@@ -21,7 +21,7 @@ public class LoadFriendsUseCaseImpl implements LoadFriendsUseCase {
     }
 
     @Override
-    public List<FriendDto> loadFriends(PlayerId playerId) {
+    public List<Player> loadFriends(PlayerId playerId) {
 
         Player player = loadPlayerPort.loadById(playerId).orElseThrow();
 
@@ -30,11 +30,12 @@ public class LoadFriendsUseCaseImpl implements LoadFriendsUseCase {
                     Player friendPlayer =
                             loadPlayerPort.loadById(PlayerId.of(friend.friendId())).orElseThrow();
 
-                    return new FriendDto(
-                            friend.friendId(),
+                    return new Player(
+                            PlayerId.of(friend.friendId()),
                             friendPlayer.getUsername(),
+                            friendPlayer.getEmail(),
                             friendPlayer.getPictureUrl(),
-                            friend.since()
+                            friendPlayer.getCreatedAt()
                     );
                 })
                 .toList();
