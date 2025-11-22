@@ -1,12 +1,13 @@
 package be.kdg.platform.domain;
 
+import be.kdg.common.events.DomainEvent;
+import be.kdg.common.events.GameAddedEvent;
 import be.kdg.common.valueobj.AchievementId;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.platform.domain.valueobj.AchievementDefinitions;
 
 import java.time.LocalDate;
 import java.util.*;
-
 public class Game {
 
     private GameId gameId;
@@ -19,6 +20,22 @@ public class Game {
     private LocalDate createdAt;
     private int averageMinutes;
     private AchievementDefinitions achievements;
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
+    public Game(String name, String rules, String pictureUrl, String gameUrl, String category, String developedBy,
+                LocalDate createdAt, int averageMinutes) {
+        this(GameId.create(), Objects.requireNonNull(name), rules, pictureUrl, gameUrl, category, developedBy, createdAt, averageMinutes);
+        registerEvent(new GameAddedEvent(
+                gameId.uuid(),
+                name,
+                rules,
+                pictureUrl,
+                category,
+                developedBy,
+                createdAt,
+                averageMinutes,
+                achievements == null ? 0 : achievements.items().size()
+        ));
+    }
 
     public Game(GameId gameId,
                 String name,
@@ -126,6 +143,15 @@ public class Game {
 
     public int getAverageMinutes() {
         return averageMinutes;
+    }
+    public List<DomainEvent> pullDomainEvents() {
+        var copy = List.copyOf(domainEvents);
+        domainEvents.clear();
+        return copy;
+    }
+
+    public void registerEvent(DomainEvent event) {
+        domainEvents.add(event);
     }
 }
 
