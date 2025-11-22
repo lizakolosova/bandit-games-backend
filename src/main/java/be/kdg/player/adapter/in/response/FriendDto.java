@@ -6,7 +6,6 @@ import java.util.UUID;
 public record FriendDto(
         UUID friendId,
         String username,
-        String pictureUrl,
-        LocalDateTime since
+        String pictureUrl
 ) {}
 

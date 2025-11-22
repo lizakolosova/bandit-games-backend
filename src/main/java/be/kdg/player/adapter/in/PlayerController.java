@@ -47,7 +47,8 @@ public class PlayerController {
         RegisterPlayerCommand command =
                 new RegisterPlayerCommand(playerId, username, email);
         Player result = registerPlayerUseCase.register(command);
-        return ResponseEntity.ok(new PlayerDto(result.getPlayerId().uuid(), result.getUsername(), result.getEmail(), result.getPictureUrl(), result.getCreatedAt()));
+        return ResponseEntity.ok(new PlayerDto(result.getPlayerId().uuid(), result.getUsername(), result.getEmail(),
+                result.getPictureUrl(), result.getCreatedAt()));
     }
 
     @GetMapping("/library")
@@ -94,6 +95,8 @@ public class PlayerController {
             @AuthenticationPrincipal Jwt jwt
     ) {
         UUID playerId = UUID.fromString(jwt.getSubject());
-        return ResponseEntity.ok(loadFriendsUseCase.loadFriends(PlayerId.of(playerId))); // ask teacher about this
+        List<Player> friends = loadFriendsUseCase.loadFriends(PlayerId.of(playerId));
+        return ResponseEntity.ok(friends.stream().map(friend -> new FriendDto(friend.getPlayerId().uuid(),
+                friend.getUsername(), friend.getPictureUrl())).toList());
     }
 }
