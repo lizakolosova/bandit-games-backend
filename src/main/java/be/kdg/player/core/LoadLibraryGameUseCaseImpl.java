@@ -1,5 +1,6 @@
 package be.kdg.player.core;
 
+import be.kdg.common.exception.NotFoundException;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.adapter.in.response.UnlockedAchievementDto;
 import be.kdg.player.domain.GameLibrary;
@@ -31,7 +32,7 @@ public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
     public LibraryGameDetailsDto loadGame(LoadLibraryGameCommand command) {
 
         Player player = loadPlayerPort.loadById(PlayerId.of(command.playerId()))
-                .orElseThrow();
+                .orElseThrow(()-> NotFoundException.player(command.playerId()));
 
         GameLibrary libraryEntry = player.findGameInLibrary(command.gameId());
 
