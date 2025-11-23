@@ -1,5 +1,6 @@
 package be.kdg.player.domain;
 
+import be.kdg.common.exception.NotFoundException;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 
@@ -54,7 +55,7 @@ public class Player {
     public void addToFavourites(UUID gameId) {
         GameLibrary entry = findGameInLibrary(gameId);
         if (entry == null) {
-            throw new IllegalStateException("Game not in library");
+            throw NotFoundException.game(gameId);
         }
         entry.markAsFavourite();
     }
