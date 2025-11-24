@@ -5,6 +5,9 @@ import be.kdg.player.adapter.in.request.AddGameToLibraryRequest;
 import be.kdg.player.adapter.in.response.FriendDto;
 import be.kdg.player.adapter.in.response.GameLibraryDto;
 import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
+import be.kdg.player.adapter.in.request.RegisterPlayerRequest;
+import be.kdg.player.adapter.in.response.PlayerDto;
+import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,12 +25,30 @@ public class PlayerController {
     private final AddGameToLibraryUseCase addGameToLibraryUseCase;
     private final LoadLibraryGameUseCase loadLibraryGameUseCase;
     private final LoadFriendsUseCase loadFriendsUseCase;
+    private final RegisterPlayerUseCase registerPlayerUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
         this.loadFriendsUseCase = loadFriendsUseCase;
+        this.registerPlayerUseCase = registerPlayerUseCase;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<PlayerDto> registerCurrentPlayer(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody(required = false) RegisterPlayerRequest ignoredBody // kept for future fields
+    ) {
+        UUID playerId = UUID.fromString(jwt.getSubject());
+        String username = jwt.getClaim("preferred_username");
+        String email = jwt.getClaim("email");
+
+        RegisterPlayerCommand command =
+                new RegisterPlayerCommand(playerId, username, email);
+        Player result = registerPlayerUseCase.register(command);
+        return ResponseEntity.ok(new PlayerDto(result.getPlayerId().uuid(), result.getUsername(), result.getEmail(),
+                result.getPictureUrl(), result.getCreatedAt()));
     }
 
     @GetMapping("/library")
@@ -74,6 +95,8 @@ public class PlayerController {
             @AuthenticationPrincipal Jwt jwt
     ) {
         UUID playerId = UUID.fromString(jwt.getSubject());
-        return ResponseEntity.ok(loadFriendsUseCase.loadFriends(PlayerId.of(playerId))); // ask teacher about this
+        List<Player> friends = loadFriendsUseCase.loadFriends(PlayerId.of(playerId));
+        return ResponseEntity.ok(friends.stream().map(friend -> new FriendDto(friend.getPlayerId().uuid(),
+                friend.getUsername(), friend.getPictureUrl())).toList());
     }
 }

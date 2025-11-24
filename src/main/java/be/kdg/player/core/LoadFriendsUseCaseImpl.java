@@ -1,7 +1,7 @@
 package be.kdg.player.core;
 
+import be.kdg.common.exception.NotFoundException;
 import be.kdg.common.valueobj.PlayerId;
-import be.kdg.player.adapter.in.response.FriendDto;
 import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.LoadFriendsUseCase;
 import be.kdg.player.port.out.LoadPlayerPort;
@@ -21,20 +21,21 @@ public class LoadFriendsUseCaseImpl implements LoadFriendsUseCase {
     }
 
     @Override
-    public List<FriendDto> loadFriends(PlayerId playerId) {
+    public List<Player> loadFriends(PlayerId playerId) {
 
-        Player player = loadPlayerPort.loadById(playerId).orElseThrow();
+        Player player = loadPlayerPort.loadById(playerId).orElseThrow(() -> NotFoundException.player(playerId.uuid()));
 
         return player.getFriends().stream()
                 .map(friend -> {
                     Player friendPlayer =
-                            loadPlayerPort.loadById(PlayerId.of(friend.friendId())).orElseThrow();
+                            loadPlayerPort.loadById(PlayerId.of(friend.friendId())).orElseThrow(()-> NotFoundException.player(friend.friendId()));
 
-                    return new FriendDto(
-                            friend.friendId(),
+                    return new Player(
+                            PlayerId.of(friend.friendId()),
                             friendPlayer.getUsername(),
+                            friendPlayer.getEmail(),
                             friendPlayer.getPictureUrl(),
-                            friend.since()
+                            friendPlayer.getCreatedAt()
                     );
                 })
                 .toList();

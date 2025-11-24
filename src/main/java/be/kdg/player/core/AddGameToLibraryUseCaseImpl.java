@@ -1,5 +1,6 @@
 package be.kdg.player.core;
 
+import be.kdg.common.exception.NotFoundException;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.domain.Player;
 import be.kdg.player.domain.GameLibrary;
@@ -29,7 +30,7 @@ public class AddGameToLibraryUseCaseImpl implements AddGameToLibraryUseCase {
         PlayerId playerId = PlayerId.of(command.playerId());
 
         Player player = loadPlayerPort.loadById(playerId)
-                .orElseThrow(() -> new IllegalStateException("Player not found: " + command.playerId()));
+                .orElseThrow(() -> NotFoundException.player(command.playerId()));
 
         GameLibrary library = player.addGameToLibrary(command.gameId());
         updatePlayerPort.update(player);

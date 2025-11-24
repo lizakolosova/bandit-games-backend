@@ -28,6 +28,14 @@ public class Player {
         this.createdAt = LocalDateTime.now();
     }
 
+    public Player(PlayerId playerId, String username, String email, String pictureUrl, LocalDateTime createdAt) {
+        this.playerId = playerId;
+        this.username = username;
+        this.email = email;
+        this.pictureUrl = pictureUrl;
+        this.createdAt = createdAt;
+    }
+
     public void addFriend(UUID friendId) {
         friends.add(new Friend(friendId, LocalDateTime.now()));
         // we'll have an event here
@@ -48,7 +56,7 @@ public class Player {
     public void addToFavourites(UUID gameId) {
         GameLibrary entry = findGameInLibrary(gameId);
         if (entry == null) {
-            throw new IllegalStateException("Game not in library");
+            throw NotFoundException.game(gameId);
         }
         entry.markAsFavourite();
     }

@@ -1,5 +1,6 @@
 package be.kdg.gameplay.domain;
 
+import be.kdg.common.exception.GameRoomException;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.domain.valueobj.GameRoomId;
@@ -44,10 +45,10 @@ public class GameRoom {
 
     public void join(PlayerId player) {
         if (isFull())
-            throw new IllegalStateException("Lobby already has two players.");
+            throw GameRoomException.invite();
 
         if (gameRoomType == GameRoomType.CLOSED && !player.equals(invitedPlayerId))
-            throw new IllegalStateException("This lobby is invite-only");
+            throw GameRoomException.notReady();
 
         this.invitedPlayerId = player;
         updateReadyStatus();
@@ -69,7 +70,7 @@ public class GameRoom {
 
     public Match startMatch() {
         if (status != GameRoomStatus.READY)
-            throw new IllegalStateException("Lobby not ready");
+            throw GameRoomException.notReady();
 
         status = GameRoomStatus.MATCH_STARTED;
 

@@ -49,7 +49,7 @@ public class Match {
 
     public void updateState() {
         if (status != MatchStatus.IN_PROGRESS)
-            throw new IllegalStateException("Match not active");
+            throw MatchException.notActive();
     }
 
     public void finish(PlayerId winner) {
