@@ -8,7 +8,10 @@ import be.kdg.platform.domain.Game;
 import be.kdg.platform.domain.exceptions.GameNotFoundException;
 import be.kdg.platform.port.in.*;
 
+import be.kdg.player.port.in.MarkFavouriteCommand;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

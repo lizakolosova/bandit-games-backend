@@ -26,20 +26,20 @@ public class PlayerController {
     private final LoadLibraryGameUseCase loadLibraryGameUseCase;
     private final LoadFriendsUseCase loadFriendsUseCase;
     private final RegisterPlayerUseCase registerPlayerUseCase;
+    private final MarkFavouriteUseCase markFavouriteUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
         this.loadFriendsUseCase = loadFriendsUseCase;
         this.registerPlayerUseCase = registerPlayerUseCase;
+        this.markFavouriteUseCase = markFavouriteUseCase;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<PlayerDto> registerCurrentPlayer(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestBody(required = false) RegisterPlayerRequest ignoredBody // kept for future fields
-    ) {
+    public ResponseEntity<PlayerDto> registerCurrentPlayer(@AuthenticationPrincipal Jwt jwt,
+                                                           @RequestBody(required = false) RegisterPlayerRequest ignoredBody /*kept for future fields */ ) {
         UUID playerId = UUID.fromString(jwt.getSubject());
         String username = jwt.getClaim("preferred_username");
         String email = jwt.getClaim("email");
@@ -71,32 +71,37 @@ public class PlayerController {
     }
 
     @PostMapping("/library")
-    public ResponseEntity<Void> addGameToLibrary(
-            @RequestBody AddGameToLibraryRequest request, @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<Void> addGameToLibrary(@RequestBody AddGameToLibraryRequest request, @AuthenticationPrincipal Jwt jwt) {
         UUID playerId = UUID.fromString(jwt.getSubject());
-
         AddGameToLibraryCommand command = new AddGameToLibraryCommand(playerId, request.gameId());
         addGameToLibraryUseCase.addGameToLibrary(command);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/library/{gameId}")
-    public ResponseEntity<LibraryGameDetailsDto> loadLibraryGame(
-            @PathVariable UUID gameId,
-            @AuthenticationPrincipal Jwt jwt
-    ) {
+    public ResponseEntity<LibraryGameDetailsDto> loadLibraryGame(@PathVariable UUID gameId, @AuthenticationPrincipal Jwt jwt) {
         UUID playerId = UUID.fromString(jwt.getSubject());
         LoadLibraryGameCommand command = new LoadLibraryGameCommand(playerId, gameId);
         return ResponseEntity.ok(loadLibraryGameUseCase.loadGame(command));
     }
 
     @GetMapping("/friends")
-    public ResponseEntity<List<FriendDto>> loadFriends(
-            @AuthenticationPrincipal Jwt jwt
-    ) {
+    public ResponseEntity<List<FriendDto>> loadFriends(@AuthenticationPrincipal Jwt jwt) {
         UUID playerId = UUID.fromString(jwt.getSubject());
         List<Player> friends = loadFriendsUseCase.loadFriends(PlayerId.of(playerId));
         return ResponseEntity.ok(friends.stream().map(friend -> new FriendDto(friend.getPlayerId().uuid(),
                 friend.getUsername(), friend.getPictureUrl())).toList());
+    }
+
+    @PostMapping("/library/{gameId}/favourite")
+    public ResponseEntity<Void> toggleFavourite(
+            @PathVariable UUID gameId,
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam boolean favourite
+    ) {
+        UUID playerId = UUID.fromString(jwt.getSubject());
+        MarkFavouriteCommand command = new MarkFavouriteCommand(playerId, gameId, favourite);
+        markFavouriteUseCase.markFavourite(command);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,6 +1,5 @@
 package be.kdg.platform.core;
-
-import be.kdg.common.valueobj.GameId;
+import be.kdg.platform.adapter.out.PlatformEventPublisher;
 import be.kdg.platform.domain.Game;
 import be.kdg.platform.port.in.AddGameCommand;
 import be.kdg.platform.port.in.AddGameUseCase;
@@ -11,16 +10,17 @@ import org.springframework.stereotype.Service;
 public class AddGameUseCaseImpl implements AddGameUseCase {
 
     private final AddGamePort addGamePort;
+    private final PlatformEventPublisher eventPublisher;
 
-    public AddGameUseCaseImpl(AddGamePort addGamePort) {
+    public AddGameUseCaseImpl(AddGamePort addGamePort, PlatformEventPublisher eventPublisher) {
         this.addGamePort = addGamePort;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
     public Game createGame(AddGameCommand command) {
 
         Game game = new Game(
-                GameId.create(),
                 command.name(),
                 command.rules(),
                 command.pictureUrl(),
@@ -31,6 +31,7 @@ public class AddGameUseCaseImpl implements AddGameUseCase {
                 command.averageMinutes()
         );
 
+        eventPublisher.publishEvents(game.pullDomainEvents());
         return addGamePort.add(game);
     }
 }
