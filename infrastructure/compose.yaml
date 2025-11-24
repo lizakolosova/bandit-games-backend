@@ -57,7 +57,7 @@ services:
         KC_DB_PASSWORD: 'password'
       command: start-dev --import-realm
       volumes:
-        - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+          - ./keycloak/kdg-team8-realm.json:/opt/keycloak/data/import/kdg-team8-realm.json
       ports:
         - "8180:8080"
       depends_on:
