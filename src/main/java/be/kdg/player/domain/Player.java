@@ -3,6 +3,7 @@ package be.kdg.player.domain;
 import be.kdg.common.events.DomainEvent;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
+import be.kdg.common.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -48,17 +49,20 @@ public class Player {
         // we'll have an event here
     }
 
-    public boolean canPlay(UUID gameId) {
-        return gameLibraries.stream()
-                .anyMatch(f -> f.getGameId().equals(gameId));
-    }
-
-    public void addToFavourites(UUID gameId) {
+    public void markGameAsFavourite(UUID gameId) {
         GameLibrary entry = findGameInLibrary(gameId);
         if (entry == null) {
             throw NotFoundException.game(gameId);
         }
         entry.markAsFavourite();
+    }
+
+    public void unmarkGameAsFavourite(UUID gameId) {
+        GameLibrary entry = findGameInLibrary(gameId);
+        if (entry == null) {
+            throw NotFoundException.game(gameId);
+        }
+        entry.unmarkAsFavourite();
     }
 
     public GameLibrary findGameInLibrary(UUID gameId) {

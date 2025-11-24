@@ -5,6 +5,7 @@ import be.kdg.common.valueobj.GameId;
 import be.kdg.gameplay.domain.valueobj.MatchId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.domain.valueobj.MatchStatus;
+import be.kdg.common.exception.MatchException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
