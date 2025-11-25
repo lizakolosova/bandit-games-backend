@@ -40,7 +40,7 @@ public class Match {
         this.matchId = matchId;
         this.gameId = gameId;
         this.players = players;
-        this.status = MatchStatus.PENDING;
+        this.status = MatchStatus.IN_PROGRESS;
     }
 
     public void start() {

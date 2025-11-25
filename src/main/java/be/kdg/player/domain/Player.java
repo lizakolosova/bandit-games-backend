@@ -4,9 +4,12 @@ import be.kdg.common.events.DomainEvent;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.common.exception.NotFoundException;
+import be.kdg.player.domain.valueobj.ReceiverId;
+import be.kdg.player.domain.valueobj.SenderId;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -37,16 +40,17 @@ public class Player {
         this.createdAt = createdAt;
     }
 
+    public Player() {
+    }
+
     public void addFriend(UUID friendId) {
         friends.add(new Friend(friendId, LocalDateTime.now()));
-        // we'll have an event here
     }
 
     public GameLibrary addGameToLibrary(UUID gameId) {
         GameLibrary library = new GameLibrary(gameId);
         gameLibraries.add(library);
         return library;
-        // we'll have an event here
     }
 
     public void markGameAsFavourite(UUID gameId) {

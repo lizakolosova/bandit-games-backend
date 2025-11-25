@@ -46,5 +46,25 @@ public class FriendshipRequest {
             status = FriendshipStatus.EXPIRED;
         // we'll have an event here
     }
+
+    public FriendshipRequestId getRequestId() {
+        return requestId;
+    }
+
+    public SenderId getSenderId() {
+        return senderId;
+    }
+
+    public ReceiverId getReceiverId() {
+        return receiverId;
+    }
+
+    public FriendshipStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
 

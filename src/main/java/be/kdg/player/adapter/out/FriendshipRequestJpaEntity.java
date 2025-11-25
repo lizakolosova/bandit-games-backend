@@ -13,6 +13,7 @@ public class FriendshipRequestJpaEntity {
     private UUID uuid;
 
     private UUID senderId;
+
     private UUID receiverId;
 
     @Enumerated(EnumType.STRING)
@@ -22,11 +23,7 @@ public class FriendshipRequestJpaEntity {
 
     protected FriendshipRequestJpaEntity() {}
 
-    public FriendshipRequestJpaEntity(UUID uuid,
-                                      UUID senderId,
-                                      UUID receiverId,
-                                      FriendshipStatus status,
-                                      LocalDateTime createdAt) {
+    public FriendshipRequestJpaEntity(UUID uuid, UUID senderId, UUID receiverId, FriendshipStatus status, LocalDateTime createdAt) {
         this.uuid = uuid;
         this.senderId = senderId;
         this.receiverId = receiverId;
@@ -35,9 +32,14 @@ public class FriendshipRequestJpaEntity {
     }
 
     public UUID getUuid() { return uuid; }
-    public UUID getSenderId() { return senderId; }
-    public UUID getReceiverId() { return receiverId; }
     public FriendshipStatus getStatus() { return status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
-}
 
+    public UUID getSenderId() {
+        return senderId;
+    }
+
+    public UUID getReceiverId() {
+        return receiverId;
+    }
+}

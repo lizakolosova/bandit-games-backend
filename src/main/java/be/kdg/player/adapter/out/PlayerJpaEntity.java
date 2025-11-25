@@ -25,7 +25,6 @@ public class PlayerJpaEntity {
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<GameLibraryJpaEntity> gameLibraries = new HashSet<>();
 
-
     @ElementCollection
     @CollectionTable(
             name = "player_friends",

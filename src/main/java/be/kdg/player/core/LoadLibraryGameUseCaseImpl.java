@@ -1,6 +1,7 @@
 package be.kdg.player.core;
 
 import be.kdg.common.exception.NotFoundException;
+import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.adapter.in.response.UnlockedAchievementDto;
 import be.kdg.player.domain.GameLibrary;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
 
     private final LoadPlayerPort loadPlayerPort;
@@ -29,6 +29,7 @@ public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
     }
 
     @Override
+    @Transactional
     public LibraryGameDetailsDto loadGame(LoadLibraryGameCommand command) {
 
         Player player = loadPlayerPort.loadById(PlayerId.of(command.playerId()))
@@ -37,7 +38,7 @@ public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
         GameLibrary libraryEntry = player.findGameInLibrary(command.gameId());
 
         GameProjection projection =
-                loadGameProjectionPort.loadProjection(command.gameId());
+                loadGameProjectionPort.loadProjection(GameId.of(command.gameId()));
 
         var unlockedAchievements = player.getAchievements().stream()
                 .filter(a -> a.getGameId().uuid().equals(command.gameId()))

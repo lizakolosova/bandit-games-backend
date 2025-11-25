@@ -2,6 +2,7 @@ package be.kdg.player.adapter.in;
 
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.adapter.in.request.AddGameToLibraryRequest;
+import be.kdg.player.adapter.in.request.SendFriendRequestDto;
 import be.kdg.player.adapter.in.response.FriendDto;
 import be.kdg.player.adapter.in.response.GameLibraryDto;
 import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
@@ -27,14 +28,16 @@ public class PlayerController {
     private final LoadFriendsUseCase loadFriendsUseCase;
     private final RegisterPlayerUseCase registerPlayerUseCase;
     private final MarkFavouriteUseCase markFavouriteUseCase;
+    private final SendFriendshipRequestUseCase sendFriendshipRequestUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
         this.loadFriendsUseCase = loadFriendsUseCase;
         this.registerPlayerUseCase = registerPlayerUseCase;
         this.markFavouriteUseCase = markFavouriteUseCase;
+        this.sendFriendshipRequestUseCase = sendFriendshipRequestUseCase;
     }
 
     @PostMapping("/register")
@@ -109,6 +112,14 @@ public class PlayerController {
         UUID playerId = UUID.fromString(jwt.getSubject());
         MarkFavouriteCommand command = new MarkFavouriteCommand(playerId, gameId, favourite);
         markFavouriteUseCase.markFavourite(command);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/friends/requests")
+    public ResponseEntity<Void> sendFriendRequest(@AuthenticationPrincipal Jwt jwt, @RequestBody SendFriendRequestDto request) {
+        UUID senderId = UUID.fromString(jwt.getSubject());
+        SendFriendshipRequestCommand command = new SendFriendshipRequestCommand(senderId, request.receiverId());
+        sendFriendshipRequestUseCase.sendRequest(command);
         return ResponseEntity.ok().build();
     }
 }
