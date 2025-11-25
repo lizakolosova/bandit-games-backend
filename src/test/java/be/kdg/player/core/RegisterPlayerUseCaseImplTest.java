@@ -35,7 +35,7 @@ class RegisterPlayerUseCaseImplTest {
     }
 
     @Test
-    void register() {
+    void shouldRegisterPlayer() {
         // Arrange
         UUID uuid = UUID.randomUUID();
         PlayerId playerId = PlayerId.of(uuid);
