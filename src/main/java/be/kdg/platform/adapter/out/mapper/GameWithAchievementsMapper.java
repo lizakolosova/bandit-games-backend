@@ -6,10 +6,9 @@ import be.kdg.platform.adapter.out.GameJpaEntity;
 import be.kdg.platform.adapter.out.AchievementDefinitionJpaEntity;
 import be.kdg.platform.domain.AchievementDefinition;
 import be.kdg.platform.domain.Game;
-import be.kdg.platform.domain.valueobj.AchievementDefinitions;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameWithAchievementsMapper {
 
@@ -27,15 +26,12 @@ public class GameWithAchievementsMapper {
                 entity.getAverageMinutes()
         );
 
-        Map<AchievementId, AchievementDefinition> defs =
+        List<AchievementDefinition> defs =
                 entity.getAchievements().stream()
                         .map(GameWithAchievementsMapper::toDomainAchievement)
-                        .collect(Collectors.toMap(
-                                AchievementDefinition::getAchievementId,
-                                def -> def
-                        ));
+                        .toList();
 
-        game.setAchievements(new AchievementDefinitions(defs));
+        game.setAchievements(new ArrayList<>(defs));
 
         return game;
     }
@@ -64,7 +60,7 @@ public class GameWithAchievementsMapper {
                 game.getAverageMinutes()
         );
 
-        game.getAchievements().items().values().forEach(def -> {
+        game.getAchievements().forEach(def -> {
             AchievementDefinitionJpaEntity jpaDef =
                     toEntityAchievement(def, entity);
             entity.getAchievements().add(jpaDef);

@@ -4,7 +4,6 @@ import be.kdg.common.events.DomainEvent;
 import be.kdg.common.events.GameAddedEvent;
 import be.kdg.common.valueobj.AchievementId;
 import be.kdg.common.valueobj.GameId;
-import be.kdg.platform.domain.valueobj.AchievementDefinitions;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -19,7 +18,7 @@ public class Game {
     private String developedBy;
     private LocalDate createdAt;
     private int averageMinutes;
-    private AchievementDefinitions achievements;
+    private List<AchievementDefinition> achievements;
     private final List<DomainEvent> domainEvents = new ArrayList<>();
     public Game(String name, String rules, String pictureUrl, String gameUrl, String category, String developedBy,
                 LocalDate createdAt, int averageMinutes) {
@@ -33,7 +32,7 @@ public class Game {
                 developedBy,
                 createdAt,
                 averageMinutes,
-                achievements == null ? 0 : achievements.items().size()
+                achievements == null ? 0 : achievements.size()
         ));
     }
 
@@ -56,6 +55,7 @@ public class Game {
         this.developedBy = developedBy;
         this.createdAt = createdAt;
         this.averageMinutes = averageMinutes;
+        this.achievements = new ArrayList<>();
     }
 
     public AchievementDefinition addAchievement(String name,
@@ -129,11 +129,11 @@ public class Game {
         this.createdAt = createdAt;
     }
 
-    public AchievementDefinitions getAchievements() {
+    public List<AchievementDefinition> getAchievements() {
         return achievements;
     }
 
-    public void setAchievements(AchievementDefinitions achievements) {
+    public void setAchievements(List<AchievementDefinition> achievements) {
         this.achievements = achievements;
     }
 
