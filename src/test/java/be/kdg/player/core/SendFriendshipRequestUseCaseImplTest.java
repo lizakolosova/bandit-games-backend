@@ -9,7 +9,7 @@ import be.kdg.player.domain.valueobj.SenderId;
 import be.kdg.player.port.in.SendFriendshipRequestCommand;
 import be.kdg.player.port.out.LoadFriendshipRequestPort;
 import be.kdg.player.port.out.LoadPlayerPort;
-import be.kdg.player.port.out.SaveFriendshipRequestPort;
+import be.kdg.player.port.out.AddFriendshipRequestPort;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +36,7 @@ class SendFriendshipRequestUseCaseImplTest {
     private LoadPlayerPort loadPlayerPort;
 
     @Mock
-    private SaveFriendshipRequestPort saveFriendshipRequestPort;
+    private AddFriendshipRequestPort addFriendshipRequestPort;
 
     @Mock
     private LoadFriendshipRequestPort loadFriendshipRequestPort;
@@ -73,7 +73,7 @@ class SendFriendshipRequestUseCaseImplTest {
         assertEquals(senderId, result.getSenderId().uuid());
         assertEquals(receiverId, result.getReceiverId().uuid());
 
-        verify(saveFriendshipRequestPort).save(any());
+        verify(addFriendshipRequestPort).save(any());
     }
 
 
@@ -94,7 +94,7 @@ class SendFriendshipRequestUseCaseImplTest {
 
         // Assert
         assertThrows(NotFoundException.class, action);
-        verify(saveFriendshipRequestPort, never()).save(any());
+        verify(addFriendshipRequestPort, never()).save(any());
     }
 
     @Test
@@ -117,7 +117,7 @@ class SendFriendshipRequestUseCaseImplTest {
 
         // Assert
         assertThrows(NotFoundException.class, action);
-        verify(saveFriendshipRequestPort, never()).save(any());
+        verify(addFriendshipRequestPort, never()).save(any());
     }
 
     @Test
@@ -143,6 +143,6 @@ class SendFriendshipRequestUseCaseImplTest {
 
         // Assert
         assertThrows(IllegalStateException.class, action);
-        verify(saveFriendshipRequestPort, never()).save(any());
+        verify(addFriendshipRequestPort, never()).save(any());
     }
 }

@@ -5,10 +5,11 @@ import be.kdg.common.valueobj.GameId;
 import be.kdg.player.domain.GameProjection;
 import be.kdg.player.port.out.LoadGameProjectionPort;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-@Component
+@Repository
 public class GameProjectionJpaAdapter implements LoadGameProjectionPort {
 
     private final GameProjectionJpaRepository games;
