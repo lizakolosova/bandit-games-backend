@@ -1,8 +1,9 @@
-package be.kdg.platform.adapter.in.response;
+package be.kdg.platform.adapter.in.request;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public record AddGameRequest(
+public record CreateGameRequest(
         String name,
         String rules,
         String pictureUrl,
@@ -10,5 +11,6 @@ public record AddGameRequest(
         String category,
         String developedBy,
         LocalDate createdAt,
-        int averageMinutes
+        int averageMinutes,
+        List<AchievementDefinitionRequest> achievements
 ) {}

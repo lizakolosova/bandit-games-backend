@@ -9,6 +9,7 @@ import java.util.UUID;
 public class AchievementDefinitionJpaEntity {
 
     @Id
+    @Column(columnDefinition = "UUID")
     private UUID uuid;
 
     @Column(nullable = false)

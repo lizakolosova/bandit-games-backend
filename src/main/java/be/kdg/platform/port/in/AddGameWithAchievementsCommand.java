@@ -1,8 +1,9 @@
 package be.kdg.platform.port.in;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public record AddGameCommand(
+public record AddGameWithAchievementsCommand(
         String name,
         String rules,
         String pictureUrl,
@@ -10,6 +11,7 @@ public record AddGameCommand(
         String category,
         String developedBy,
         LocalDate createdAt,
-        int averageMinutes
+        int averageMinutes,
+        List<AchievementDefinitionCommand> achievements
 ) {}
 

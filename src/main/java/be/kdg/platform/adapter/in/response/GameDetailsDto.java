@@ -20,7 +20,7 @@ public record GameDetailsDto(
     public static GameDetailsDto toDetailsDto(Game game) {
 
         List<AchievementDto> achievementDtos =
-                game.getAchievements().items().values().stream()
+                game.getAchievements().stream()
                         .map(a -> new AchievementDto(
                                 a.getAchievementId().uuid().toString(),
                                 a.getName(),
