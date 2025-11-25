@@ -35,19 +35,13 @@ public class FriendshipRequest {
     }
 
     public void reject() {
-        if (status != FriendshipStatus.PENDING)
-            throw new InvalidRowException("Request already processed.");
+        if (status != FriendshipStatus.PENDING) {
+            throw new IllegalStateException("Only pending friend requests can be rejected.");
+        }
         status = FriendshipStatus.REJECTED;
-        // we'll have an event here
     }
 
-    public void expire() {
-        if (status == FriendshipStatus.PENDING)
-            status = FriendshipStatus.EXPIRED;
-        // we'll have an event here
-    }
-
-    public FriendshipRequestId getRequestId() {
+    public FriendshipRequestId getFriendshipRequestId() {
         return requestId;
     }
 
@@ -66,5 +60,6 @@ public class FriendshipRequest {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-}
 
+
+}

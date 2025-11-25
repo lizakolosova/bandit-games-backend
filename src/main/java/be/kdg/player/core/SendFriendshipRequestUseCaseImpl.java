@@ -9,7 +9,7 @@ import be.kdg.player.port.in.SendFriendshipRequestCommand;
 import be.kdg.player.port.in.SendFriendshipRequestUseCase;
 import be.kdg.player.port.out.LoadFriendshipRequestPort;
 import be.kdg.player.port.out.LoadPlayerPort;
-import be.kdg.player.port.out.SaveFriendshipRequestPort;
+import be.kdg.player.port.out.AddFriendshipRequestPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class SendFriendshipRequestUseCaseImpl implements SendFriendshipRequestUseCase {
 
     private final LoadPlayerPort loadPlayerPort;
-    private final SaveFriendshipRequestPort saveFriendshipRequestPort;
+    private final AddFriendshipRequestPort addFriendshipRequestPort;
     private final LoadFriendshipRequestPort loadFriendshipRequestPort;
 
     public SendFriendshipRequestUseCaseImpl(
             LoadPlayerPort loadPlayerPort,
-            SaveFriendshipRequestPort saveFriendshipRequestPort,
+            AddFriendshipRequestPort addFriendshipRequestPort,
             LoadFriendshipRequestPort loadFriendshipRequestPort
     ) {
         this.loadPlayerPort = loadPlayerPort;
-        this.saveFriendshipRequestPort = saveFriendshipRequestPort;
+        this.addFriendshipRequestPort = addFriendshipRequestPort;
         this.loadFriendshipRequestPort = loadFriendshipRequestPort;
     }
 
@@ -46,7 +46,7 @@ public class SendFriendshipRequestUseCaseImpl implements SendFriendshipRequestUs
                 new SenderId(command.senderId()),
                 new ReceiverId(command.receiverId())
         );
-        saveFriendshipRequestPort.save(request);
+        addFriendshipRequestPort.save(request);
         return request;
     }
 }

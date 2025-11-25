@@ -14,7 +14,6 @@ import java.util.Optional;
 public class PlayerJpaAdapter implements LoadPlayerPort, UpdatePlayerPort {
 
     private final PlayerJpaRepository players;
-    private final PlayerJpaMapper mapper = new PlayerJpaMapper();
 
     public PlayerJpaAdapter(PlayerJpaRepository players) {
         this.players = players;
@@ -24,13 +23,13 @@ public class PlayerJpaAdapter implements LoadPlayerPort, UpdatePlayerPort {
     @Transactional
     public Optional<Player> loadById(PlayerId playerId) {
         return players.findById(playerId.uuid())
-                .map(mapper::toDomain);
+                .map(PlayerJpaMapper::toDomain);
     }
 
     @Override
     @Transactional
     public void update(Player player) {
-        PlayerJpaEntity entity = mapper.toEntity(player);
+        PlayerJpaEntity entity = PlayerJpaMapper.toEntity(player);
         players.save(entity);
     }
 }

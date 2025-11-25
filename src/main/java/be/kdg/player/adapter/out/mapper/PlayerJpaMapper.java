@@ -14,7 +14,7 @@ import java.time.Duration;
 
 public class PlayerJpaMapper {
 
-    public Player toDomain(PlayerJpaEntity entity) {
+    public static Player toDomain(PlayerJpaEntity entity) {
 
         Player domain = new Player(
                 PlayerId.of(entity.getUuid()),
@@ -58,7 +58,7 @@ public class PlayerJpaMapper {
         return domain;
     }
 
-    public PlayerJpaEntity toEntity(Player domain) {
+    public static PlayerJpaEntity toEntity(Player domain) {
 
         PlayerJpaEntity entity = new PlayerJpaEntity(
                 domain.getPlayerId().uuid(),
