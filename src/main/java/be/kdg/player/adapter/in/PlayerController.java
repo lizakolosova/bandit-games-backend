@@ -38,18 +38,25 @@ public class PlayerController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<PlayerDto> registerCurrentPlayer(@AuthenticationPrincipal Jwt jwt,
-                                                           @RequestBody(required = false) RegisterPlayerRequest ignoredBody /*kept for future fields */ ) {
-        UUID playerId = UUID.fromString(jwt.getSubject());
-        String username = jwt.getClaim("preferred_username");
-        String email = jwt.getClaim("email");
+    public ResponseEntity<PlayerDto> registerPlayer(@RequestBody RegisterPlayerRequest request) {
 
+        UUID playerId = UUID.randomUUID();
         RegisterPlayerCommand command =
-                new RegisterPlayerCommand(playerId, username, email);
+                new RegisterPlayerCommand(playerId, request.username(), request.email());
+
         Player result = registerPlayerUseCase.register(command);
-        return ResponseEntity.ok(new PlayerDto(result.getPlayerId().uuid(), result.getUsername(), result.getEmail(),
-                result.getPictureUrl(), result.getCreatedAt()));
+
+        return ResponseEntity
+                .status(201)
+                .body(new PlayerDto(
+                        result.getPlayerId().uuid(),
+                        result.getUsername(),
+                        result.getEmail(),
+                        result.getPictureUrl(),
+                        result.getCreatedAt()
+                ));
     }
+
 
     @GetMapping("/library")
     public ResponseEntity<List<GameLibraryDto>> loadLibrary(@AuthenticationPrincipal Jwt jwt) {
