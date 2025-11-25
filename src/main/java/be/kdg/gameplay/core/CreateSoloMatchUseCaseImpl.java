@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class CreateSoloMatchUseCaseImpl implements CreateSoloMatchUseCase {
 
     private final AddMatchPort addMatchPort;
@@ -25,6 +24,7 @@ public class CreateSoloMatchUseCaseImpl implements CreateSoloMatchUseCase {
     }
 
     @Override
+    @Transactional
     public Match createSoloMatch(CreateSoloMatchCommand command) {
 
         PlayerId human = PlayerId.of(command.playerId());
@@ -34,8 +34,6 @@ public class CreateSoloMatchUseCaseImpl implements CreateSoloMatchUseCase {
                 new GameId(command.gameId()),
                 List.of(human, AIPlayer.AI_PLAYER)
         );
-
-        match.start();
         addMatchPort.add(match);
         return match;
     }

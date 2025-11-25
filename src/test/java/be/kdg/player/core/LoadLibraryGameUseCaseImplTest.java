@@ -1,6 +1,7 @@
 package be.kdg.player.core;
 
 import be.kdg.common.exception.NotFoundException;
+import be.kdg.common.valueobj.GameId;
 import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
 import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.GameProjection;
@@ -65,7 +66,7 @@ class LoadLibraryGameUseCaseImplTest {
         when(projection.getAverageMinutes()).thenReturn(averageMinutes);
         when(projection.getDevelopedBy()).thenReturn(developedBy);
 
-        when(loadGameProjectionPort.loadProjection(gameId)).thenReturn(projection);
+        when(loadGameProjectionPort.loadProjection(GameId.of(gameId))).thenReturn(projection);
 
         Duration totalPlaytime = Duration.ofMinutes(90);
         when(libraryEntry.getAddedAt()).thenReturn(null);
@@ -94,7 +95,7 @@ class LoadLibraryGameUseCaseImplTest {
 
         verify(loadPlayerPort).loadById(any());
         verify(player).findGameInLibrary(gameId);
-        verify(loadGameProjectionPort).loadProjection(gameId);
+        verify(loadGameProjectionPort).loadProjection(GameId.of(gameId));
     }
 
     @Test

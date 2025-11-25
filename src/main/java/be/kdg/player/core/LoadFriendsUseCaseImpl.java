@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Transactional
 public class LoadFriendsUseCaseImpl implements LoadFriendsUseCase {
 
     private final LoadPlayerPort loadPlayerPort;
@@ -21,6 +20,7 @@ public class LoadFriendsUseCaseImpl implements LoadFriendsUseCase {
     }
 
     @Override
+    @Transactional
     public List<Player> loadFriends(PlayerId playerId) {
 
         Player player = loadPlayerPort.loadById(playerId).orElseThrow(() -> NotFoundException.player(playerId.uuid()));
@@ -41,4 +41,3 @@ public class LoadFriendsUseCaseImpl implements LoadFriendsUseCase {
                 .toList();
     }
 }
-
