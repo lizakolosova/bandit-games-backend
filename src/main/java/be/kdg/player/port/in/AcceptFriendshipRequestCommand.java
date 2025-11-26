@@ -4,8 +4,5 @@ import be.kdg.player.domain.valueobj.FriendshipRequestId;
 
 import java.util.UUID;
 
-public record RejectFriendshipRequestCommand(
-        UUID friendshipRequestId,
-        UUID receiverId
-) {}
-
+public record AcceptFriendshipRequestCommand(UUID friendshipRequestId, UUID receiverId) {
+}

@@ -39,6 +39,7 @@ public class SendFriendshipRequestUseCaseImpl implements SendFriendshipRequestUs
         loadPlayerPort.loadById(PlayerId.of(command.receiverId()))
                 .orElseThrow(() -> new NotFoundException("Receiver not found"));
 
+
         if (loadFriendshipRequestPort.existsPending(SenderId.of(command.senderId()), ReceiverId.of(command.receiverId()))) {
             throw new IllegalStateException("Request already exists.");
         }

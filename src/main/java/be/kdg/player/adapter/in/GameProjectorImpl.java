@@ -2,23 +2,26 @@ package be.kdg.player.adapter.in;
 
 import be.kdg.player.adapter.out.GameProjectionJpaEntity;
 import be.kdg.player.adapter.out.GameProjectionJpaRepository;
+import be.kdg.player.domain.GameProjection;
 import be.kdg.player.port.in.GameAddedProjectionCommand;
 import be.kdg.player.port.in.GameProjector;
+import be.kdg.player.port.out.AddGameProjectionPort;
+import be.kdg.player.port.out.LoadGameProjectionPort;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GameProjectorImpl implements GameProjector {
 
-    private final GameProjectionJpaRepository gameProjections;
+    private final AddGameProjectionPort games;
 
-    public GameProjectorImpl(GameProjectionJpaRepository gameProjections) {
-        this.gameProjections = gameProjections;
+    public GameProjectorImpl(AddGameProjectionPort games) {
+        this.games = games;
     }
 
     @Override
     public void project(GameAddedProjectionCommand command) {
 
-        GameProjectionJpaEntity entity = new GameProjectionJpaEntity(
+        GameProjection gameProjection = new GameProjection(
                 command.gameId(),
                 command.name(),
                 command.pictureUrl(),
@@ -29,6 +32,6 @@ public class GameProjectorImpl implements GameProjector {
                 command.developedBy()
         );
 
-        gameProjections.save(entity);
+        games.addGameProjection(gameProjection);
     }
 }
