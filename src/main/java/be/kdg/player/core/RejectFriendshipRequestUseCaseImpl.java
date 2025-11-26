@@ -1,6 +1,7 @@
 package be.kdg.player.core;
 
 import be.kdg.player.domain.FriendshipRequest;
+import be.kdg.player.domain.valueobj.FriendshipRequestId;
 import be.kdg.player.port.in.RejectFriendshipRequestCommand;
 import be.kdg.player.port.in.RejectFriendshipRequestUseCase;
 import be.kdg.player.port.out.LoadFriendshipRequestPort;
@@ -23,14 +24,13 @@ public class RejectFriendshipRequestUseCaseImpl implements RejectFriendshipReque
     @Transactional
     public FriendshipRequest reject(RejectFriendshipRequestCommand command) {
 
-        FriendshipRequest friendshipRequest = loadFriendshipRequestPort.load(command.friendshipRequestId());
+        FriendshipRequest friendshipRequest = loadFriendshipRequestPort.load(FriendshipRequestId.of(command.friendshipRequestId()));
 
         if (!friendshipRequest.getReceiverId().uuid().equals(command.receiverId())) {
             throw new IllegalStateException("Only the receiver can reject the friendship.");
         }
 
         friendshipRequest.reject();
-
         return UpdateFriendshipRequestPort.update(friendshipRequest);
     }
 }
