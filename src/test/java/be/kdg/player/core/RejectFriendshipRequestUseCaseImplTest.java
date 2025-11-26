@@ -61,7 +61,7 @@ class RejectFriendshipRequestUseCaseImplTest {
         when(updatePort.update(friendshipRequest)).thenReturn(friendshipRequest);
 
         var command = new RejectFriendshipRequestCommand(
-                requestId,
+                requestId.uuid(),
                 receiver.uuid()
         );
 
@@ -93,7 +93,7 @@ class RejectFriendshipRequestUseCaseImplTest {
         when(loadPort.load(requestId)).thenReturn(friendshipRequest);
 
         RejectFriendshipRequestCommand command = new RejectFriendshipRequestCommand(
-                requestId,
+                requestId.uuid(),
                 wrongReceiver.uuid()
         );
 
@@ -123,7 +123,7 @@ class RejectFriendshipRequestUseCaseImplTest {
         when(loadPort.load(requestId)).thenReturn(friendshipRequest);
 
         var command = new RejectFriendshipRequestCommand(
-                requestId,
+                requestId.uuid(),
                 receiver.uuid()
         );
 
@@ -145,7 +145,7 @@ class RejectFriendshipRequestUseCaseImplTest {
                 .thenThrow(new IllegalArgumentException("Friendship request not found"));
 
         RejectFriendshipRequestCommand command = new RejectFriendshipRequestCommand(
-                requestId,
+                requestId.uuid(),
                 receiverId.uuid()
         );
 
