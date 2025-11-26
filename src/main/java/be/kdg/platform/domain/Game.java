@@ -64,7 +64,6 @@ public class Game {
 
         AchievementId id = AchievementId.create();
         AchievementDefinition def = new AchievementDefinition(id, name, description, howToUnlock);
-
         achievements.add(def);
         return def;
     }
@@ -144,6 +143,7 @@ public class Game {
     public int getAverageMinutes() {
         return averageMinutes;
     }
+
     public List<DomainEvent> pullDomainEvents() {
         var copy = List.copyOf(domainEvents);
         domainEvents.clear();
