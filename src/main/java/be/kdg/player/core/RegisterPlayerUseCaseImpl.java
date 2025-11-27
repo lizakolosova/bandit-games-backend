@@ -13,36 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RegisterPlayerUseCaseImpl implements RegisterPlayerUseCase {
 
-    private final LoadPlayerPort loadPlayerPort;
     private final UpdatePlayerPort updatePlayerPort;
 
-    public RegisterPlayerUseCaseImpl(LoadPlayerPort loadPlayerPort,
-                                     UpdatePlayerPort updatePlayerPort) {
-        this.loadPlayerPort = loadPlayerPort;
+    public RegisterPlayerUseCaseImpl(UpdatePlayerPort updatePlayerPort) {
         this.updatePlayerPort = updatePlayerPort;
     }
 
     @Override
     @Transactional
     public Player register(RegisterPlayerCommand command) {
-        PlayerId playerId = PlayerId.of(command.playerId());
-
-        Player player = loadPlayerPort.loadById(playerId)
-                .orElseGet(() -> new Player(
-                        playerId,
-                        command.username(),
-                        command.email(),
-                        null
-                ));
+        Player player = new Player(command.username(), command.email(), null);
 
         updatePlayerPort.update(player);
 
-        return new Player(
-                player.getPlayerId(),
-                player.getUsername(),
-                player.getEmail(),
-                player.getPictureUrl(),
-                player.getCreatedAt()
-        );
+        return new Player(player.getPlayerId(), player.getUsername(), player.getEmail(),
+                player.getPictureUrl(), player.getCreatedAt());
     }
 }

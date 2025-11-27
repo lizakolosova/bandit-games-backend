@@ -23,7 +23,6 @@ public class Match {
     private LocalDateTime finishedAt;
 
     private PlayerId winnerPlayerId;
-    private final List<DomainEvent> domainEvents = new ArrayList<>();
 
 
     public Match(MatchId matchId, GameId gameId, List<PlayerId> players, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, PlayerId winnerPlayerId) {
@@ -41,22 +40,6 @@ public class Match {
         this.gameId = gameId;
         this.players = players;
         this.status = MatchStatus.IN_PROGRESS;
-    }
-
-    public void start() {
-        this.status = MatchStatus.IN_PROGRESS;
-        this.startedAt = LocalDateTime.now();
-    }
-
-    public void updateState() {
-        if (status != MatchStatus.IN_PROGRESS)
-            throw MatchException.notActive();
-    }
-
-    public void finish(PlayerId winner) {
-        this.status = MatchStatus.FINISHED;
-        this.winnerPlayerId = winner;
-        this.finishedAt = LocalDateTime.now();
     }
 
     public MatchId getMatchId() {
