@@ -42,10 +42,6 @@ public class GameRoom {
         this(LocalDateTime.now(), GameRoomId.create(), gameId,  hostPlayerId, invitedPlayerId, gameRoomType, GameRoomStatus.READY);
     }
 
-    public void invite(PlayerId invited) {
-        this.invitedPlayerId = invited;
-        updateReadyStatus();
-    }
 
     public void join(PlayerId player) {
         if (isFull())
@@ -55,17 +51,10 @@ public class GameRoom {
             throw GameRoomException.notReady();
 
         this.invitedPlayerId = player;
-        updateReadyStatus();
     }
 
     private boolean isFull() {
         return invitedPlayerId != null;
-    }
-
-    private void updateReadyStatus() {
-        if (isFull()) {
-            status = GameRoomStatus.READY;
-        }
     }
 
     public Match startMatch() {
