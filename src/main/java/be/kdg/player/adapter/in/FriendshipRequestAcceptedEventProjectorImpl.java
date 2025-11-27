@@ -8,9 +8,9 @@ import be.kdg.player.port.in.FriendshipRequestAcceptedProjector;
 import be.kdg.player.port.out.LoadPlayerPort;
 import be.kdg.player.port.out.UpdatePlayerPort;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class FriendshipRequestAcceptedEventProjectorImpl implements FriendshipRequestAcceptedProjector {
 
     private final LoadPlayerPort loadPlayerPort;

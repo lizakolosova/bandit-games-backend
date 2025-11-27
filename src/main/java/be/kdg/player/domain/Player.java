@@ -24,12 +24,8 @@ public class Player {
     private Set<PlayerAchievement> achievements = new HashSet<>();
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
-    public Player(PlayerId playerId, String username, String email, String pictureUrl) {
-        this.playerId = playerId;
-        this.username = username;
-        this.email = email;
-        this.pictureUrl = pictureUrl;
-        this.createdAt = LocalDateTime.now();
+    public Player(String username, String email, String pictureUrl) {
+        this(PlayerId.create(), username, email, pictureUrl, LocalDateTime.now());
     }
 
     public Player(PlayerId playerId, String username, String email, String pictureUrl, LocalDateTime createdAt) {
@@ -38,6 +34,13 @@ public class Player {
         this.email = email;
         this.pictureUrl = pictureUrl;
         this.createdAt = createdAt;
+    }
+
+    public Player(PlayerId playerId, String username, String email, String pictureUrl) {
+        this.playerId = playerId;
+        this.username = username;
+        this.email = email;
+        this.pictureUrl = pictureUrl;
     }
 
     public Player() {
@@ -74,6 +77,16 @@ public class Player {
                 .filter(g -> g.getGameId().equals(gameId))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<DomainEvent> pullDomainEvents() {
+        var copy = List.copyOf(domainEvents);
+        domainEvents.clear();
+        return copy;
+    }
+
+    public void registerEvent(DomainEvent event) {
+        domainEvents.add(event);
     }
 
     public PlayerId getPlayerId() {

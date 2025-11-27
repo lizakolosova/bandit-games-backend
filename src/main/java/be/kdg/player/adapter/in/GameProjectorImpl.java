@@ -1,15 +1,12 @@
 package be.kdg.player.adapter.in;
 
-import be.kdg.player.adapter.out.GameProjectionJpaEntity;
-import be.kdg.player.adapter.out.GameProjectionJpaRepository;
 import be.kdg.player.domain.GameProjection;
 import be.kdg.player.port.in.GameAddedProjectionCommand;
 import be.kdg.player.port.in.GameProjector;
 import be.kdg.player.port.out.AddGameProjectionPort;
-import be.kdg.player.port.out.LoadGameProjectionPort;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class GameProjectorImpl implements GameProjector {
 
     private final AddGameProjectionPort games;

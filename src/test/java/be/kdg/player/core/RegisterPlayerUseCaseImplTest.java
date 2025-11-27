@@ -1,6 +1,5 @@
 package be.kdg.player.core;
 
-import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.RegisterPlayerCommand;
 import be.kdg.player.port.out.LoadPlayerPort;
@@ -13,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -22,28 +20,20 @@ import static org.mockito.Mockito.*;
 class RegisterPlayerUseCaseImplTest {
 
     @Mock
-    private LoadPlayerPort loadPlayerPort;
-
-    @Mock
     private UpdatePlayerPort updatePlayerPort;
 
     private RegisterPlayerUseCaseImpl useCase;
 
     @BeforeEach
     void setUp() {
-        useCase = new RegisterPlayerUseCaseImpl(loadPlayerPort, updatePlayerPort);
+        useCase = new RegisterPlayerUseCaseImpl(updatePlayerPort);
     }
 
     @Test
     void shouldRegisterPlayer() {
         // Arrange
-        UUID uuid = UUID.randomUUID();
-        PlayerId playerId = PlayerId.of(uuid);
         RegisterPlayerCommand command =
-                new RegisterPlayerCommand(uuid, "geetika", "geetika@example.com");
-
-        // no player yet
-        when(loadPlayerPort.loadById(playerId)).thenReturn(Optional.empty());
+                new RegisterPlayerCommand("geetika", "geetika@example.com");
 
         // Act
         Player result = useCase.register(command);
@@ -53,7 +43,7 @@ class RegisterPlayerUseCaseImplTest {
         verify(updatePlayerPort).update(captor.capture());
 
         Player saved = captor.getValue();
-        assertThat(saved.getPlayerId()).isEqualTo(playerId);
+        assertThat(saved.getPlayerId()).isEqualTo(result.getPlayerId());
         assertThat(saved.getUsername()).isEqualTo("geetika");
         assertThat(saved.getEmail()).isEqualTo("geetika@example.com");
         assertThat(saved.getPictureUrl()).isNull(); // from use case
@@ -62,8 +52,5 @@ class RegisterPlayerUseCaseImplTest {
         assertThat(result.getPlayerId()).isEqualTo(saved.getPlayerId());
         assertThat(result.getUsername()).isEqualTo(saved.getUsername());
         assertThat(result.getEmail()).isEqualTo(saved.getEmail());
-
-        // load was called once
-        verify(loadPlayerPort).loadById(playerId);
     }
 }
