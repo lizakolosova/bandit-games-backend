@@ -1,4 +1,26 @@
 services:
+  backend:
+    image: registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://kdg-db:5432/kdg
+      SPRING_DATASOURCE_USERNAME: kdg
+      SPRING_DATASOURCE_PASSWORD: kdg
+      SPRING_RABBITMQ_HOST: app_rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: user
+      SPRING_RABBITMQ_PASSWORD: password
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://idp_keycloak:8080/realms/og-realm
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kdg-db
+      - app_rabbitmq
+      - idp_keycloak
+    networks:
+      - backend
+      - kc
+
   kdg-db:
     image: postgres:17.2-alpine
     restart: always
