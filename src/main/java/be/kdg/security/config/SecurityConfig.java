@@ -26,7 +26,8 @@ public class SecurityConfig {
     public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
         http
                 .securityMatcher(
-                        "/api/upload/**" // example from my project
+                        "/api/players/register",
+                        "/api/games"
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())

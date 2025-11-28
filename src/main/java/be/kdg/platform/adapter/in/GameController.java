@@ -1,7 +1,6 @@
 package be.kdg.platform.adapter.in;
 
-import be.kdg.platform.adapter.in.response.AddGameRequest;
-import be.kdg.platform.adapter.in.response.FilterGameDto;
+import be.kdg.platform.adapter.in.request.CreateGameRequest;
 import be.kdg.platform.adapter.in.response.GameDetailsDto;
 import be.kdg.platform.adapter.in.response.GameDto;
 import be.kdg.platform.domain.Game;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -21,14 +19,12 @@ public class GameController {
 
     private final FindAllGamesPort findAllGamesPort;
     private final ViewGameUseCase viewGameUseCase;
-    private final AddGameUseCase addGameUseCase;
-    private final FilterGamesUseCase filterGamesUseCase;
+    private final AddGameWithAchievementsUseCase addGameWithAchievementsUseCase;
 
-    public GameController(FindAllGamesPort findAllGamesPort, ViewGameUseCase viewGameUseCase, AddGameUseCase addGameUseCase, FilterGamesUseCase filterGamesUseCase) {
+    public GameController(FindAllGamesPort findAllGamesPort, ViewGameUseCase viewGameUseCase, AddGameWithAchievementsUseCase addGameWithAchievementsUseCase) {
         this.findAllGamesPort = findAllGamesPort;
         this.viewGameUseCase = viewGameUseCase;
-        this.addGameUseCase = addGameUseCase;
-        this.filterGamesUseCase = filterGamesUseCase;
+        this.addGameWithAchievementsUseCase = addGameWithAchievementsUseCase;
     }
 
     @GetMapping
@@ -50,9 +46,9 @@ public class GameController {
     }
 
     @PostMapping
-    public ResponseEntity<GameDto> createGame(@RequestBody AddGameRequest request) {
+    public ResponseEntity<GameDto> create(@RequestBody CreateGameRequest request) {
 
-        AddGameCommand command = new AddGameCommand(
+        AddGameWithAchievementsCommand command = new AddGameWithAchievementsCommand(
                 request.name(),
                 request.rules(),
                 request.pictureUrl(),
@@ -60,31 +56,14 @@ public class GameController {
                 request.category(),
                 request.developedBy(),
                 request.createdAt(),
-                request.averageMinutes()
+                request.averageMinutes(),
+                request.achievements().stream()
+                        .map(a -> new AchievementDefinitionCommand(a.name(), a.description(), a.howToUnlock()))
+                        .toList()
         );
 
-        Game game = addGameUseCase.createGame(command);
+        Game game = addGameWithAchievementsUseCase.create(command);
 
         return ResponseEntity.ok(GameDto.toDto(game));
-    }
-
-    @GetMapping("/filter")
-    public ResponseEntity<List<FilterGameDto>> filterGames(
-            @RequestParam Optional<String> category
-    ) {
-
-        FilterGamesCommand command = new FilterGamesCommand(category);
-
-        List<FilterGameDto> games = filterGamesUseCase.filter(command).stream()
-                .map(game -> new FilterGameDto(
-                        game.getGameId().uuid().toString(),
-                        game.getName(),
-                        game.getPictureUrl(),
-                        game.getCategory(),
-                        game.getAverageMinutes()
-                ))
-                .toList();
-
-        return ResponseEntity.ok(games);
     }
 }

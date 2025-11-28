@@ -36,9 +36,9 @@ public class GameJpaAdapter implements LoadGamePort, AddGamePort {
     }
 
     @Override
+    @Transactional
     public Game add(Game game) {
-        GameJpaEntity entity = GameMapper.toEntity(game);
-        GameJpaEntity saved = games.save(entity);
-        return GameMapper.toDomain(saved);
+        return GameWithAchievementsMapper.toDomain(games
+                .save(GameWithAchievementsMapper.toEntity(game)));
     }
 }

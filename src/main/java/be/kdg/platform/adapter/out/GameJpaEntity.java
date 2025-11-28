@@ -3,10 +3,7 @@ package be.kdg.platform.adapter.out;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "games", schema = "kdg_platform")
@@ -38,8 +35,8 @@ public class GameJpaEntity {
 
     private int averageMinutes;
 
-    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
-    private Set<AchievementDefinitionJpaEntity> achievements = new HashSet<>();
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<AchievementDefinitionJpaEntity> achievements = new ArrayList<>();
 
     public GameJpaEntity() {
     }
@@ -100,7 +97,7 @@ public class GameJpaEntity {
         return averageMinutes;
     }
 
-    public Set<AchievementDefinitionJpaEntity> getAchievements() {
+    public List<AchievementDefinitionJpaEntity> getAchievements() {
         return achievements;
     }
 }
