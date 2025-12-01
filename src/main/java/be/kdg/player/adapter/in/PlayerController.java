@@ -47,9 +47,8 @@ public class PlayerController {
     @PostMapping("/register")
     public ResponseEntity<PlayerDto> registerPlayer(@RequestBody RegisterPlayerRequest request) {
 
-        UUID playerId = UUID.randomUUID();
         RegisterPlayerCommand command =
-                new RegisterPlayerCommand(playerId, request.username(), request.email());
+                new RegisterPlayerCommand(request.username(), request.email());
 
         Player result = registerPlayerUseCase.register(command);
 
