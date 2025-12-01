@@ -58,8 +58,8 @@ class AcceptFriendshipUseCaseImplIntegrationTest {
         var senderId = PlayerId.create();
         var receiverId = PlayerId.create();
 
-        var sender = new Player(senderId, "alice", "alice@gmail.com", "pic1.png");
-        var receiver = new Player(receiverId, "bob", "bob@gmail.com", "pic2.png");
+        var sender = new Player(senderId, "alice", "alice@gmail.com", "pic1.png", LocalDateTime.now());
+        var receiver = new Player(receiverId, "bob", "bob@gmail.com", "pic2.png", LocalDateTime.now());
 
         players.save(PlayerJpaMapper.toEntity(sender));
         players.save(PlayerJpaMapper.toEntity(receiver));

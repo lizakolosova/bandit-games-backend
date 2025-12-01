@@ -1,6 +1,7 @@
 package be.kdg.player.domain;
 
 import be.kdg.common.events.DomainEvent;
+import be.kdg.common.events.FriendRemovedEvent;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.common.exception.NotFoundException;
@@ -36,19 +37,21 @@ public class Player {
         this.createdAt = createdAt;
     }
 
-    public Player(PlayerId playerId, String username, String email, String pictureUrl) {
-        this.playerId = playerId;
-        this.username = username;
-        this.email = email;
-        this.pictureUrl = pictureUrl;
-    }
-
     public Player() {
     }
 
     public void addFriend(UUID friendId) {
         friends.add(new Friend(friendId, LocalDateTime.now()));
     }
+
+    public void removeFriend(UUID friendId) {
+        boolean removed = friends.removeIf(f -> f.friendId().equals(friendId));
+        if (!removed) {
+            throw NotFoundException.player(friendId);
+        }
+        registerEvent(new FriendRemovedEvent(this.playerId.uuid(), friendId));
+    }
+
 
     public GameLibrary addGameToLibrary(UUID gameId) {
         GameLibrary library = new GameLibrary(gameId);
