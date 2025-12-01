@@ -3,6 +3,7 @@ package be.kdg;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.platform.adapter.out.AchievementDefinitionJpaRepository;
 import be.kdg.platform.adapter.out.GameJpaRepository;
+import be.kdg.player.adapter.out.PlayerJpaRepository;
 import be.kdg.player.domain.Player;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class TestHelper {
     private GameJpaRepository games;
     @Autowired
     private AchievementDefinitionJpaRepository achievements;
+    @Autowired
+    private PlayerJpaRepository players;
     @Autowired
     private  DataSource dataSource;
 
@@ -39,6 +42,7 @@ public class TestHelper {
     public void cleanUp() {
         games.deleteAll();
         achievements.deleteAll();
+        players.deleteAll();
     }
 
     public Player createDummyPlayer(UUID id) {
