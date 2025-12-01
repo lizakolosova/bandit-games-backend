@@ -23,16 +23,8 @@ public class GameProjectionJpaAdapter implements LoadGameProjectionPort, AddGame
         GameProjectionJpaEntity entity = games.findById(gameId.uuid())
                 .orElseThrow(() -> NotFoundException.game(gameId.uuid()));
 
-        return new GameProjection(
-                entity.getGameId(),
-                entity.getName(),
-                entity.getPictureUrl(),
-                entity.getCategory(),
-                entity.getRules(),
-                entity.getAchievementCount(),
-                entity.getAverageMinutes(),
-                entity.getDevelopedBy()
-        );
+        return new GameProjection(entity.getGameId(), entity.getName(), entity.getPictureUrl(), entity.getCategory(),
+                entity.getRules(), entity.getAchievementCount(), entity.getAverageMinutes(), entity.getDevelopedBy());
     }
     @Override
     public void addGameProjection(GameProjection gameProjection) {

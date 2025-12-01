@@ -25,14 +25,10 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
         http
-                .securityMatcher(
-                        "/api/players/register",
-                        "/api/games"
-                )
+                .securityMatcher("/api/players/register", "/api/games")
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().permitAll()
                 );
         return http.build();
@@ -40,12 +36,13 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain securedEndpoints(HttpSecurity http) throws Exception {
+    public SecurityFilterChain allEndpoints(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()   // 👈 WebSockets are open
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

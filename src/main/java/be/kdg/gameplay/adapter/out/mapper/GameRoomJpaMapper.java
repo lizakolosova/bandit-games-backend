@@ -16,7 +16,9 @@ public class GameRoomJpaMapper {
                 PlayerId.of(entity.getHostPlayerId()),
                 entity.getInvitedPlayerId() == null ? null : PlayerId.of(entity.getInvitedPlayerId()),
                 entity.getGameRoomType(),
-                entity.getStatus()
+                entity.getStatus(),
+                entity.getInvitationStatus()
+
         );
     }
 
@@ -29,7 +31,8 @@ public class GameRoomJpaMapper {
                 domain.getInvitedPlayerId() == null ? null : domain.getInvitedPlayerId().uuid(),
                 domain.getGameRoomType(),
                 domain.getStatus(),
-                domain.getCreatedAt()
+                domain.getCreatedAt(),
+                domain.getInvitationStatus()
         );
     }
 }

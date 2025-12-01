@@ -7,6 +7,7 @@ import be.kdg.player.adapter.in.response.UnlockedAchievementDto;
 import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.Player;
 import be.kdg.player.domain.GameProjection;
+import be.kdg.player.domain.PlayerAchievement;
 import be.kdg.player.port.in.LoadLibraryGameCommand;
 import be.kdg.player.port.in.LoadLibraryGameUseCase;
 import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
@@ -15,6 +16,8 @@ import be.kdg.player.port.out.LoadGameProjectionPort;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
@@ -40,7 +43,7 @@ public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
         GameProjection projection =
                 loadGameProjectionPort.loadProjection(GameId.of(command.gameId()));
 
-        var unlockedAchievements = player.getAchievements().stream()
+        List<UnlockedAchievementDto> unlockedAchievements = player.getAchievements().stream()
                 .filter(a -> a.getGameId().uuid().equals(command.gameId()))
                 .map(a -> new UnlockedAchievementDto(
                         a.getAchievementId().toString(),   // TODO replace with real title

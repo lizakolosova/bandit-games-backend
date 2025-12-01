@@ -50,13 +50,8 @@ public class PlayerController {
 
         return ResponseEntity
                 .status(201)
-                .body(new PlayerDto(
-                        result.getPlayerId().uuid(),
-                        result.getUsername(),
-                        result.getEmail(),
-                        result.getPictureUrl(),
-                        result.getCreatedAt()
-                ));
+                .body(new PlayerDto(result.getPlayerId().uuid(), result.getUsername(), result.getEmail(), result.getPictureUrl(),
+                        result.getCreatedAt()));
     }
 
 
@@ -67,13 +62,8 @@ public class PlayerController {
 
         List<GameLibraryDto> result = loadGameLibraryUseCase.loadLibrary(query)
                 .stream()
-                .map(gl -> new GameLibraryDto(
-                        gl.getGameId(),
-                        gl.getAddedAt(),
-                        gl.getLastPlayedAt(),
-                        gl.getTotalPlaytime() == null ? 0 : gl.getTotalPlaytime().toMinutes(),
-                        gl.isFavourite()
-                ))
+                .map(gl -> new GameLibraryDto(gl.getGameId(), gl.getAddedAt(), gl.getLastPlayedAt(),
+                        gl.getTotalPlaytime() == null ? 0 : gl.getTotalPlaytime().toMinutes(), gl.isFavourite()))
                 .toList();
 
         return ResponseEntity.ok(result);
@@ -103,11 +93,8 @@ public class PlayerController {
     }
 
     @PostMapping("/library/{gameId}/favourite")
-    public ResponseEntity<Void> toggleFavourite(
-            @PathVariable UUID gameId,
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestParam boolean favourite
-    ) {
+    public ResponseEntity<Void> toggleFavourite(@PathVariable UUID gameId, @AuthenticationPrincipal Jwt jwt,
+                                                @RequestParam boolean favourite) {
         UUID playerId = UUID.fromString(jwt.getSubject());
         MarkFavouriteCommand command = new MarkFavouriteCommand(playerId, gameId, favourite);
         markFavouriteUseCase.markFavourite(command);

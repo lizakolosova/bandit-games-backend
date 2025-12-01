@@ -26,21 +26,11 @@ public class MatchController {
     }
 
     @PostMapping("/matches/solo")
-    public ResponseEntity<SoloMatchDto> createSoloMatch(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestBody SoloMatchRequest request
-    ) {
+    public ResponseEntity<SoloMatchDto> createSoloMatch(@AuthenticationPrincipal Jwt jwt, @RequestBody SoloMatchRequest request) {
         UUID playerId = UUID.fromString(jwt.getSubject());
-
-        CreateSoloMatchCommand command =
-                new CreateSoloMatchCommand(playerId, request.gameId());
-
+        CreateSoloMatchCommand command = new CreateSoloMatchCommand(playerId, request.gameId());
         Match match = createSoloMatchUseCase.createSoloMatch(command);
 
-        return ResponseEntity.ok(new SoloMatchDto(
-                match.getMatchId().uuid(),
-                match.getGameId().uuid(),
-                match.getStatus().toString()
-        ));
+        return ResponseEntity.ok(new SoloMatchDto(match.getMatchId().uuid(), match.getGameId().uuid(), match.getStatus().toString()));
     }
 }
