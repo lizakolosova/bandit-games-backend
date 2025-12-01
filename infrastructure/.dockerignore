@@ -1,0 +1,22 @@
+# Build artifacts
+build/
+.gradle/
+bin/
+out/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Database data - IMPORTANT
+*_data/
+idp_mysql_data/
+postgres_data/
+
+# Git
+.git/
+
+# Other
+*.log
+.DS_Store
