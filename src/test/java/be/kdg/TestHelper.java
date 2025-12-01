@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -50,7 +51,8 @@ public class TestHelper {
                 PlayerId.of(id),
                 "username-" + id.toString().substring(0, 5),
                 id.toString() + "@mail.com",
-                "pic.png"
+                "pic.png",
+                LocalDateTime.now()
         );
     }
 }

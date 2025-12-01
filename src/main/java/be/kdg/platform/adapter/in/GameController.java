@@ -48,15 +48,8 @@ public class GameController {
     @PostMapping
     public ResponseEntity<GameDto> create(@RequestBody CreateGameRequest request) {
 
-        AddGameWithAchievementsCommand command = new AddGameWithAchievementsCommand(
-                request.name(),
-                request.rules(),
-                request.pictureUrl(),
-                request.gameUrl(),
-                request.category(),
-                request.developedBy(),
-                request.createdAt(),
-                request.averageMinutes(),
+        AddGameWithAchievementsCommand command = new AddGameWithAchievementsCommand(request.name(), request.rules(), request.pictureUrl(),
+                request.gameUrl(), request.category(), request.developedBy(), request.createdAt(), request.averageMinutes(),
                 request.achievements().stream()
                         .map(a -> new AchievementDefinitionCommand(a.name(), a.description(), a.howToUnlock()))
                         .toList()

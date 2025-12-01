@@ -1,6 +1,7 @@
 package be.kdg.player.domain;
 
 import be.kdg.common.events.DomainEvent;
+import be.kdg.common.events.FriendRemovedEvent;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.common.exception.NotFoundException;
@@ -24,12 +25,8 @@ public class Player {
     private Set<PlayerAchievement> achievements = new HashSet<>();
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
-    public Player(PlayerId playerId, String username, String email, String pictureUrl) {
-        this.playerId = playerId;
-        this.username = username;
-        this.email = email;
-        this.pictureUrl = pictureUrl;
-        this.createdAt = LocalDateTime.now();
+    public Player(String username, String email, String pictureUrl) {
+        this(PlayerId.create(), username, email, pictureUrl, LocalDateTime.now());
     }
 
     public Player(PlayerId playerId, String username, String email, String pictureUrl, LocalDateTime createdAt) {
@@ -46,6 +43,15 @@ public class Player {
     public void addFriend(UUID friendId) {
         friends.add(new Friend(friendId, LocalDateTime.now()));
     }
+
+    public void removeFriend(UUID friendId) {
+        boolean removed = friends.removeIf(f -> f.friendId().equals(friendId));
+        if (!removed) {
+            throw NotFoundException.player(friendId);
+        }
+        registerEvent(new FriendRemovedEvent(this.playerId.uuid(), friendId));
+    }
+
 
     public GameLibrary addGameToLibrary(UUID gameId) {
         GameLibrary library = new GameLibrary(gameId);
@@ -74,6 +80,16 @@ public class Player {
                 .filter(g -> g.getGameId().equals(gameId))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<DomainEvent> pullDomainEvents() {
+        var copy = List.copyOf(domainEvents);
+        domainEvents.clear();
+        return copy;
+    }
+
+    public void registerEvent(DomainEvent event) {
+        domainEvents.add(event);
     }
 
     public PlayerId getPlayerId() {

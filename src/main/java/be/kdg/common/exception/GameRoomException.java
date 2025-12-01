@@ -12,4 +12,8 @@ public class GameRoomException extends RuntimeException {
     public static GameRoomException notReady() {
         return new GameRoomException("This game room is not ready");
     }
+
+    public static GameRoomException notAllowed() {
+        return new GameRoomException("This player is not allowed in this room");
+    }
 }

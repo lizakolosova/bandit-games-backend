@@ -20,7 +20,8 @@ public class PlayerJpaMapper {
                 PlayerId.of(entity.getUuid()),
                 entity.getUsername(),
                 entity.getEmail(),
-                entity.getPictureUrl()
+                entity.getPictureUrl(),
+                entity.getCreatedAt()
         );
 
         entity.getGameLibraries().forEach(gl -> {

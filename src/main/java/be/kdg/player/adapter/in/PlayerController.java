@@ -30,8 +30,9 @@ public class PlayerController {
     private final MarkFavouriteUseCase markFavouriteUseCase;
     private final SendFriendshipRequestUseCase sendFriendshipRequestUseCase;
     private final SearchPlayersUseCase searchPlayersUseCase;
+    private final RemoveFriendUseCase removeFriendUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
@@ -40,6 +41,7 @@ public class PlayerController {
         this.markFavouriteUseCase = markFavouriteUseCase;
         this.sendFriendshipRequestUseCase = sendFriendshipRequestUseCase;
         this.searchPlayersUseCase = searchPlayersUseCase;
+        this.removeFriendUseCase = removeFriendUseCase;
     }
 
     @PostMapping("/register")
@@ -138,5 +140,12 @@ public class PlayerController {
                         p.getPictureUrl(), p.getCreatedAt())).toList();
 
         return ResponseEntity.ok(result);
+    }
+    @DeleteMapping("/friends/{friendId}")
+    public ResponseEntity<Void> removeFriend(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID friendId) {
+        UUID playerId = UUID.fromString(jwt.getSubject());
+        RemoveFriendCommand command = new RemoveFriendCommand(playerId, friendId);
+        removeFriendUseCase.removeFriend(command);
+        return ResponseEntity.noContent().build();
     }
 }

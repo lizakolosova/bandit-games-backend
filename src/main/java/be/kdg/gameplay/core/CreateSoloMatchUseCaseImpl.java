@@ -29,11 +29,7 @@ public class CreateSoloMatchUseCaseImpl implements CreateSoloMatchUseCase {
 
         PlayerId human = PlayerId.of(command.playerId());
 
-        Match match = new Match(
-                MatchId.create(),
-                new GameId(command.gameId()),
-                List.of(human, AIPlayer.AI_PLAYER)
-        );
+        Match match = new Match(MatchId.create(), new GameId(command.gameId()), List.of(human, AIPlayer.AI_PLAYER));
         addMatchPort.add(match);
         return match;
     }

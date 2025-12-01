@@ -1,0 +1,39 @@
+stages:
+  - build
+  - test
+
+variables:
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+build:
+  stage: build
+  image: gradle:8.5-jdk21-alpine
+  script:
+    - gradle clean build -x test --build-cache --no-daemon
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 hour
+
+test:
+  stage: test
+  image: gradle:8.5-jdk21-alpine
+  artifacts:
+    when: always
+    reports:
+      junit: build/test-results/test/TEST-*.xml
+  services:
+    - name: docker:27-dind
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+
+  script:
+    - gradle test --no-daemon
+
