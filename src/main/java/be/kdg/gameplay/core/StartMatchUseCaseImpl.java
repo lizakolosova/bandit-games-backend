@@ -1,5 +1,6 @@
 package be.kdg.gameplay.core;
 
+import be.kdg.gameplay.adapter.out.GameplayEventPublisher;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.Match;
 import be.kdg.gameplay.domain.valueobj.GameRoomId;
@@ -17,13 +18,15 @@ public class StartMatchUseCaseImpl implements StartMatchUseCase {
     private final LoadGameRoomPort loadGameRoomPort;
     private final UpdateGameRoomPort updateGameRoomPort;
     private final AddMatchPort addMatchPort;
+    private final GameplayEventPublisher eventPublisher;
 
     public StartMatchUseCaseImpl(LoadGameRoomPort loadGameRoomPort,
                                  UpdateGameRoomPort updateGameRoomPort,
-                                 AddMatchPort addMatchPort) {
+                                 AddMatchPort addMatchPort, GameplayEventPublisher eventPublisher) {
         this.loadGameRoomPort = loadGameRoomPort;
         this.updateGameRoomPort = updateGameRoomPort;
         this.addMatchPort = addMatchPort;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -34,7 +37,9 @@ public class StartMatchUseCaseImpl implements StartMatchUseCase {
         Match match = room.startMatch();
 
         updateGameRoomPort.update(room);
+        Match saved = addMatchPort.add(match);
 
-        return addMatchPort.add(match);
+        eventPublisher.publishEvents(room.pullDomainEvents());
+        return saved;
     }
 }
