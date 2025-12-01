@@ -29,8 +29,9 @@ public class PlayerController {
     private final RegisterPlayerUseCase registerPlayerUseCase;
     private final MarkFavouriteUseCase markFavouriteUseCase;
     private final SendFriendshipRequestUseCase sendFriendshipRequestUseCase;
+    private final RemoveFriendUseCase removeFriendUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, RemoveFriendUseCase removeFriendUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
@@ -38,6 +39,7 @@ public class PlayerController {
         this.registerPlayerUseCase = registerPlayerUseCase;
         this.markFavouriteUseCase = markFavouriteUseCase;
         this.sendFriendshipRequestUseCase = sendFriendshipRequestUseCase;
+        this.removeFriendUseCase = removeFriendUseCase;
     }
 
     @PostMapping("/register")
@@ -90,6 +92,14 @@ public class PlayerController {
         List<Player> friends = loadFriendsUseCase.loadFriends(PlayerId.of(playerId));
         return ResponseEntity.ok(friends.stream().map(friend -> new FriendDto(friend.getPlayerId().uuid(),
                 friend.getUsername(), friend.getPictureUrl())).toList());
+    }
+
+    @DeleteMapping("/friends/{friendId}")
+    public ResponseEntity<Void> removeFriend(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID friendId) {
+        UUID playerId = UUID.fromString(jwt.getSubject());
+        RemoveFriendCommand command = new RemoveFriendCommand(playerId, friendId);
+        removeFriendUseCase.removeFriend(command);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/library/{gameId}/favourite")
