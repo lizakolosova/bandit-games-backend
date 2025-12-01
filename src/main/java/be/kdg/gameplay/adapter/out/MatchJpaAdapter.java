@@ -16,8 +16,8 @@ public class MatchJpaAdapter implements AddMatchPort {
 
     @Override
     @Transactional
-    public void add(Match match) {
+    public Match add(Match match) {
         MatchJpaEntity entity = MatchJpaMapper.toEntity(match);
-        matches.save(entity);
+        return MatchJpaMapper.toDomain(matches.save(entity));
     }
 }

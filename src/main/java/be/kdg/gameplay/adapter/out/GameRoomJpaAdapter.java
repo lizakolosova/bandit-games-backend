@@ -1,6 +1,5 @@
 package be.kdg.gameplay.adapter.out;
 
-import be.kdg.common.exception.NotFoundException;
 import be.kdg.gameplay.adapter.out.mapper.GameRoomJpaMapper;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.valueobj.GameRoomId;
@@ -10,7 +9,7 @@ import be.kdg.gameplay.port.out.UpdateGameRoomPort;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GameRoomJpaAdapter implements AddGameRoomPort, LoadGameRoomPort, UpdateGameRoomPort {
+public class GameRoomJpaAdapter implements AddGameRoomPort, UpdateGameRoomPort, LoadGameRoomPort {
 
     private final GameRoomJpaRepository games;
 
@@ -20,21 +19,19 @@ public class GameRoomJpaAdapter implements AddGameRoomPort, LoadGameRoomPort, Up
 
     @Override
     public GameRoom add(GameRoom room) {
-        GameRoomJpaEntity entity = games.save(GameRoomJpaMapper.toEntity(room));
-        return GameRoomJpaMapper.toDomain(entity);
-    }
-    @Override
-    public GameRoom loadById(GameRoomId gameRoomId) {
-        GameRoomJpaEntity entity = games.findById(gameRoomId.uuid())
-                .orElseThrow(() -> new NotFoundException("GameRoom not found: " + gameRoomId.uuid()));
-
-        return GameRoomJpaMapper.toDomain(entity);
+        GameRoomJpaEntity saved = games.save(GameRoomJpaMapper.toEntity(room));
+        return GameRoomJpaMapper.toDomain(saved);
     }
 
     @Override
-    public GameRoom update(GameRoom gameRoom) {
-        GameRoomJpaEntity entity = games.save(GameRoomJpaMapper.toEntity(gameRoom));
-        return GameRoomJpaMapper.toDomain(entity);
+    public GameRoom loadById(GameRoomId id) {
+        return games.findById(id.uuid())
+                .map(GameRoomJpaMapper::toDomain)
+                .orElseThrow(() -> new IllegalArgumentException("GameRoom not found"));
+    }
+
+    @Override
+    public GameRoom update(GameRoom room) {
+        return GameRoomJpaMapper.toDomain(games.save(GameRoomJpaMapper.toEntity(room)));
     }
 }
-
