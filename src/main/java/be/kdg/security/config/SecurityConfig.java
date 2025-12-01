@@ -25,7 +25,7 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/api/players/register", "/api/games")
+                .securityMatcher("/api/players/register", "/api/games", "/api/test/publish-match-started")
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
@@ -33,7 +33,6 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-
     @Bean
     @Order(2)
     public SecurityFilterChain allEndpoints(HttpSecurity http) throws Exception {
