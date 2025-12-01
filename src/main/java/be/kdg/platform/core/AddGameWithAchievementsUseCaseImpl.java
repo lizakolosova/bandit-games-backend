@@ -22,16 +22,8 @@ public class AddGameWithAchievementsUseCaseImpl implements AddGameWithAchievemen
     @Override
     @Transactional
     public Game create(AddGameWithAchievementsCommand command) {
-        Game game = new Game(
-                command.name(),
-                command.rules(),
-                command.pictureUrl(),
-                command.gameUrl(),
-                command.category(),
-                command.developedBy(),
-                command.createdAt(),
-                command.averageMinutes()
-        );
+        Game game = new Game(command.name(), command.rules(), command.pictureUrl(), command.gameUrl(),
+                command.category(), command.developedBy(), command.createdAt(), command.averageMinutes());
 
         if (command.achievements() != null) {
             command.achievements().forEach(a ->

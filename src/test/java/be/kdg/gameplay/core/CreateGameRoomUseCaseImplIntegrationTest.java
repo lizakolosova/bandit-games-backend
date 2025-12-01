@@ -60,13 +60,13 @@ class CreateGameRoomUseCaseImplIntegrationTest {
         assertEquals(hostId, room.getHostPlayerId().uuid());
         assertEquals(invitedId, room.getInvitedPlayerId().uuid());
         assertEquals(GameRoomType.CLOSED, room.getGameRoomType());
-        assertEquals(GameRoomStatus.READY, room.getStatus());
+        assertEquals(GameRoomStatus.WAITING, room.getStatus());
 
         var saved = rooms.findById(room.getGameRoomId().uuid()).orElseThrow();
         assertEquals(hostId, saved.getHostPlayerId());
         assertEquals(invitedId, saved.getInvitedPlayerId());
         assertEquals(GameRoomType.CLOSED, saved.getGameRoomType());
-        assertEquals(GameRoomStatus.READY, saved.getStatus());
+        assertEquals(GameRoomStatus.WAITING, saved.getStatus());
     }
 
     @Test
@@ -91,11 +91,11 @@ class CreateGameRoomUseCaseImplIntegrationTest {
         assertEquals(hostId, room.getHostPlayerId().uuid());
         assertNull(room.getInvitedPlayerId());
         assertEquals(GameRoomType.CLOSED, room.getGameRoomType());
-        assertEquals(GameRoomStatus.READY, room.getStatus());
+        assertEquals(GameRoomStatus.WAITING, room.getStatus());
 
         var saved = rooms.findById(room.getGameRoomId().uuid()).orElseThrow();
         assertNull(saved.getInvitedPlayerId());
-        assertEquals(GameRoomStatus.READY, saved.getStatus());
+        assertEquals(GameRoomStatus.WAITING, saved.getStatus());
     }
 
     @Test

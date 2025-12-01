@@ -53,10 +53,10 @@ dependencies {
     implementation("org.springframework.modulith:spring-modulith-core")
 
     implementation("org.keycloak:keycloak-admin-client:26.0.0")
-
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework:spring-messaging")
 
-    // TESTING
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
