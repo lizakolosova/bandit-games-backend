@@ -115,6 +115,10 @@ public class GameRoom {
         return status;
     }
 
+    public void setStatus(GameRoomStatus status) {
+        this.status = status;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

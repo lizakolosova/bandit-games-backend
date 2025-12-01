@@ -1,13 +1,12 @@
 package be.kdg.gameplay.core;
 
+import be.kdg.common.exception.GameRoomException;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
+import be.kdg.gameplay.adapter.out.GameplayEventPublisher;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.Match;
-import be.kdg.gameplay.domain.valueobj.GameRoomId;
-import be.kdg.gameplay.domain.valueobj.GameRoomType;
-import be.kdg.gameplay.domain.valueobj.MatchId;
-import be.kdg.gameplay.domain.valueobj.MatchStatus;
+import be.kdg.gameplay.domain.valueobj.*;
 import be.kdg.gameplay.port.in.StartMatchCommand;
 import be.kdg.gameplay.port.out.AddMatchPort;
 import be.kdg.gameplay.port.out.LoadGameRoomPort;
@@ -37,6 +36,9 @@ class StartMatchUseCaseImplTest {
     @Mock
     private AddMatchPort addMatchPort;
 
+    @Mock
+    private GameplayEventPublisher eventPublisher;
+
     @InjectMocks
     private StartMatchUseCaseImpl useCase;
 
@@ -59,6 +61,7 @@ class StartMatchUseCaseImplTest {
     @Test
     void shouldLoadRoomStartMatchUpdateRoomAndPersistMatch() {
         // Arrange
+        gameRoom.setStatus(GameRoomStatus.READY);
         UUID roomId = gameRoom.getGameRoomId().uuid();
         StartMatchCommand command = new StartMatchCommand(roomId);
 
@@ -70,7 +73,7 @@ class StartMatchUseCaseImplTest {
 
         when(addMatchPort.add(any(Match.class)))
                 .thenAnswer(inv -> inv.getArgument(0));
-
+        doNothing().when(eventPublisher).publishEvents(anyList());
         // Act
         Match result = useCase.start(command);
 
@@ -93,5 +96,30 @@ class StartMatchUseCaseImplTest {
         assertEquals(2, result.getPlayers().size());
         assertTrue(result.getPlayers().contains(gameRoom.getHostPlayerId()));
         assertTrue(result.getPlayers().contains(gameRoom.getInvitedPlayerId()));
+    }
+    @Test
+    void shouldThrowExceptionWhenGameRoomIsNotReady() {
+        // Arrange
+        UUID roomId = gameRoom.getGameRoomId().uuid();
+        StartMatchCommand command = new StartMatchCommand(roomId);
+
+        // NOT READY (default status of new GameRoom)
+        assertNotEquals(GameRoomStatus.READY, gameRoom.getStatus());
+
+        when(loadGameRoomPort.loadById(GameRoomId.of(roomId)))
+                .thenReturn(gameRoom);
+
+        // Act + Assert
+        assertThrows(
+                GameRoomException.class,
+                () -> useCase.start(command)
+        );
+
+        // Verify no side effects
+        verify(updateGameRoomPort, never()).update(any());
+        verify(addMatchPort, never()).add(any());
+        verify(eventPublisher, never()).publishEvents(anyList());
+
+        verify(loadGameRoomPort).loadById(GameRoomId.of(roomId));
     }
 }
