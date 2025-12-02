@@ -6,7 +6,7 @@ import be.kdg.player.domain.valueobj.FriendshipRequestId;
 import be.kdg.player.domain.valueobj.FriendshipStatus;
 import be.kdg.player.domain.valueobj.ReceiverId;
 import be.kdg.player.domain.valueobj.SenderId;
-import be.kdg.player.port.in.RejectFriendshipRequestCommand;
+import be.kdg.player.port.in.command.RejectFriendshipRequestCommand;
 import be.kdg.player.port.out.LoadFriendshipRequestPort;
 import be.kdg.player.port.out.UpdateFriendshipRequestPort;
 import org.junit.jupiter.api.BeforeEach;

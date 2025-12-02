@@ -15,7 +15,7 @@ import be.kdg.player.domain.valueobj.FriendshipRequestId;
 import be.kdg.player.domain.valueobj.FriendshipStatus;
 import be.kdg.player.domain.valueobj.ReceiverId;
 import be.kdg.player.domain.valueobj.SenderId;
-import be.kdg.player.port.in.AcceptFriendshipRequestCommand;
+import be.kdg.player.port.in.command.AcceptFriendshipRequestCommand;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package be.kdg.player.adapter.in;
 
 import be.kdg.common.events.FriendshipRequestAcceptedEvent;
-import be.kdg.player.port.in.FriendshipRequestAcceptedProjectionCommand;
+import be.kdg.player.port.in.command.FriendshipRequestAcceptedProjectionCommand;
 import be.kdg.player.port.in.FriendshipRequestAcceptedProjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

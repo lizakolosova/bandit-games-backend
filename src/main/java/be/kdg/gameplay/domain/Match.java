@@ -32,11 +32,6 @@ public class Match {
         this.winnerPlayerId = winnerPlayerId;
     }
 
-    public Match(GameId gameId, List<PlayerId> players) {
-        this.gameId = gameId;
-        this.players = players;
-    }
-
     public void updatePlayers(PlayerId white, PlayerId black) {
         this.players = List.of(white, black);
     }

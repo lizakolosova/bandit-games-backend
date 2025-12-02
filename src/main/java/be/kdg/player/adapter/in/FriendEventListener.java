@@ -1,7 +1,7 @@
 package be.kdg.player.adapter.in;
 
 import be.kdg.common.events.FriendRemovedEvent;
-import be.kdg.player.port.in.FriendRemovedProjectionCommand;
+import be.kdg.player.port.in.command.FriendRemovedProjectionCommand;
 import be.kdg.player.port.in.FriendRemovedProjector;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

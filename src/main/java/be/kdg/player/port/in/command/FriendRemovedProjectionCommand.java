@@ -1,4 +1,4 @@
-package be.kdg.player.port.in;
+package be.kdg.player.port.in.command;
 
 import java.util.UUID;
 

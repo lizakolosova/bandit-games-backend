@@ -3,7 +3,7 @@ package be.kdg.player.adapter.in;
 import be.kdg.common.exception.NotFoundException;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.domain.Player;
-import be.kdg.player.port.in.FriendRemovedProjectionCommand;
+import be.kdg.player.port.in.command.FriendRemovedProjectionCommand;
 import be.kdg.player.port.in.FriendRemovedProjector;
 import be.kdg.player.port.out.LoadPlayerPort;
 import be.kdg.player.port.out.UpdatePlayerPort;

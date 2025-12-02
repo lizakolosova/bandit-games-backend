@@ -3,6 +3,7 @@ package be.kdg.platform.core;
 import be.kdg.platform.adapter.out.PlatformEventPublisher;
 import be.kdg.platform.domain.Game;
 import be.kdg.platform.port.in.*;
+import be.kdg.platform.port.in.command.AddGameWithAchievementsCommand;
 import be.kdg.platform.port.out.AddGamePort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

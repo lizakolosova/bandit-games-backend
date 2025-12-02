@@ -4,7 +4,7 @@ import be.kdg.common.config.RabbitMQTopology;
 import be.kdg.common.events.AchievementEntry;
 import be.kdg.common.events.GameRegisteredEvent;
 import be.kdg.platform.port.in.ChessPlatformProjector;
-import be.kdg.platform.port.in.RegisterChessGameProjectionCommand;
+import be.kdg.platform.port.in.command.RegisterChessGameProjectionCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

@@ -2,7 +2,7 @@ package be.kdg.player.core;
 
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.domain.Player;
-import be.kdg.player.port.in.MarkFavouriteCommand;
+import be.kdg.player.port.in.command.MarkFavouriteCommand;
 import be.kdg.player.port.out.LoadPlayerPort;
 import be.kdg.player.port.out.UpdatePlayerPort;
 import org.junit.jupiter.api.Test;

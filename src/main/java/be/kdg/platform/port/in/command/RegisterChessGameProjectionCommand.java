@@ -1,4 +1,4 @@
-package be.kdg.platform.port.in;
+package be.kdg.platform.port.in.command;
 
 import be.kdg.common.events.AchievementEntry;
 

@@ -1,7 +1,7 @@
 package be.kdg.player.adapter.in;
 
 import be.kdg.player.domain.GameProjection;
-import be.kdg.player.port.in.GameAddedProjectionCommand;
+import be.kdg.player.port.in.command.GameAddedProjectionCommand;
 import be.kdg.player.port.in.GameProjector;
 import be.kdg.player.port.out.AddGameProjectionPort;
 import org.springframework.stereotype.Service;

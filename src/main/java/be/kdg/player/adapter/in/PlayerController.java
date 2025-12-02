@@ -10,6 +10,7 @@ import be.kdg.player.adapter.in.request.RegisterPlayerRequest;
 import be.kdg.player.adapter.in.response.PlayerDto;
 import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.*;
+import be.kdg.player.port.in.command.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;

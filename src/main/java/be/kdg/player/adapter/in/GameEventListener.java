@@ -1,7 +1,7 @@
 package be.kdg.player.adapter.in;
 
 import be.kdg.common.events.GameAddedEvent;
-import be.kdg.player.port.in.GameAddedProjectionCommand;
+import be.kdg.player.port.in.command.GameAddedProjectionCommand;
 import be.kdg.player.port.in.GameProjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

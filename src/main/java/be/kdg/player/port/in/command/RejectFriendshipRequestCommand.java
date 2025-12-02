@@ -1,6 +1,4 @@
-package be.kdg.player.port.in;
-
-import be.kdg.player.domain.valueobj.FriendshipRequestId;
+package be.kdg.player.port.in.command;
 
 import java.util.UUID;
 

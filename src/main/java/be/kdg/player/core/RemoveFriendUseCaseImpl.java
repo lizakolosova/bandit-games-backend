@@ -5,7 +5,7 @@ import be.kdg.player.domain.Player;
 import be.kdg.common.exception.NotFoundException;
 import be.kdg.common.valueobj.PlayerId;
 
-import be.kdg.player.port.in.RemoveFriendCommand;
+import be.kdg.player.port.in.command.RemoveFriendCommand;
 import be.kdg.player.port.in.RemoveFriendUseCase;
 import be.kdg.player.port.out.LoadPlayerPort;
 import be.kdg.player.port.out.UpdatePlayerPort;

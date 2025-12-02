@@ -2,7 +2,7 @@ package be.kdg.platform.adapter.in;
 
 import be.kdg.common.valueobj.GameId;
 import be.kdg.platform.domain.Game;
-import be.kdg.platform.port.in.RegisterChessGameProjectionCommand;
+import be.kdg.platform.port.in.command.RegisterChessGameProjectionCommand;
 import be.kdg.platform.port.in.ChessPlatformProjector;
 import be.kdg.platform.port.out.AddGamePort;
 import org.springframework.stereotype.Service;
