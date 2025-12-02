@@ -1,6 +1,6 @@
-package be.kdg.gameplay.adapter.in;
+package be.kdg.gameplay.adapter.in.projector;
 
-import be.kdg.gameplay.port.in.InvitationNotificationCommand;
+import be.kdg.gameplay.port.in.command.InvitationNotificationCommand;
 import be.kdg.gameplay.port.in.InvitationNotificationEventProjector;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;

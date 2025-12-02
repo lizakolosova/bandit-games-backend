@@ -32,11 +32,19 @@ public class Match {
         this.winnerPlayerId = winnerPlayerId;
     }
 
-    public Match(MatchId matchId, GameId gameId, List<PlayerId> players) {
-        this.matchId = matchId;
+    public Match(GameId gameId, List<PlayerId> players) {
         this.gameId = gameId;
         this.players = players;
-        this.status = MatchStatus.IN_PROGRESS;
+    }
+
+    public void updatePlayers(PlayerId white, PlayerId black) {
+        this.players = List.of(white, black);
+    }
+
+    public void finish(LocalDateTime finishedAt, PlayerId winner) {
+        this.status = MatchStatus.FINISHED;
+        this.finishedAt = finishedAt;
+        this.winnerPlayerId = winner;
     }
 
     public MatchId getMatchId() {

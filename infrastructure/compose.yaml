@@ -12,10 +12,10 @@ services:
       SPRING_RABBITMQ_PASSWORD: password
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://idp_keycloak:8080/realms/og-realm
     ports:
-      - "9090:8080"
+      - "9090:8081"
     depends_on:
       - kdg-db
-      - app_rabbitmq
+#      - app_rabbitmq
       - idp_keycloak
     networks:
       - backend
@@ -39,19 +39,19 @@ services:
       - db-data:/var/lib/postgresql/data
       - ./pg_hba.conf:/docker-entrypoint-initdb.d/pg_hba.conf
 
-  app_rabbitmq:
-    image: rabbitmq:3.13.7-management-alpine
-    environment:
-      RABBITMQ_DEFAULT_USER: 'user'
-      RABBITMQ_DEFAULT_PASS: 'password'
-    ports:
-      - "5672:5672" #AMQP
-      - "15672:15672" #MGMT
-    networks:
-      - backend
-    volumes:
-      - ./rabbitmq/data/:/var/lib/rabbitmq/
-      - ./rabbitmq/log/:/var/log/rabbitmq/
+#  app_rabbitmq:
+#    image: rabbitmq:3.13.7-management-alpine
+#    environment:
+#      RABBITMQ_DEFAULT_USER: 'user'
+#      RABBITMQ_DEFAULT_PASS: 'password'
+#    ports:
+#      - "5672:5672" #AMQP
+#      - "15672:15672" #MGMT
+#    networks:
+#      - backend
+#    volumes:
+#      - ./rabbitmq/data/:/var/lib/rabbitmq/
+#      - ./rabbitmq/log/:/var/log/rabbitmq/
 
   idp_mysql:
       image: mysql:8.4

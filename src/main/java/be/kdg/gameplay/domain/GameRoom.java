@@ -1,8 +1,8 @@
 package be.kdg.gameplay.domain;
 
+import be.kdg.common.events.MatchStartRequestedEvent;
 import be.kdg.common.events.DomainEvent;
 import be.kdg.common.events.GameRoomInvitationSentEvent;
-import be.kdg.common.events.MatchStartedEvent;
 import be.kdg.common.exception.GameRoomException;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
@@ -11,7 +11,6 @@ import be.kdg.gameplay.domain.valueobj.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class GameRoom {
 
@@ -70,15 +69,16 @@ public class GameRoom {
         this.status = GameRoomStatus.WAITING;
         this.invitedPlayerId = null;
     }
-    public Match startMatch() {
+
+    public MatchId startMatch() {
         if (status != GameRoomStatus.READY)
             throw GameRoomException.notReady();
 
-        status = GameRoomStatus.MATCH_STARTED;
-        Match match = new Match(MatchId.create(), gameId, List.of(hostPlayerId, invitedPlayerId));
-        registerEvent(new MatchStartedEvent(match.getMatchId().uuid(),
-                gameId.uuid(), hostPlayerId.uuid(), invitedPlayerId.uuid()));
-        return match;
+        this.status = GameRoomStatus.MATCH_STARTED;
+        MatchId matchId = MatchId.create();
+        registerEvent(new MatchStartRequestedEvent(matchId.uuid(), gameId.uuid(), hostPlayerId.uuid(), invitedPlayerId.uuid()));
+
+        return matchId;
     }
 
     public List<DomainEvent> pullDomainEvents() {

@@ -1,7 +1,7 @@
-package be.kdg.gameplay.adapter.in;
+package be.kdg.gameplay.adapter.in.listener;
 
 import be.kdg.common.events.GameRoomInvitationSentEvent;
-import be.kdg.gameplay.port.in.InvitationNotificationCommand;
+import be.kdg.gameplay.port.in.command.InvitationNotificationCommand;
 import be.kdg.gameplay.port.in.InvitationNotificationEventProjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

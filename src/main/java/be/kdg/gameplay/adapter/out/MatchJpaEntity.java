@@ -3,6 +3,7 @@ package be.kdg.gameplay.adapter.out;
 import be.kdg.gameplay.domain.valueobj.MatchStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -21,7 +22,7 @@ public class MatchJpaEntity {
             joinColumns = @JoinColumn(name = "match_id")
     )
     @Column(name = "player_id")
-    private java.util.Set<UUID> players;
+    private Set<UUID> players;
 
     @Enumerated(EnumType.STRING)
     private MatchStatus status;
@@ -33,15 +34,7 @@ public class MatchJpaEntity {
 
     protected MatchJpaEntity() {}
 
-    public MatchJpaEntity(
-            UUID matchId,
-            UUID gameId,
-            java.util.Set<UUID> players,
-            MatchStatus status,
-            LocalDateTime startedAt,
-            LocalDateTime finishedAt,
-            UUID winnerPlayerId
-    ) {
+    public MatchJpaEntity(UUID matchId, UUID gameId, Set<UUID> players, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, UUID winnerPlayerId) {
         this.matchId = matchId;
         this.gameId = gameId;
         this.players = players;

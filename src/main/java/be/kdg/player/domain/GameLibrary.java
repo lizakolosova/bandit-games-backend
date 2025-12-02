@@ -15,6 +15,11 @@ public class GameLibrary {
     private Duration totalPlaytime;
     private boolean isFavourite;
 
+    private int matchesPlayed;
+    private int gamesWon;
+    private int gamesLost;
+    private int gamesDraw;
+
     public GameLibrary(UUID gameId) {
         this.gameLibraryId = GameLibraryId.create();
         this.gameId = gameId;

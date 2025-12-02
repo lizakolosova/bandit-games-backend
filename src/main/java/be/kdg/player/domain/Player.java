@@ -88,6 +88,23 @@ public class Player {
         return copy;
     }
 
+//    public void recordGameResult(UUID gameId, String winner, String playerName) {
+//        GameLibrary library = findGameInLibrary(gameId);
+//        if (library == null) {
+//            library = addGameToLibrary(gameId);
+//        }
+//        library.recordGamePlayed();
+//
+//        if ("DRAW".equals(winner)) {
+//        library.recordDraw();
+//        } else if (playerName.equals(winner)) {
+//        library.recordWin();
+//        } else {
+//        library.recordLoss();
+//        }
+//    }
+
+
     public void registerEvent(DomainEvent event) {
         domainEvents.add(event);
     }

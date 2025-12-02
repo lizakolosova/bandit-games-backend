@@ -1,4 +1,4 @@
-package be.kdg.gameplay.port.in;
+package be.kdg.gameplay.port.in.command;
 
 import be.kdg.gameplay.domain.valueobj.GameRoomType;
 
