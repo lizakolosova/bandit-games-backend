@@ -29,8 +29,10 @@ public class PlayerController {
     private final RegisterPlayerUseCase registerPlayerUseCase;
     private final MarkFavouriteUseCase markFavouriteUseCase;
     private final SendFriendshipRequestUseCase sendFriendshipRequestUseCase;
+    private final SearchPlayersUseCase searchPlayersUseCase;
+    private final RemoveFriendUseCase removeFriendUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
@@ -38,6 +40,8 @@ public class PlayerController {
         this.registerPlayerUseCase = registerPlayerUseCase;
         this.markFavouriteUseCase = markFavouriteUseCase;
         this.sendFriendshipRequestUseCase = sendFriendshipRequestUseCase;
+        this.searchPlayersUseCase = searchPlayersUseCase;
+        this.removeFriendUseCase = removeFriendUseCase;
     }
 
     @PostMapping("/register")
@@ -120,5 +124,27 @@ public class PlayerController {
         SendFriendshipRequestCommand command = new SendFriendshipRequestCommand(senderId, request.receiverId());
         sendFriendshipRequestUseCase.sendRequest(command);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PlayerDto>> searchPlayers(@AuthenticationPrincipal Jwt jwt, @RequestParam(required = false) String q) {
+
+        UUID loggedInId = UUID.fromString(jwt.getSubject());
+        SearchPlayersCommand command = new SearchPlayersCommand(loggedInId, q);
+
+        List<Player> found = searchPlayersUseCase.search(command);
+
+        List<PlayerDto> result = found.stream()
+                .map(p -> new PlayerDto(p.getPlayerId().uuid(), p.getUsername(), p.getEmail(),
+                        p.getPictureUrl(), p.getCreatedAt())).toList();
+
+        return ResponseEntity.ok(result);
+    }
+    @DeleteMapping("/friends/{friendId}")
+    public ResponseEntity<Void> removeFriend(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID friendId) {
+        UUID playerId = UUID.fromString(jwt.getSubject());
+        RemoveFriendCommand command = new RemoveFriendCommand(playerId, friendId);
+        removeFriendUseCase.removeFriend(command);
+        return ResponseEntity.noContent().build();
     }
 }

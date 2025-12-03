@@ -23,22 +23,15 @@ public class FriendshipRequestJpaAdapter implements AddFriendshipRequestPort, Lo
     @Override
     public void save(FriendshipRequest request) {
         FriendshipRequestJpaEntity entity =
-                new FriendshipRequestJpaEntity(
-                        request.getFriendshipRequestId().uuid(),
-                        request.getSenderId().uuid(),
-                        request.getReceiverId().uuid(),
-                        request.getStatus(),
-                        request.getCreatedAt()
-                );
+                new FriendshipRequestJpaEntity(request.getFriendshipRequestId().uuid(), request.getSenderId().uuid(),
+                        request.getReceiverId().uuid(), request.getStatus(), request.getCreatedAt());
 
         requests.save(entity);
     }
 
     @Override
     public boolean existsPending(SenderId senderId, ReceiverId receiverId) {
-        return requests.existsBySenderIdAndReceiverIdAndStatus(
-                senderId.uuid(), receiverId.uuid(), FriendshipStatus.PENDING
-        );
+        return requests.existsBySenderIdAndReceiverIdAndStatus(senderId.uuid(), receiverId.uuid(), FriendshipStatus.PENDING);
     }
 
     @Override

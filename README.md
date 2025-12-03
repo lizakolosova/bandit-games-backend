@@ -1,6 +1,6 @@
 # Documentation 
-So guys if you are lost, we have 5 bounded contexts:
-3 of them are shown in the domain model and 2 are external service: AI player and the game they give us
+So guys if you are lost, we have 4 bounded contexts:
+3 of them are shown in the domain model and 1 is an external service: the game they give us
 
 # Commits 
 ## Every commit message follows this pattern:
