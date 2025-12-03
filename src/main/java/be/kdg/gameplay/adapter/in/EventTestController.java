@@ -43,11 +43,15 @@ public class EventTestController {
         System.out.println(">>> Publishing MatchStartedEvent");
         System.out.println("    Match ID: " + event.matchId());
         System.out.println("    Game ID: " + event.gameId());
+        System.out.println("    HostPlayer ID: " + event.hostPlayerId());
+        System.out.println("    Opponent player ID: " + event.opponentPlayerId());
 
         eventPublisher.publishEvent(event);
 
         System.out.println(">>> Event published to Spring EventBus");
 
-        return "Event published - Match: " + event.matchId() + ", Game: " + event.gameId();
+        return "Event published - Match: " + event.matchId() + ", Game: " + event.gameId()
+                + ", HostPlayer: " + event.hostPlayerId()
+                +  ", OpponentPlayer: " + event.opponentPlayerId();
     }
 }
