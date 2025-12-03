@@ -13,14 +13,22 @@ public class MatchEventListener {
 
     public MatchEventListener(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
+        System.out.println("=== MatchEventListener INITIALIZED ===");
     }
 
     @EventListener(MatchStartedEvent.class)
     public void publishMatchStarted(MatchStartedEvent event) {
+        System.out.println("=== MatchEventListener TRIGGERED ===");
+        System.out.println("Event: " + event.matchId());
+        System.out.println("Exchange: " + RabbitMQTopology.EXCHANGE);
+        System.out.println("Routing key: " + RabbitMQTopology.ROUTING_KEY);
+
         rabbitTemplate.convertAndSend(
                 RabbitMQTopology.EXCHANGE,
                 RabbitMQTopology.ROUTING_KEY,
                 event
         );
+
+        System.out.println("=== Message sent to RabbitMQ ===");
     }
 }
