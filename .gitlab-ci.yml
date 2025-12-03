@@ -49,6 +49,7 @@ package:
   dependencies:
     - build
   before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - apk add --no-cache openjdk21  # Add Java for gradlew
   script:
     - ./gradlew bootBuildImage --imageName=registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA}
