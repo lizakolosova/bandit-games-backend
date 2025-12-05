@@ -7,7 +7,7 @@
 //import be.kdg.gameplay.domain.GameRoom;
 //import be.kdg.gameplay.domain.Match;
 //import be.kdg.gameplay.domain.valueobj.*;
-//import be.kdg.gameplay.port.in.StartMatchCommand;
+//import be.kdg.gameplay.port.in.FinalizeRoomCommand;
 //import be.kdg.gameplay.port.out.AddMatchPort;
 //import be.kdg.gameplay.port.out.LoadGameRoomPort;
 //import be.kdg.gameplay.port.out.UpdateGameRoomPort;
@@ -40,7 +40,7 @@
 //    private GameplayEventPublisher eventPublisher;
 //
 //    @InjectMocks
-//    private StartMatchUseCaseImpl useCase;
+//    private FinalizeRoomUseCaseImpl useCase;
 //
 //    private GameRoom gameRoom;
 //
@@ -63,7 +63,7 @@
 //        // Arrange
 //        gameRoom.setStatus(GameRoomStatus.READY);
 //        UUID roomId = gameRoom.getGameRoomId().uuid();
-//        StartMatchCommand command = new StartMatchCommand(roomId);
+//        FinalizeRoomCommand command = new FinalizeRoomCommand(roomId);
 //
 //        when(loadGameRoomPort.loadById(GameRoomId.of(roomId)))
 //                .thenReturn(gameRoom);
@@ -75,7 +75,7 @@
 //                .thenAnswer(inv -> inv.getArgument(0));
 //        doNothing().when(eventPublisher).publishEvents(anyList());
 //        // Act
-//        Match result = useCase.start(command);
+//        Match result = useCase.finalize(command);
 //
 //        // Assert
 //        verify(loadGameRoomPort).loadById(GameRoomId.of(roomId));
@@ -101,7 +101,7 @@
 //    void shouldThrowExceptionWhenGameRoomIsNotReady() {
 //        // Arrange
 //        UUID roomId = gameRoom.getGameRoomId().uuid();
-//        StartMatchCommand command = new StartMatchCommand(roomId);
+//        FinalizeRoomCommand command = new FinalizeRoomCommand(roomId);
 //
 //        // NOT READY (default status of new GameRoom)
 //        assertNotEquals(GameRoomStatus.READY, gameRoom.getStatus());
@@ -112,7 +112,7 @@
 //        // Act + Assert
 //        assertThrows(
 //                GameRoomException.class,
-//                () -> useCase.start(command)
+//                () -> useCase.finalize(command)
 //        );
 //
 //        // Verify no side effects
