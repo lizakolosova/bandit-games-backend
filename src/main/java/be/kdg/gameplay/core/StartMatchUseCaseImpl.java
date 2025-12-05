@@ -2,7 +2,6 @@ package be.kdg.gameplay.core;
 
 import be.kdg.gameplay.adapter.out.GameplayEventPublisher;
 import be.kdg.gameplay.domain.GameRoom;
-import be.kdg.gameplay.domain.Match;
 import be.kdg.gameplay.domain.valueobj.GameRoomId;
 import be.kdg.gameplay.port.in.StartMatchCommand;
 import be.kdg.gameplay.port.in.StartMatchUseCase;
@@ -31,13 +30,12 @@ public class StartMatchUseCaseImpl implements StartMatchUseCase {
 
     @Override
     @Transactional
-    public Match start(StartMatchCommand command) {
+    public GameRoom start(StartMatchCommand command) {
         GameRoom room = loadGameRoomPort.loadById(GameRoomId.of(command.gameRoomId()));
 
-        Match match = room.beforeStartMatch();
+        GameRoom gameRoom = room.finalizeRoom();
 
-        updateGameRoomPort.update(room);
-        Match saved = addMatchPort.add(match);
+        GameRoom saved = updateGameRoomPort.update(room);
 
         eventPublisher.publishEvents(room.pullDomainEvents());
         return saved;

@@ -3,7 +3,7 @@ package be.kdg.common.events;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record MatchBeforeStartedEvent(
+public record FinalizeRoomEvent(
         LocalDateTime occurredAt,
         String hostPlayerName,
         String opponentPlayerName,
@@ -11,7 +11,7 @@ public record MatchBeforeStartedEvent(
         UUID opponentPlayerId
 ) implements DomainEvent{
 
-    public MatchBeforeStartedEvent (String hostPlayerName, String opponentPlayerName, UUID hostPlayerId, UUID opponentPlayerId){
+    public FinalizeRoomEvent(String hostPlayerName, String opponentPlayerName, UUID hostPlayerId, UUID opponentPlayerId){
     this(LocalDateTime.now(), hostPlayerName, opponentPlayerName, hostPlayerId, opponentPlayerId);
     }
 

@@ -1,13 +1,11 @@
 package be.kdg.gameplay.adapter.in;
 
 import be.kdg.gameplay.adapter.in.request.MatchRequest;
-import be.kdg.gameplay.adapter.in.response.MatchDto;
-import be.kdg.gameplay.domain.Match;
+import be.kdg.gameplay.adapter.in.response.GameRoomDto;
+import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.port.in.StartMatchCommand;
 import be.kdg.gameplay.port.in.StartMatchUseCase;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +21,11 @@ public class MatchController {
         this.startMatchUseCase = startMatchUseCase;
     }
 
-    @PostMapping("/matches/start")
-    public ResponseEntity<MatchDto> createSoloMatch(@AuthenticationPrincipal Jwt jwt, @RequestBody MatchRequest request) {
+    @PostMapping("/matches/start")//change the name later
+    public ResponseEntity<GameRoomDto> finalizeRoom(@RequestBody MatchRequest request) {
         StartMatchCommand command = new StartMatchCommand(request.gameRoomId());
-        Match match = startMatchUseCase.start(command);
+        GameRoom gameRoom = startMatchUseCase.start(command);
 
-        return ResponseEntity.ok(new MatchDto(match.getMatchId().uuid(), match.getGameId().uuid(), match.getStatus().toString()));
+        return ResponseEntity.ok(GameRoomDto.from(gameRoom));
     }
 }

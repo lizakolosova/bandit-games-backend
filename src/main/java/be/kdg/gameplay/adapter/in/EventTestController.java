@@ -1,6 +1,6 @@
 package be.kdg.gameplay.adapter.in;
 
-import be.kdg.common.events.MatchBeforeStartedEvent;
+import be.kdg.common.events.FinalizeRoomEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,14 +33,14 @@ public class EventTestController {
     private String publishEvent() {
         System.out.println("=== ENDPOINT HIT ===");
 
-        MatchBeforeStartedEvent event = new MatchBeforeStartedEvent(
+        FinalizeRoomEvent event = new FinalizeRoomEvent(
                 "hostPlayerName",
                 "opponentPlayerName",
                 UUID.randomUUID(),
                 UUID.randomUUID()
         );
 
-        System.out.println(">>> Publishing MatchBeforeStartedEvent");
+        System.out.println(">>> Publishing FinalizeRoomEvent");
         System.out.println("    hostPlayerName: " + event.hostPlayerName());
         System.out.println("    opponentPlayerName: " + event.opponentPlayerName());
         System.out.println("    HostPlayer ID: " + event.hostPlayerId());
