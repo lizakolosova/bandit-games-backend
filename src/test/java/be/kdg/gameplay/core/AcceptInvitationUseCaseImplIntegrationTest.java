@@ -51,9 +51,13 @@ class AcceptInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
                 GameId.of(gameId),
+                hostName,
+                invitedName,
                 PlayerId.of(hostId),
                 PlayerId.of(invitedId),
                 GameRoomType.CLOSED
@@ -85,9 +89,13 @@ class AcceptInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
                 GameId.of(gameId),
+                hostName,
+                invitedName,
                 PlayerId.of(hostId),
                 PlayerId.of(invitedId),
                 GameRoomType.CLOSED
@@ -117,9 +125,13 @@ class AcceptInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
                 GameId.of(gameId),
+                hostName,
+                invitedName,
                 PlayerId.of(hostId),
                 PlayerId.of(invitedId),
                 GameRoomType.CLOSED

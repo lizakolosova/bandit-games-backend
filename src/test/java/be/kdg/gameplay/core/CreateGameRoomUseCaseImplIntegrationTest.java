@@ -43,9 +43,13 @@ class CreateGameRoomUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         var command = new CreateGameRoomCommand(
                 gameId,
+                hostName,
+                invitedName,
                 hostId,
                 invitedId,
                 GameRoomType.CLOSED
@@ -74,9 +78,12 @@ class CreateGameRoomUseCaseImplIntegrationTest {
         // Arrange
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
+        String hostName = UUID.randomUUID().toString();
 
         var command = new CreateGameRoomCommand(
                 gameId,
+                hostName,
+                null,
                 hostId,
                 null,
                 GameRoomType.CLOSED
@@ -103,8 +110,10 @@ class CreateGameRoomUseCaseImplIntegrationTest {
         // Arrange
         var command = new CreateGameRoomCommand(
                 UUID.randomUUID(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
                 UUID.randomUUID(),
-                null,
+                UUID.randomUUID(),
                 GameRoomType.CLOSED
         );
 
