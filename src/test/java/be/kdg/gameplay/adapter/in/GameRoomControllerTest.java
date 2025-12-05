@@ -45,10 +45,15 @@ class GameRoomControllerIntegrationTest {
     @MockitoBean
     private RejectInvitationUseCase rejectInvitationUseCase;
 
+    @MockitoBean
+    private FinalizeRoomUseCase finalizeRoomUseCase;
+
     private UUID testPlayerId;
     private UUID testGameId;
     private UUID testRoomId;
     private UUID testInvitedPlayerId;
+    private String invitedName;
+    private String hostName;
 
     @BeforeEach
     void setUp() {
@@ -56,6 +61,8 @@ class GameRoomControllerIntegrationTest {
         testGameId = UUID.randomUUID();
         testRoomId = UUID.randomUUID();
         testInvitedPlayerId = UUID.randomUUID();
+        invitedName = UUID.randomUUID().toString();
+        hostName = UUID.randomUUID().toString();
     }
 
     @Test
@@ -64,11 +71,14 @@ class GameRoomControllerIntegrationTest {
         CreateGameRoomRequest request = new CreateGameRoomRequest(
                 testGameId,
                 testInvitedPlayerId,
+                invitedName,
                 "CLOSED"
         );
 
         GameRoom gameRoom = new GameRoom(
                 GameId.of(testGameId),
+                hostName,
+                invitedName,
                 PlayerId.of(testPlayerId),
                 PlayerId.of(testInvitedPlayerId),
                 GameRoomType.CLOSED
@@ -97,6 +107,7 @@ class GameRoomControllerIntegrationTest {
         CreateGameRoomRequest request = new CreateGameRoomRequest(
                 testGameId,
                 testInvitedPlayerId,
+                invitedName,
                 "CLOSED"
         );
 
@@ -115,6 +126,7 @@ class GameRoomControllerIntegrationTest {
         CreateGameRoomRequest request = new CreateGameRoomRequest(
                 testGameId,
                 testInvitedPlayerId,
+                invitedName,
                 "CLOSED"
         );
 
@@ -137,6 +149,7 @@ class GameRoomControllerIntegrationTest {
         CreateGameRoomRequest request = new CreateGameRoomRequest(
                 testGameId,
                 testInvitedPlayerId,
+                invitedName,
                 "CLOSED"
         );
 
@@ -159,6 +172,7 @@ class GameRoomControllerIntegrationTest {
         CreateGameRoomRequest request = new CreateGameRoomRequest(
                 testGameId,
                 testInvitedPlayerId,
+                invitedName,
                 "CLOSED"
         );
 

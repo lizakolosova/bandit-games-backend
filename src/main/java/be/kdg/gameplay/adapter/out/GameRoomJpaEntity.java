@@ -17,6 +17,10 @@ public class GameRoomJpaEntity {
 
     private UUID gameId;
 
+    private String hostPlayerName;
+
+    private String invitedPlayerName;
+
     private UUID hostPlayerId;
 
     private UUID invitedPlayerId;
@@ -34,15 +38,27 @@ public class GameRoomJpaEntity {
 
     protected GameRoomJpaEntity() {}
 
-    public GameRoomJpaEntity(UUID uuid, UUID gameId, UUID hostPlayerId, UUID invitedPlayerId, GameRoomType type, GameRoomStatus status, LocalDateTime createdAt, InvitationStatus invitationStatus) {
+    public GameRoomJpaEntity(UUID uuid, UUID gameId, String hostPlayerName, String invitedPlayerName, UUID hostPlayerId,
+                             UUID invitedPlayerId, GameRoomType gameRoomType, GameRoomStatus status, LocalDateTime createdAt,
+                             InvitationStatus invitationStatus) {
         this.uuid = uuid;
         this.gameId = gameId;
+        this.hostPlayerName = hostPlayerName;
+        this.invitedPlayerName = invitedPlayerName;
         this.hostPlayerId = hostPlayerId;
         this.invitedPlayerId = invitedPlayerId;
-        this.gameRoomType = type;
+        this.gameRoomType = gameRoomType;
         this.status = status;
         this.createdAt = createdAt;
         this.invitationStatus = invitationStatus;
+    }
+
+    public String getHostPlayerName() {
+        return hostPlayerName;
+    }
+
+    public String getInvitedPlayerName() {
+        return invitedPlayerName;
     }
 
     public UUID getUuid() {

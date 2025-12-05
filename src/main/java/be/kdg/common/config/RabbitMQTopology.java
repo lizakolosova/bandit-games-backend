@@ -31,6 +31,9 @@ public class RabbitMQTopology {
     public static final String GAME_CREATED_KEY = "game.created";
     public static final String GAME_UPDATED_KEY = "game.player.names.updated";
 
+    public static final String ROUTING_KEY = "match.before.started";
+    public static final String QUEUE = "match.before.started.queue";
+
     @Bean
     public TopicExchange gameplayExchange() {
         return new TopicExchange(EXCHANGE, true, false);
@@ -135,5 +138,16 @@ public class RabbitMQTopology {
         return BindingBuilder.bind(playerGameRegisteredQueue())
                 .to(chessGameExchange())
                 .with(GAME_REGISTERED_ROUTING_KEY);
+    }
+    @Bean
+    public Queue matchBeforeStartedQueue() {
+        return QueueBuilder.durable(QUEUE).build();
+    }
+
+    @Bean
+    public Binding matchBeforeStartedBinding() {
+        return BindingBuilder.bind(matchBeforeStartedQueue())
+                .to(gameplayExchange())
+                .with(ROUTING_KEY);
     }
 }

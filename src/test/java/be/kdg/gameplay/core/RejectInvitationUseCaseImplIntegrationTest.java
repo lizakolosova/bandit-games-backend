@@ -2,6 +2,8 @@ package be.kdg.gameplay.core;
 
 import be.kdg.TestHelper;
 import be.kdg.common.exception.GameRoomException;
+import be.kdg.common.valueobj.GameId;
+import be.kdg.common.valueobj.PlayerId;
 import be.kdg.config.TestContainersConfig;
 import be.kdg.gameplay.adapter.out.GameRoomJpaEntity;
 import be.kdg.gameplay.adapter.out.GameRoomJpaRepository;
@@ -49,11 +51,15 @@ class RejectInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
-                be.kdg.common.valueobj.GameId.of(gameId),
-                be.kdg.common.valueobj.PlayerId.of(hostId),
-                be.kdg.common.valueobj.PlayerId.of(invitedId),
+                GameId.of(gameId),
+                hostName,
+                invitedName,
+                PlayerId.of(hostId),
+                PlayerId.of(invitedId),
                 GameRoomType.CLOSED
         );
 
@@ -76,11 +82,15 @@ class RejectInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
-                be.kdg.common.valueobj.GameId.of(gameId),
-                be.kdg.common.valueobj.PlayerId.of(hostId),
-                be.kdg.common.valueobj.PlayerId.of(invitedId),
+                GameId.of(gameId),
+                hostName,
+                invitedName,
+                PlayerId.of(hostId),
+                PlayerId.of(invitedId),
                 GameRoomType.CLOSED
         );
 
@@ -110,11 +120,15 @@ class RejectInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
-                be.kdg.common.valueobj.GameId.of(gameId),
-                be.kdg.common.valueobj.PlayerId.of(hostId),
-                be.kdg.common.valueobj.PlayerId.of(invitedId),
+                GameId.of(gameId),
+                hostName,
+                invitedName,
+                PlayerId.of(hostId),
+                PlayerId.of(invitedId),
                 GameRoomType.CLOSED
         );
 

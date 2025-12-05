@@ -13,6 +13,8 @@ public class GameRoomJpaMapper {
                 entity.getCreatedAt(),
                 GameRoomId.of(entity.getUuid()),
                 GameId.of(entity.getGameId()),
+                entity.getHostPlayerName(),
+                entity.getInvitedPlayerName(),
                 PlayerId.of(entity.getHostPlayerId()),
                 entity.getInvitedPlayerId() == null ? null : PlayerId.of(entity.getInvitedPlayerId()),
                 entity.getGameRoomType(),
@@ -27,6 +29,8 @@ public class GameRoomJpaMapper {
         return new GameRoomJpaEntity(
                 domain.getGameRoomId().uuid(),
                 domain.getGameId().uuid(),
+                domain.getHostPlayerName(),
+                domain.getInvitedPlayerName(),
                 domain.getHostPlayerId().uuid(),
                 domain.getInvitedPlayerId() == null ? null : domain.getInvitedPlayerId().uuid(),
                 domain.getGameRoomType(),
