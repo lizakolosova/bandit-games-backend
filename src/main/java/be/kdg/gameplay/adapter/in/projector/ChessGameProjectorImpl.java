@@ -1,40 +1,52 @@
 package be.kdg.gameplay.adapter.in.projector;
 
+import be.kdg.Main;
 import be.kdg.common.valueobj.PlayerId;
+import be.kdg.gameplay.domain.GameViewProjection;
 import be.kdg.gameplay.domain.Match;
 import be.kdg.gameplay.domain.valueobj.MatchId;
+import be.kdg.gameplay.domain.valueobj.MatchStatus;
 import be.kdg.gameplay.port.in.command.ChessGameCreatedProjectionCommand;
 import be.kdg.gameplay.port.in.command.ChessGameEndedProjectionCommand;
 import be.kdg.gameplay.port.in.ChessGameProjector;
 import be.kdg.gameplay.port.in.command.ChessGameUpdatedProjectionCommand;
 import be.kdg.gameplay.port.out.AddMatchPort;
+import be.kdg.gameplay.port.out.LoadGameViewProjectionPort;
 import be.kdg.gameplay.port.out.LoadMatchPort;
 import be.kdg.gameplay.port.out.UpdateMatchPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-
 @Service
 public class ChessGameProjectorImpl implements ChessGameProjector {
 
     private final LoadMatchPort loadMatchPort;
     private final UpdateMatchPort updateMatchPort;
     private final AddMatchPort addMatchPort;
+    private final LoadGameViewProjectionPort loadGameViewProjectionPort;
 
-    public ChessGameProjectorImpl(LoadMatchPort loadMatchPort, UpdateMatchPort updateMatchPort, AddMatchPort addMatchPort) {
+    private static final Logger log = LoggerFactory.getLogger(ChessGameProjectorImpl.class);
+
+    public ChessGameProjectorImpl(LoadMatchPort loadMatchPort, UpdateMatchPort updateMatchPort, AddMatchPort addMatchPort, LoadGameViewProjectionPort loadGameViewProjectionPort) {
         this.loadMatchPort = loadMatchPort;
         this.updateMatchPort = updateMatchPort;
         this.addMatchPort = addMatchPort;
+        this.loadGameViewProjectionPort = loadGameViewProjectionPort;
     }
 
-//    @Override
-//    public void project(ChessGameCreatedProjectionCommand command) {
-//        Match match = Match.begin(MatchId.of(UUID.fromString(command.gameId())), List.of(
-//                PlayerId.of(UUID.fromString(command.whitePlayer())), PlayerId.of(UUID.fromString(command.blackPlayer()))),
-//                command.timestamp());
-//        addMatchPort.add(match);
-//    }
+    @Override
+    public void project(ChessGameCreatedProjectionCommand command) {
+        GameViewProjection game = loadGameViewProjectionPort.findByName(command.gameName());
+        log.info(String.valueOf(game.getName()));
+        Match match = new Match(MatchId.of(UUID.fromString(command.matchId())), game.getGameId(),
+                List.of(PlayerId.of(UUID.fromString(command.whitePlayer())), PlayerId.of(UUID.fromString(command.blackPlayer()))),
+                MatchStatus.IN_PROGRESS, command.timestamp());
+
+        addMatchPort.add(match);
+    }
 
     @Override
     public void project(ChessGameUpdatedProjectionCommand command) {
@@ -59,7 +71,7 @@ public class ChessGameProjectorImpl implements ChessGameProjector {
         return switch (winner.toUpperCase()) {
             case "WHITE" -> match.getPlayers().get(0);
             case "BLACK" -> match.getPlayers().get(1);
-            default -> null; // DRAW
+            default -> null;
         };
     }
 }

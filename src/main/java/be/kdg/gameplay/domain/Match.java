@@ -31,6 +31,13 @@ public class Match {
         this.finishedAt = finishedAt;
         this.winnerPlayerId = winnerPlayerId;
     }
+    public Match(MatchId matchId, GameId gameId, List<PlayerId> players, MatchStatus status, LocalDateTime startedAt) {
+        this.matchId = matchId;
+        this.gameId = gameId;
+        this.players = players;
+        this.status = status;
+        this.startedAt = startedAt;
+    }
 
     public void updatePlayers(PlayerId white, PlayerId black) {
         this.players = List.of(white, black);

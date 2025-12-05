@@ -21,7 +21,7 @@ public class ChessPlatformEventListener {
         this.projector = projector;
     }
 
-    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_REGISTERED_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.PLATFORM_GAME_REGISTERED_QUEUE)
     public void onGameRegistered(GameRegisteredEvent event) {
         log.info("Received chess game registration: {}", event.registrationId());
 

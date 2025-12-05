@@ -19,7 +19,7 @@ public class MatchEventListener {
     public void publishMatchStarted(MatchStartedEvent event) {
         rabbitTemplate.convertAndSend(
                 RabbitMQTopology.EXCHANGE,
-                RabbitMQTopology.ROUTING_KEY,
+                RabbitMQTopology.MATCH_STARTED_ROUTING_KEY,
                 event
         );
     }

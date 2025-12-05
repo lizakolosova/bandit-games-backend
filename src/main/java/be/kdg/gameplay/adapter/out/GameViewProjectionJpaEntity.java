@@ -4,14 +4,12 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "game_projection")
+@Table(name = "game_view_projection",  schema = "kdg_gameplay")
 public class GameViewProjectionJpaEntity {
 
     @Id
-    @Column(name = "game_id", nullable = false)
     private UUID gameId;
 
-    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     protected GameViewProjectionJpaEntity() {

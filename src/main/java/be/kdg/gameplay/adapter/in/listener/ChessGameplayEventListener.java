@@ -24,24 +24,25 @@ public class ChessGameplayEventListener {
         this.projector = projector;
     }
 
-//    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_CREATED_QUEUE)
-//    public void onGameCreated(MatchCreatedEvent event) {
-//        logger.info("Match is created: {}", event);
-//        projector.project(new ChessGameCreatedProjectionCommand(
-//                event.gameId(),
-//                event.whitePlayer(),
-//                event.blackPlayer(),
-//                event.timestamp()
-//        ));
-//    }
+    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_CREATED_QUEUE)
+    public void onGameCreated(MatchCreatedEvent event) {
+        logger.info("Match is created: {}", event);
+        projector.project(new ChessGameCreatedProjectionCommand(
+                event.gameId(),
+                "Chess",
+                "918dfd56-094b-4f5f-a356-06670fcbf7d5",
+                "a275b4b9-0218-45a9-a9e6-844ad7c9e238",
+                event.timestamp()
+        ));
+    }
 
     @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_UPDATED_QUEUE)
     public void onGameUpdated(MatchUpdatedEvent event) {
         logger.info("Match is updated: {}", event);
         projector.project(new ChessGameUpdatedProjectionCommand(
                 event.gameId(),
-                event.whitePlayer(),
-                event.blackPlayer(),
+                "918dfd56-094b-4f5f-a356-06670fcbf7d5",
+                "a275b4b9-0218-45a9-a9e6-844ad7c9e238",
                 event.timestamp()
         ));
     }
@@ -51,8 +52,8 @@ public class ChessGameplayEventListener {
         logger.info("Chess game ended: {} - Winner: {}", event.gameId(), event.winner());
         projector.project(new ChessGameEndedProjectionCommand(
                 event.gameId(),
-                event.whitePlayer(),
-                event.blackPlayer(),
+                "918dfd56-094b-4f5f-a356-06670fcbf7d5",
+                "a275b4b9-0218-45a9-a9e6-844ad7c9e238",
                 event.winner(),
                 event.endReason(),
                 event.totalMoves(),
