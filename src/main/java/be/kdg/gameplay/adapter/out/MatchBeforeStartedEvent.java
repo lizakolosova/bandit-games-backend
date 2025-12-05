@@ -1,25 +1,25 @@
 package be.kdg.gameplay.adapter.out;
 
 import be.kdg.common.config.RabbitMQTopology;
-import be.kdg.common.events.MatchStartedEvent;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MatchEventListener {
+public class MatchBeforeStartedEvent {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public MatchEventListener(RabbitTemplate rabbitTemplate) {
+    public MatchBeforeStartedEvent(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
         System.out.println("=== MatchEventListener INITIALIZED ===");
     }
 
-    @EventListener(MatchStartedEvent.class)
-    public void publishMatchStarted(MatchStartedEvent event) {
+    @EventListener(be.kdg.common.events.MatchBeforeStartedEvent.class)
+    public void publishMatchBeforeStartedEvent(be.kdg.common.events.MatchBeforeStartedEvent event) {
         System.out.println("=== MatchEventListener TRIGGERED ===");
-        System.out.println("Event: " + event.matchId());
+        System.out.println("host player Name: " + event.hostPlayerName());
+        System.out.println("host player ID: " + event.hostPlayerId());
         System.out.println("Exchange: " + RabbitMQTopology.EXCHANGE);
         System.out.println("Routing key: " + RabbitMQTopology.ROUTING_KEY);
 

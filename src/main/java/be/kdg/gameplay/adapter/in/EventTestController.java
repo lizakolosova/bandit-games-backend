@@ -1,6 +1,6 @@
 package be.kdg.gameplay.adapter.in;
 
-import be.kdg.common.events.MatchStartedEvent;
+import be.kdg.common.events.MatchBeforeStartedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,16 +33,16 @@ public class EventTestController {
     private String publishEvent() {
         System.out.println("=== ENDPOINT HIT ===");
 
-        MatchStartedEvent event = new MatchStartedEvent(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
+        MatchBeforeStartedEvent event = new MatchBeforeStartedEvent(
+                "hostPlayerName",
+                "opponentPlayerName",
                 UUID.randomUUID(),
                 UUID.randomUUID()
         );
 
-        System.out.println(">>> Publishing MatchStartedEvent");
-        System.out.println("    Match ID: " + event.matchId());
-        System.out.println("    Game ID: " + event.gameId());
+        System.out.println(">>> Publishing MatchBeforeStartedEvent");
+        System.out.println("    hostPlayerName: " + event.hostPlayerName());
+        System.out.println("    opponentPlayerName: " + event.opponentPlayerName());
         System.out.println("    HostPlayer ID: " + event.hostPlayerId());
         System.out.println("    Opponent player ID: " + event.opponentPlayerId());
 
@@ -50,7 +50,7 @@ public class EventTestController {
 
         System.out.println(">>> Event published to Spring EventBus");
 
-        return "Event published - Match: " + event.matchId() + ", Game: " + event.gameId()
+        return "Event published - Match: " + event.hostPlayerName() + ", Game: " + event.opponentPlayerName()
                 + ", HostPlayer: " + event.hostPlayerId()
                 +  ", OpponentPlayer: " + event.opponentPlayerId();
     }

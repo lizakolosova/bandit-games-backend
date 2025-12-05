@@ -2,7 +2,7 @@ package be.kdg.gameplay.domain;
 
 import be.kdg.common.events.DomainEvent;
 import be.kdg.common.events.GameRoomInvitationSentEvent;
-import be.kdg.common.events.MatchStartedEvent;
+import be.kdg.common.events.MatchBeforeStartedEvent;
 import be.kdg.common.exception.GameRoomException;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
@@ -17,6 +17,9 @@ public class GameRoom {
 
     private GameRoomId gameRoomId;
     private GameId gameId;
+    private String hostplayerName;
+    private String invitedPlayerName;
+
 
     private PlayerId hostPlayerId;
     private PlayerId invitedPlayerId;
@@ -70,14 +73,14 @@ public class GameRoom {
         this.status = GameRoomStatus.WAITING;
         this.invitedPlayerId = null;
     }
-    public Match startMatch() {
+    public Match beforeStartMatch() {
         if (status != GameRoomStatus.READY)
             throw GameRoomException.notReady();
 
         status = GameRoomStatus.MATCH_STARTED;
-        Match match = new Match(MatchId.create(), gameId, List.of(hostPlayerId, invitedPlayerId));
-        registerEvent(new MatchStartedEvent(match.getMatchId().uuid(),
-                gameId.uuid(), hostPlayerId.uuid(), invitedPlayerId.uuid()));
+        Match match = new Match(hostplayerName, invitedPlayerName, List.of(hostPlayerId, invitedPlayerId));
+        registerEvent(new MatchBeforeStartedEvent(hostplayerName,
+                invitedPlayerName, hostPlayerId.uuid(), invitedPlayerId.uuid()));
         return match;
     }
 

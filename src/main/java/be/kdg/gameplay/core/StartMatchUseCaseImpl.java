@@ -34,7 +34,7 @@ public class StartMatchUseCaseImpl implements StartMatchUseCase {
     public Match start(StartMatchCommand command) {
         GameRoom room = loadGameRoomPort.loadById(GameRoomId.of(command.gameRoomId()));
 
-        Match match = room.startMatch();
+        Match match = room.beforeStartMatch();
 
         updateGameRoomPort.update(room);
         Match saved = addMatchPort.add(match);
