@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQTopology {
 
     public static final String EXCHANGE = "gameplay.match";
-    public static final String ROUTING_KEY = "match.started";
-    public static final String QUEUE = "match.started.queue";
+    public static final String ROUTING_KEY = "match.before.started";
+    public static final String QUEUE = "match.before.started.queue";
 
     @Bean
     public TopicExchange gameplayExchange() {
@@ -17,13 +17,13 @@ public class RabbitMQTopology {
     }
 
     @Bean
-    public Queue matchStartedQueue() {
+    public Queue matchBeforeStartedQueue() {
         return QueueBuilder.durable(QUEUE).build();
     }
 
     @Bean
-    public Binding matchStartedBinding() {
-        return BindingBuilder.bind(matchStartedQueue())
+    public Binding matchBeforeStartedBinding() {
+        return BindingBuilder.bind(matchBeforeStartedQueue())
                 .to(gameplayExchange())
                 .with(ROUTING_KEY);
     }

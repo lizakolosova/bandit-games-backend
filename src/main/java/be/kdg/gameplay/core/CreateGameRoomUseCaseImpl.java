@@ -23,8 +23,8 @@ public class CreateGameRoomUseCaseImpl implements CreateGameRoomUseCase {
     @Override
     public GameRoom create(CreateGameRoomCommand command) {
 
-        GameRoom room = new GameRoom(GameId.of(command.gameId()), PlayerId.of(command.hostPlayerId()),
-                PlayerId.of(command.invitedPlayerId()), command.gameRoomType());
+        GameRoom room = new GameRoom(GameId.of(command.gameId()), command.hostPlayerName(), command.invitedPlayerName(),
+                PlayerId.of(command.hostPlayerId()), PlayerId.of(command.invitedPlayerId()), command.gameRoomType());
         eventPublisher.publishEvents(room.pullDomainEvents());
         return addGameRoomPort.add(room);
     }
