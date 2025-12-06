@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class TicTacToeGameplayEventListener {
 
@@ -25,7 +27,7 @@ public class TicTacToeGameplayEventListener {
     public void onGameCreated(TicTacToeMatchCreatedEvent event) {
         logger.info("TicTacToe game created: {}", event);
         projector.project(new TicTacToeGameCreatedProjectionCommand(
-                "b90a72ac-b27b-428d-b99e-51a8c2abfccb",
+                UUID.fromString("b90a72ac-b27b-428d-b99e-51a8c2abfccb"),// needs to be changed
                 event.matchId(),
                 event.hostPlayerId(),
                 event.opponentPlayerId(),

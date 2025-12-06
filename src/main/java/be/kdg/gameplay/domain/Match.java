@@ -4,6 +4,7 @@ import be.kdg.common.valueobj.GameId;
 import be.kdg.gameplay.domain.valueobj.MatchId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.domain.valueobj.MatchStatus;
+import jakarta.persistence.OrderColumn;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
 
 @Component
 public class AchievementProjectorImpl implements AchievementProjector {
@@ -36,11 +35,11 @@ public class AchievementProjectorImpl implements AchievementProjector {
     public void project(TicTacToeAchievementUnlockedProjectionCommand command) {
         logger.info("Projecting achievement unlocked: {}", command);
 
-        Player player = loadPlayerPort.loadById(PlayerId.of(UUID.fromString(command.playerId())))
-                .orElseThrow(() -> NotFoundException.player(UUID.fromString(command.playerId())));
+        Player player = loadPlayerPort.loadById(PlayerId.of(command.playerId()))
+                .orElseThrow(() -> NotFoundException.player(command.playerId()));
 
-        player.unlockAchievement(AchievementId.of(UUID.fromString(command.achievementId())),
-                GameId.of(UUID.fromString(command.gameId())));
+        player.unlockAchievement(AchievementId.of(command.achievementId()),
+                GameId.of(command.gameId()));
 
         updatePlayerPort.update(player);
     }

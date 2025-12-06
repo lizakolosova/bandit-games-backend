@@ -36,8 +36,8 @@ public class TicTacToeGameProjectorImpl implements TicTacToeGameProjector {
     public void project(TicTacToeGameCreatedProjectionCommand command) {
         logger.info("Projecting TicTacToe game created: {}", command);
 
-        Match match = new Match(MatchId.of(UUID.fromString(command.matchId())), GameId.of(UUID.fromString(command.gameId())),
-                List.of(PlayerId.of(UUID.fromString(command.hostPlayerId())),  PlayerId.of(UUID.fromString(command.opponentPlayerId()))),
+        Match match = new Match(MatchId.of(command.matchId()), GameId.of(command.gameId()),
+                List.of(PlayerId.of(command.hostPlayerId()),  PlayerId.of(command.opponentPlayerId())),
                 MatchStatus.STARTED, command.timestamp());
 
         addMatchPort.add(match);
@@ -55,9 +55,9 @@ public class TicTacToeGameProjectorImpl implements TicTacToeGameProjector {
     public void project(TicTacToeGameEndedProjectionCommand command) {
         logger.info("Projecting TicTacToe game ended: {}", command);
 
-        Match match = loadMatchPort.loadById(MatchId.of(UUID.fromString(command.matchId())));
+        Match match = loadMatchPort.loadById(MatchId.of(command.matchId()));
 
-        match.finish(command.timestamp(), command.winnerId() == null ? null : PlayerId.of(UUID.fromString(command.winnerId())));
+        match.finish(command.timestamp(), command.winnerId() == null ? null : PlayerId.of(command.winnerId()));
         updateMatchPort.update(match);
     }
 }

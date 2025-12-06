@@ -4,9 +4,10 @@ import be.kdg.common.events.DomainEvent;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public record ChessGameRegisteredEvent(
-        String registrationId,
+        UUID registrationId,
         String frontendUrl,
         String pictureUrl,
         List<AchievementEntry> availableAchievements,

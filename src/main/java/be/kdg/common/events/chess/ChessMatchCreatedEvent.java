@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ChessMatchCreatedEvent(
-        String gameId,
+        UUID gameId,
         UUID whitePlayerId,
         String whitePlayerName,
         UUID blackPlayerId,

@@ -1,7 +1,9 @@
 package be.kdg.player.port.in.command;
 
+import java.util.UUID;
+
 public record RegisterPlayerGameProjectionCommand(
-        String gameId,
+        UUID gameId,
         String name,
         String pictureUrl,
         String category,

@@ -41,7 +41,7 @@ public class ChessGameProjectorImpl implements ChessGameProjector {
     @Override
     public void project(ChessGameCreatedProjectionCommand command) {
         GameViewProjection game = loadGameViewProjectionPort.findByName(command.gameName());
-        Match match = new Match(MatchId.of(UUID.fromString(command.matchId())), game.getGameId(),
+        Match match = new Match(MatchId.of(command.matchId()), game.getGameId(),
                 List.of(PlayerId.of(command.whitePlayerId()), PlayerId.of(command.blackPlayerId())),
                 MatchStatus.IN_PROGRESS, command.timestamp());
 
@@ -50,7 +50,7 @@ public class ChessGameProjectorImpl implements ChessGameProjector {
 
     @Override
     public void project(ChessGameUpdatedProjectionCommand command) {
-        Match match = loadMatchPort.loadById(MatchId.of(UUID.fromString(command.gameId())));
+        Match match = loadMatchPort.loadById(MatchId.of(command.gameId()));
 
         match.updatePlayers(PlayerId.of((command.whitePlayerId())),
                 PlayerId.of((command.blackPlayerId())));
@@ -60,7 +60,7 @@ public class ChessGameProjectorImpl implements ChessGameProjector {
 
     @Override
     public void project(ChessGameEndedProjectionCommand command) {
-        Match match = loadMatchPort.loadById((MatchId.of((UUID.fromString(command.gameId())))));
+        Match match = loadMatchPort.loadById((MatchId.of((command.gameId()))));
 
         PlayerId winner = resolveWinner(match, command.winner());
 
@@ -78,7 +78,7 @@ public class ChessGameProjectorImpl implements ChessGameProjector {
     @Override
     @Transactional
     public void project(RegisterGameViewProjectionCommand command) {
-        GameViewProjection projection = new GameViewProjection(GameId.of(UUID.fromString(command.gameId())), command.name());
+        GameViewProjection projection = new GameViewProjection(GameId.of(command.gameId()), command.name());
         addGameViewProjectionPort.add(projection);
     }
 }

@@ -17,7 +17,7 @@ public class MatchJpaMapper {
                 match.getGameId().uuid(),
                 match.getPlayers().stream()
                         .map(PlayerId::uuid)
-                        .collect(Collectors.toSet()),
+                        .collect(Collectors.toList()),
                 match.getStatus(),
                 match.getStartedAt(),
                 match.getFinishedAt(),

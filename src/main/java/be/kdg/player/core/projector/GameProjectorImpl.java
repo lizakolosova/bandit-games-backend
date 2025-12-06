@@ -30,7 +30,7 @@ public class GameProjectorImpl implements GameProjector {
     @Override
     @Transactional
     public void project(RegisterPlayerGameProjectionCommand command) {
-        GameProjection projection = new GameProjection(UUID.fromString(command.gameId()), command.name(), command.pictureUrl(),
+        GameProjection projection = new GameProjection(command.gameId(), command.name(), command.pictureUrl(),
                 command.category(), command.rules(), command.achievementCount(), command.averageMinutes(), command.developedBy());
 
         games.addGameProjection(projection);
