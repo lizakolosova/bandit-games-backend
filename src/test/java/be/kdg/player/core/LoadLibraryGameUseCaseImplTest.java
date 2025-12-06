@@ -6,7 +6,7 @@ import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
 import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.GameProjection;
 import be.kdg.player.domain.Player;
-import be.kdg.player.port.in.LoadLibraryGameCommand;
+import be.kdg.player.port.in.command.LoadLibraryGameCommand;
 import be.kdg.player.port.out.LoadGameProjectionPort;
 import be.kdg.player.port.out.LoadPlayerPort;
 import org.junit.jupiter.api.Test;

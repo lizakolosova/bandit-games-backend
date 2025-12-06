@@ -4,7 +4,7 @@ import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.adapter.out.GameplayEventPublisher;
 import be.kdg.gameplay.domain.GameRoom;
-import be.kdg.gameplay.port.in.CreateGameRoomCommand;
+import be.kdg.gameplay.port.in.command.CreateGameRoomCommand;
 import be.kdg.gameplay.port.in.CreateGameRoomUseCase;
 import be.kdg.gameplay.port.out.AddGameRoomPort;
 import org.springframework.stereotype.Service;

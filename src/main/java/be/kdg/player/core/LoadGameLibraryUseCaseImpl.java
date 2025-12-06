@@ -4,7 +4,7 @@ import be.kdg.common.exception.NotFoundException;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.Player;
-import be.kdg.player.port.in.LoadGameLibraryCommand;
+import be.kdg.player.port.in.command.LoadGameLibraryCommand;
 import be.kdg.player.port.in.LoadGameLibraryUseCase;
 import be.kdg.player.port.out.LoadPlayerPort;
 import jakarta.transaction.Transactional;

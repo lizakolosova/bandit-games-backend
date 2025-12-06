@@ -2,6 +2,8 @@ package be.kdg.player.domain;
 
 import be.kdg.common.events.DomainEvent;
 import be.kdg.common.events.FriendRemovedEvent;
+import be.kdg.common.valueobj.AchievementId;
+import be.kdg.common.valueobj.GameId;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.common.exception.NotFoundException;
@@ -87,6 +89,33 @@ public class Player {
         domainEvents.clear();
         return copy;
     }
+
+//    public void recordGameResult(UUID gameId, String winner, String playerName) {
+//        GameLibrary library = findGameInLibrary(gameId);
+//        if (library == null) {
+//            library = addGameToLibrary(gameId);
+//        }
+//        library.recordGamePlayed();
+//
+//        if ("DRAW".equals(winner)) {
+//        library.recordDraw();
+//        } else if (playerName.equals(winner)) {
+//        library.recordWin();
+//        } else {
+//        library.recordLoss();
+//        }
+//    }
+
+    public void unlockAchievement(AchievementId achievementId, GameId gameId) {
+    boolean alreadyUnlocked = achievements.stream()
+            .anyMatch(a -> a.getAchievementId().equals(achievementId));
+
+    if (alreadyUnlocked) {return;}
+
+    PlayerAchievement achievement = new PlayerAchievement(this.playerId, achievementId, gameId);
+
+    achievements.add(achievement);
+}
 
     public void registerEvent(DomainEvent event) {
         domainEvents.add(event);

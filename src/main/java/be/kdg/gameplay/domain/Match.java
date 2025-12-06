@@ -13,9 +13,6 @@ public class Match {
     private MatchId matchId;
     private GameId gameId;
     private List<PlayerId> players;
-    private String hostplayerName;
-    private String invitedPlayerName;
-
 
     private MatchStatus status;
 
@@ -34,19 +31,22 @@ public class Match {
         this.finishedAt = finishedAt;
         this.winnerPlayerId = winnerPlayerId;
     }
-
-    public Match(MatchId matchId, GameId gameId, List<PlayerId> players) {
+    public Match(MatchId matchId, GameId gameId, List<PlayerId> players, MatchStatus status, LocalDateTime startedAt) {
         this.matchId = matchId;
         this.gameId = gameId;
         this.players = players;
-        this.status = MatchStatus.IN_PROGRESS;
+        this.status = status;
+        this.startedAt = startedAt;
     }
 
-    public Match(String hostplayerName, String invitedPlayerName, List<PlayerId> players) {
-        this.hostplayerName = hostplayerName;
-        this.invitedPlayerName = invitedPlayerName;
-        this.players = players;
-        this.status = MatchStatus.IN_PROGRESS;
+    public void updatePlayers(PlayerId white, PlayerId black) {
+        this.players = List.of(white, black);
+    }
+
+    public void finish(LocalDateTime finishedAt, PlayerId winner) {
+        this.status = MatchStatus.FINISHED;
+        this.finishedAt = finishedAt;
+        this.winnerPlayerId = winner;
     }
 
     public MatchId getMatchId() {

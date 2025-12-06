@@ -10,7 +10,7 @@ import be.kdg.gameplay.adapter.out.GameRoomJpaRepository;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.valueobj.GameRoomStatus;
 import be.kdg.gameplay.domain.valueobj.GameRoomType;
-import be.kdg.gameplay.port.in.RejectInvitationCommand;
+import be.kdg.gameplay.port.in.command.RejectInvitationCommand;
 import be.kdg.gameplay.port.out.AddGameRoomPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

@@ -6,7 +6,7 @@ import be.kdg.gameplay.adapter.out.GameRoomJpaRepository;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.valueobj.GameRoomStatus;
 import be.kdg.gameplay.domain.valueobj.GameRoomType;
-import be.kdg.gameplay.port.in.CreateGameRoomCommand;
+import be.kdg.gameplay.port.in.command.CreateGameRoomCommand;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

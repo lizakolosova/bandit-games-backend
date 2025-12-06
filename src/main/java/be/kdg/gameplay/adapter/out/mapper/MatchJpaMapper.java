@@ -4,6 +4,7 @@ import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.adapter.out.MatchJpaEntity;
 import be.kdg.gameplay.domain.Match;
+import be.kdg.gameplay.domain.valueobj.GameMatchId;
 import be.kdg.gameplay.domain.valueobj.MatchId;
 
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class MatchJpaMapper {
     public static Match toDomain(MatchJpaEntity entity) {
         return new Match(
                 MatchId.of(entity.getMatchId()),
-                new GameId(entity.getGameId()),
+                 GameId.of(entity.getGameId()),
                 entity.getPlayers().stream()
                         .map(PlayerId::of)
                         .toList(),

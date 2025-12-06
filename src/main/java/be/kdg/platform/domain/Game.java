@@ -1,5 +1,6 @@
 package be.kdg.platform.domain;
 
+import be.kdg.common.events.AchievementAddedEvent;
 import be.kdg.common.events.DomainEvent;
 import be.kdg.common.events.GameAddedEvent;
 import be.kdg.common.valueobj.AchievementId;
@@ -65,6 +66,7 @@ public class Game {
         AchievementId id = AchievementId.create();
         AchievementDefinition def = new AchievementDefinition(id, name, description, howToUnlock);
         achievements.add(def);
+        registerEvent(new AchievementAddedEvent(id.uuid(), this.gameId.uuid(), name, description));
         return def;
     }
 

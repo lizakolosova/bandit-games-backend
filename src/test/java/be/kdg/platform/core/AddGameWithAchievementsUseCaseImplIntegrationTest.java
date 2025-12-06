@@ -7,8 +7,8 @@ import be.kdg.config.TestContainersConfig;
 import be.kdg.platform.adapter.out.AchievementDefinitionJpaRepository;
 import be.kdg.platform.adapter.out.GameJpaRepository;
 import be.kdg.platform.domain.Game;
-import be.kdg.platform.port.in.AddGameWithAchievementsCommand;
-import be.kdg.platform.port.in.AchievementDefinitionCommand;
+import be.kdg.platform.port.in.command.AddGameWithAchievementsCommand;
+import be.kdg.platform.port.in.command.AchievementDefinitionCommand;
 
 
 import org.junit.jupiter.api.AfterEach;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 

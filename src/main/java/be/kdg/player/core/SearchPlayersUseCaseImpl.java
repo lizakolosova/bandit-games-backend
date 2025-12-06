@@ -3,7 +3,7 @@ package be.kdg.player.core;
 
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.domain.Player;
-import be.kdg.player.port.in.SearchPlayersCommand;
+import be.kdg.player.port.in.command.SearchPlayersCommand;
 import be.kdg.player.port.in.SearchPlayersUseCase;
 import be.kdg.player.port.out.LoadPlayerPort;
 import jakarta.transaction.Transactional;

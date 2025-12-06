@@ -6,7 +6,7 @@ import be.kdg.config.TestContainersConfig;
 import be.kdg.player.adapter.out.PlayerJpaRepository;
 import be.kdg.player.adapter.out.mapper.PlayerJpaMapper;
 import be.kdg.player.domain.Player;
-import be.kdg.player.port.in.SearchPlayersCommand;
+import be.kdg.player.port.in.command.SearchPlayersCommand;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

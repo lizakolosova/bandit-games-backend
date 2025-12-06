@@ -7,6 +7,9 @@ import be.kdg.platform.domain.Game;
 import be.kdg.platform.domain.exceptions.GameNotFoundException;
 import be.kdg.platform.port.in.*;
 
+import be.kdg.platform.port.in.command.AchievementDefinitionCommand;
+import be.kdg.platform.port.in.command.AddGameWithAchievementsCommand;
+import be.kdg.platform.port.in.command.ViewGameCommand;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

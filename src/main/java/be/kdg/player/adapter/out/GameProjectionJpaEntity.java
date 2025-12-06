@@ -1,10 +1,8 @@
 package be.kdg.player.adapter.out;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "game_projection", schema = "kdg_player")
@@ -19,6 +17,9 @@ public class GameProjectionJpaEntity {
     private int achievementCount;
     private int averageMinutes;
     private String developedBy;
+
+    @OneToMany(mappedBy = "gameProjection", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AchievementProjectionJpaEntity> achievementProjections = new ArrayList<>();
 
     protected GameProjectionJpaEntity() { }
 
