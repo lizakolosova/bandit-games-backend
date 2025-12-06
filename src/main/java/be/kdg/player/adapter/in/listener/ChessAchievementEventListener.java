@@ -2,6 +2,7 @@ package be.kdg.player.adapter.in.listener;
 
 import be.kdg.common.config.RabbitMQTopology;
 import be.kdg.common.events.chess.AchievementAcquiredEvent;
+import be.kdg.common.exception.NotFoundException;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.player.domain.AchievementProjection;
 import be.kdg.player.port.in.AchievementProjectionProjector;
@@ -33,12 +34,11 @@ public class ChessAchievementEventListener {
     public void onAchievementUnlocked(AchievementAcquiredEvent event) {
         logger.info("Chess achievement unlocked event received: {}", event);
 
-        AchievementProjection projection = loadAchievementProjectionPort.loadByGameIdAndType(GameId.of(UUID.fromString(event.gameId())),
-                event.achievementType()).orElseThrow(() -> new IllegalStateException("Achievement not found: gameId=" + event.gameId() +
-                        " type=" + event.achievementType()));
+        AchievementProjection projection = loadAchievementProjectionPort.loadByGameIdAndType(GameId.of(event.gameId()),
+                event.achievementType()).orElseThrow(() -> NotFoundException.game(event.gameId()));
 
-        projector.project(new ChessAchievementUnlockedProjectionCommand(UUID.fromString(event.playerId()),
-                projection.getAchievementId().uuid(), UUID.fromString(event.gameId()), event.achievementType(),
+        projector.project(new ChessAchievementUnlockedProjectionCommand(event.playerId(),
+                projection.getAchievementId().uuid(), event.gameId(), event.achievementType(),
                 event.timestamp()));
     }
 }

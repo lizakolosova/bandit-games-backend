@@ -3,27 +3,21 @@ package be.kdg.common.events.tictactoe;
 import be.kdg.common.events.DomainEvent;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record TicTacToeAchievementAchievedEvent(
         LocalDateTime occurredAt,
-        String playerId,
-        String achievementId,
+        UUID playerId,
+        UUID achievementId,
         String achievementType,
-        String matchId,
-        String gameId,
+        UUID matchId,
+        UUID gameId,
         String messageType,
         LocalDateTime timestamp
 ) implements DomainEvent {
 
-    public TicTacToeAchievementAchievedEvent(
-            String playerId,
-            String achievementId,
-            String achievementType,
-            String matchId,
-            String gameId,
-            String messageType,
-            LocalDateTime timestamp
-    ) {
+    public TicTacToeAchievementAchievedEvent(UUID playerId, UUID achievementId, String achievementType, UUID matchId,
+            UUID gameId, String messageType, LocalDateTime timestamp) {
         this(LocalDateTime.now(), playerId, achievementId, achievementType, matchId, gameId, messageType, timestamp);
     }
 

@@ -3,7 +3,9 @@ package be.kdg;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.platform.adapter.out.AchievementDefinitionJpaRepository;
 import be.kdg.platform.adapter.out.GameJpaRepository;
+import be.kdg.player.adapter.out.GameProjectionJpaRepository;
 import be.kdg.player.adapter.out.PlayerJpaRepository;
+import be.kdg.player.domain.GameProjection;
 import be.kdg.player.domain.Player;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,10 @@ public class TestHelper {
     private PlayerJpaRepository players;
     @Autowired
     private  DataSource dataSource;
-
+    @Autowired
+    private AchievementDefinitionJpaRepository achievementDefs;
+    @Autowired
+    private GameProjectionJpaRepository gameProjections;
 
     @PostConstruct
     public void createSchemas() {
@@ -44,6 +49,8 @@ public class TestHelper {
         games.deleteAll();
         achievements.deleteAll();
         players.deleteAll();
+        achievementDefs.deleteAll();
+        gameProjections.deleteAll();
     }
 
     public Player createDummyPlayer(UUID id) {

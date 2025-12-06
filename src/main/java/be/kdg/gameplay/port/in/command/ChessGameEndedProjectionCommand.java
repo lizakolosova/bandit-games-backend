@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ChessGameEndedProjectionCommand(
-        String gameId,
+        UUID gameId,
         UUID whitePlayerId,
         UUID blackPlayerId,
         String winner,
