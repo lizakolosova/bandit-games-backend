@@ -1,8 +1,8 @@
-package be.kdg.player.adapter.in;
+package be.kdg.player.adapter.in.listener;
 
 import be.kdg.common.config.RabbitMQTopology;
 import be.kdg.common.events.GameAddedEvent;
-import be.kdg.common.events.GameRegisteredEvent;
+import be.kdg.common.events.chess.ChessGameRegisteredEvent;
 import be.kdg.player.port.in.command.GameAddedProjectionCommand;
 import be.kdg.player.port.in.GameProjector;
 import be.kdg.player.port.in.command.RegisterPlayerGameProjectionCommand;
@@ -41,7 +41,7 @@ public class GameEventListener {
     }
 
     @RabbitListener(queues = RabbitMQTopology.PLAYER_GAME_REGISTERED_QUEUE)
-    public void onCatalogUpdate(GameRegisteredEvent event) {
+    public void onCatalogUpdate(ChessGameRegisteredEvent event) {
         logger.info("Game registered event received: {}", event);
         projector.project(new RegisterPlayerGameProjectionCommand(
                 event.registrationId(),

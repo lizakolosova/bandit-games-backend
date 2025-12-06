@@ -1,13 +1,15 @@
 package be.kdg.gameplay.adapter.in.listener;
 
 import be.kdg.common.config.RabbitMQTopology;
-import be.kdg.common.events.MatchCreatedEvent;
-import be.kdg.common.events.MatchEndedEvent;
-import be.kdg.common.events.MatchUpdatedEvent;
+import be.kdg.common.events.chess.ChessGameRegisteredEvent;
+import be.kdg.common.events.chess.ChessMatchCreatedEvent;
+import be.kdg.common.events.chess.ChessMatchEndedEvent;
+import be.kdg.common.events.chess.ChessMatchUpdatedEvent;
 import be.kdg.gameplay.port.in.ChessGameProjector;
 import be.kdg.gameplay.port.in.command.ChessGameCreatedProjectionCommand;
 import be.kdg.gameplay.port.in.command.ChessGameEndedProjectionCommand;
 import be.kdg.gameplay.port.in.command.ChessGameUpdatedProjectionCommand;
+import be.kdg.gameplay.port.in.command.RegisterGameViewProjectionCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -25,39 +27,47 @@ public class ChessGameplayEventListener {
     }
 
     @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_CREATED_QUEUE)
-    public void onGameCreated(MatchCreatedEvent event) {
+    public void onGameCreated(ChessMatchCreatedEvent event) {
         logger.info("Match is created: {}", event);
         projector.project(new ChessGameCreatedProjectionCommand(
                 event.gameId(),
                 "Chess",
-                "918dfd56-094b-4f5f-a356-06670fcbf7d5",
-                "a275b4b9-0218-45a9-a9e6-844ad7c9e238",
+                event.whitePlayerId(),
+                event.blackPlayerId(),
                 event.timestamp()
         ));
     }
 
     @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_UPDATED_QUEUE)
-    public void onGameUpdated(MatchUpdatedEvent event) {
+    public void onGameUpdated(ChessMatchUpdatedEvent event) {
         logger.info("Match is updated: {}", event);
         projector.project(new ChessGameUpdatedProjectionCommand(
                 event.gameId(),
-                "918dfd56-094b-4f5f-a356-06670fcbf7d5",
-                "a275b4b9-0218-45a9-a9e6-844ad7c9e238",
+                event.whitePlayerId(),
+                event.blackPlayerId(),
                 event.timestamp()
         ));
     }
 
-    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_ENDED_QUEUE)
-    public void onGameEnded(MatchEndedEvent event) {
+    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_ENDED_QUEUE, containerFactory = "simpleRabbitListenerContainerFactory")
+    public void onGameEnded(ChessMatchEndedEvent event) {
         logger.info("Chess game ended: {} - Winner: {}", event.gameId(), event.winner());
         projector.project(new ChessGameEndedProjectionCommand(
                 event.gameId(),
-                "918dfd56-094b-4f5f-a356-06670fcbf7d5",
-                "a275b4b9-0218-45a9-a9e6-844ad7c9e238",
+                event.whitePlayerId(),
+                event.blackPlayerId(),
                 event.winner(),
                 event.endReason(),
                 event.totalMoves(),
                 event.timestamp()
+        ));
+    }
+
+    @RabbitListener(queues = RabbitMQTopology.GAMEPLAY_GAME_REGISTERED_QUEUE)
+    public void onGameRegistered(ChessGameRegisteredEvent event) {
+        projector.project(new RegisterGameViewProjectionCommand(
+                event.registrationId(),
+                "Chess"
         ));
     }
 }

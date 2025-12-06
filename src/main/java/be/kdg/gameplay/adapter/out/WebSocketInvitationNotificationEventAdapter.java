@@ -1,4 +1,4 @@
-package be.kdg.gameplay.adapter.in.projector;
+package be.kdg.gameplay.adapter.out;
 
 import be.kdg.gameplay.port.in.command.InvitationNotificationCommand;
 import be.kdg.gameplay.port.in.InvitationNotificationEventProjector;

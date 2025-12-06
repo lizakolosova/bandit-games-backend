@@ -1,4 +1,4 @@
-package be.kdg.player.adapter.in;
+package be.kdg.player.core.projector;
 
 import be.kdg.player.domain.GameProjection;
 import be.kdg.player.port.in.command.GameAddedProjectionCommand;
@@ -21,33 +21,17 @@ public class GameProjectorImpl implements GameProjector {
     @Override
     public void project(GameAddedProjectionCommand command) {
 
-        GameProjection gameProjection = new GameProjection(
-                command.gameId(),
-                command.name(),
-                command.pictureUrl(),
-                command.category(),
-                command.rules(),
-                command.averageMinutes(),
-                command.achievementCount(),
-                command.developedBy()
-        );
+        GameProjection gameProjection = new GameProjection(command.gameId(), command.name(), command.pictureUrl(),
+                command.category(), command.rules(), command.averageMinutes(), command.achievementCount(), command.developedBy());
 
         games.addGameProjection(gameProjection);
     }
 
     @Override
     @Transactional
-    public void project(RegisterPlayerGameProjectionCommand c) {
-        GameProjection projection = new GameProjection(
-                UUID.fromString(c.gameId()),
-                c.name(),
-                c.pictureUrl(),
-                c.category(),
-                c.rules(),
-                c.achievementCount(),
-                c.averageMinutes(),
-                c.developedBy()
-        );
+    public void project(RegisterPlayerGameProjectionCommand command) {
+        GameProjection projection = new GameProjection(UUID.fromString(command.gameId()), command.name(), command.pictureUrl(),
+                command.category(), command.rules(), command.achievementCount(), command.averageMinutes(), command.developedBy());
 
         games.addGameProjection(projection);
     }

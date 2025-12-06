@@ -1,4 +1,4 @@
-package be.kdg.player.adapter.in;
+package be.kdg.player.adapter.in.listener;
 
 import be.kdg.common.events.FriendRemovedEvent;
 import be.kdg.player.port.in.command.FriendRemovedProjectionCommand;

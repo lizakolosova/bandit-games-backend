@@ -1,8 +1,8 @@
 package be.kdg.platform.adapter.in;
 
 import be.kdg.common.config.RabbitMQTopology;
-import be.kdg.common.events.AchievementEntry;
-import be.kdg.common.events.GameRegisteredEvent;
+import be.kdg.common.events.chess.AchievementEntry;
+import be.kdg.common.events.chess.ChessGameRegisteredEvent;
 import be.kdg.platform.port.in.ChessPlatformProjector;
 import be.kdg.platform.port.in.command.RegisterChessGameProjectionCommand;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class ChessPlatformEventListener {
     }
 
     @RabbitListener(queues = RabbitMQTopology.PLATFORM_GAME_REGISTERED_QUEUE)
-    public void onGameRegistered(GameRegisteredEvent event) {
+    public void onGameRegistered(ChessGameRegisteredEvent event) {
         log.info("Received chess game registration: {}", event.registrationId());
 
         var achievements = event.availableAchievements().stream()

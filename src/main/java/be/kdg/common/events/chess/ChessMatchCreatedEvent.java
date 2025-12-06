@@ -1,11 +1,16 @@
-package be.kdg.common.events;
+package be.kdg.common.events.chess;
+
+import be.kdg.common.events.DomainEvent;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public record MatchCreatedEvent(
+public record ChessMatchCreatedEvent(
         String gameId,
-        String whitePlayer,
-        String blackPlayer,
+        UUID whitePlayerId,
+        String whitePlayerName,
+        UUID blackPlayerId,
+        String blackPlayerName,
         String currentFen,
         String status,
         String messageType,

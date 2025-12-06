@@ -2,6 +2,8 @@ package be.kdg.player.domain;
 
 import be.kdg.common.events.DomainEvent;
 import be.kdg.common.events.FriendRemovedEvent;
+import be.kdg.common.valueobj.AchievementId;
+import be.kdg.common.valueobj.GameId;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.common.exception.NotFoundException;
@@ -104,6 +106,16 @@ public class Player {
 //        }
 //    }
 
+    public void unlockAchievement(AchievementId achievementId, GameId gameId) {
+    boolean alreadyUnlocked = achievements.stream()
+            .anyMatch(a -> a.getAchievementId().equals(achievementId));
+
+    if (alreadyUnlocked) {return;}
+
+    PlayerAchievement achievement = new PlayerAchievement(this.playerId, achievementId, gameId);
+
+    achievements.add(achievement);
+}
 
     public void registerEvent(DomainEvent event) {
         domainEvents.add(event);

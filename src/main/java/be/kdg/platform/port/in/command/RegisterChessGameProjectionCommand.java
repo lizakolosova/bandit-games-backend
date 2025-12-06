@@ -1,6 +1,6 @@
 package be.kdg.platform.port.in.command;
 
-import be.kdg.common.events.AchievementEntry;
+import be.kdg.common.events.chess.AchievementEntry;
 
 import java.time.LocalDateTime;
 import java.util.List;

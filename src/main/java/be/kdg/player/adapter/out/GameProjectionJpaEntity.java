@@ -18,7 +18,7 @@ public class GameProjectionJpaEntity {
     private int averageMinutes;
     private String developedBy;
 
-    @OneToMany(mappedBy = "game_projection", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "gameProjection", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AchievementProjectionJpaEntity> achievementProjections = new ArrayList<>();
 
     protected GameProjectionJpaEntity() { }

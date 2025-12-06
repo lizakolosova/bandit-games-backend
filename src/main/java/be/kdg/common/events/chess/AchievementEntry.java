@@ -1,4 +1,4 @@
-package be.kdg.common.events;
+package be.kdg.common.events.chess;
 
 public record AchievementEntry(
         String code,

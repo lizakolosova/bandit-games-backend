@@ -1,0 +1,9 @@
+INSERT INTO kdg_player.achievement_projection (achievement_id, description, name, game_id) VALUES
+                                                                                               ('94c53f71-289e-4639-b553-50316ab7898b', 'Capture your opponent''s first piece', 'FIRST_BLOOD', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
+                                                                                               ('e042db94-6eb8-4835-ab7a-95af0e4d3ebd', 'Promoted a pawn', 'PAWN_POWER', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
+                                                                                               ('795b0095-e68f-4fdd-a85a-4f9fbb34632a', 'Win in under 20 moves', 'SPEEDY_VICTORY', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
+                                                                                               ('64ba8396-d1a0-4f67-aa1a-1e3b83069968', 'Make a move in under 5 second', 'SPEED_DEMON', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
+                                                                                               ('81800354-2d93-4a93-a392-2520dc80f20c', 'Winner winner chicken dinner', 'WINNER_WINNER_CHICKEN_DINNER', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
+                                                                                               ('c2c6fc7d-a6e7-402d-bcb0-e925237a4532', 'Castle kingside or queenside', 'CASTLE_TIME', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
+                                                                                               ('77be0fa9-da6e-4229-bcac-6274ff534990', 'Move your rook for the first time', 'ROOKIE_MOVE', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
+                                                                                               ('05b6c2f1-14d6-49bc-8841-71845cfc522e', 'Make 3 pawn moves in a row', 'PAWN_STORM', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca');

@@ -8,9 +8,6 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQTopology {
 
     public static final String EXCHANGE = "gameplay.match";
-    public static final String MATCH_STARTED_ROUTING_KEY = "match.started";
-    public static final String MATCH_STARTED_QUEUE = "match.started.queue";
-
     public static final String CHESS_EXCHANGE = "gameExchange";
 
     public static final String CHESS_GAME_ENDED_QUEUE = "platform.chess.game.ended.queue";
@@ -29,26 +26,19 @@ public class RabbitMQTopology {
     public static final String GAME_ENDED_KEY = "game.ended";
     public static final String ACHIEVEMENT_KEY = "achievement.acquired";
     public static final String GAME_CREATED_KEY = "game.created";
-    public static final String GAME_UPDATED_KEY = "game.player.names.updated";
+    public static final String GAME_UPDATED_KEY = "game.players.updated";
 
     public static final String ROUTING_KEY = "match.before.started";
     public static final String QUEUE = "match.before.started.queue";
 
+    public static final String TTT_GAME_STARTED_QUEUE = "match.started.queue";
+    public static final String TTT_MOVE_MADE_QUEUE    = "move.made.queue";
+    public static final String TTT_GAME_ENDED_QUEUE   = "match.ended.queue";
+    public static final String TTT_ACHIEVEMENT_QUEUE  = "achievement.achieved.queue";
+
     @Bean
     public TopicExchange gameplayExchange() {
         return new TopicExchange(EXCHANGE, true, false);
-    }
-
-    @Bean
-    public Queue matchStartedQueue() {
-        return QueueBuilder.durable(MATCH_STARTED_QUEUE).build();
-    }
-
-    @Bean
-    public Binding matchStartedBinding() {
-        return BindingBuilder.bind(matchStartedQueue())
-                .to(gameplayExchange())
-                .with(MATCH_STARTED_ROUTING_KEY);
     }
 
     @Bean
@@ -149,5 +139,48 @@ public class RabbitMQTopology {
         return BindingBuilder.bind(matchBeforeStartedQueue())
                 .to(gameplayExchange())
                 .with(ROUTING_KEY);
+    }
+    @Bean
+    public Queue tttGameStartedQueue() {
+        return QueueBuilder.durable(TTT_GAME_STARTED_QUEUE).build();
+    }
+    @Bean
+    public Binding tttGameStartedBinding() {
+        return BindingBuilder.bind(tttGameStartedQueue())
+                .to(gameplayExchange())
+                .with("match.started");
+    }
+
+    @Bean
+    public Queue tttMoveMadeQueue() {
+        return QueueBuilder.durable(TTT_MOVE_MADE_QUEUE).build();
+    }
+    @Bean
+    public Binding tttMoveMadeBinding() {
+        return BindingBuilder.bind(tttMoveMadeQueue())
+                .to(gameplayExchange())
+                .with("move.made");
+    }
+
+    @Bean
+    public Queue tttGameEndedQueue() {
+        return QueueBuilder.durable(TTT_GAME_ENDED_QUEUE).build();
+    }
+    @Bean
+    public Binding tttGameEndedBinding() {
+        return BindingBuilder.bind(tttGameEndedQueue())
+                .to(gameplayExchange())
+                .with("match.ended");
+    }
+
+    @Bean
+    public Queue tttAchievementQueue() {
+        return QueueBuilder.durable(TTT_ACHIEVEMENT_QUEUE).build();
+    }
+    @Bean
+    public Binding tttAchievementBinding() {
+        return BindingBuilder.bind(tttAchievementQueue())
+                .to(gameplayExchange())
+                .with("achievement.achieved");
     }
 }

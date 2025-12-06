@@ -1,4 +1,4 @@
-package be.kdg.player.adapter.in;
+package be.kdg.player.core.projector;
 
 import be.kdg.common.exception.NotFoundException;
 import be.kdg.common.valueobj.PlayerId;

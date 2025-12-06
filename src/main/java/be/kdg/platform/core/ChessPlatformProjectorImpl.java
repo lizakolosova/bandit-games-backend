@@ -1,6 +1,8 @@
-package be.kdg.platform.adapter.in;
+package be.kdg.platform.core;
 
 import be.kdg.common.valueobj.GameId;
+import be.kdg.gameplay.adapter.out.GameplayEventPublisher;
+import be.kdg.platform.adapter.out.PlatformEventPublisher;
 import be.kdg.platform.domain.Game;
 import be.kdg.platform.port.in.command.RegisterChessGameProjectionCommand;
 import be.kdg.platform.port.in.ChessPlatformProjector;
@@ -14,9 +16,11 @@ import java.util.UUID;
 public class ChessPlatformProjectorImpl implements ChessPlatformProjector {
 
     private final AddGamePort addGamePort;
+    private final PlatformEventPublisher eventPublisher;
 
-    public ChessPlatformProjectorImpl(AddGamePort addGamePort) {
+    public ChessPlatformProjectorImpl(AddGamePort addGamePort, PlatformEventPublisher eventPublisher) {
         this.addGamePort = addGamePort;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class ChessPlatformProjectorImpl implements ChessPlatformProjector {
         command.achievements().forEach(a ->
                 game.addAchievement(a.code(), a.description(), a.description())
         );
-
+        eventPublisher.publishEvents(game.pullDomainEvents());
         addGamePort.add(game);
     }
 }
