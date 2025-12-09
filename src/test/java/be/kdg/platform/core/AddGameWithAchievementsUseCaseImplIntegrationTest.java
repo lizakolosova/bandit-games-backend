@@ -60,13 +60,11 @@ class AddGameWithAchievementsUseCaseImplIntegrationTest {
                 List.of(
                         new AchievementDefinitionCommand(
                                 "First Kill",
-                                "Kill your first enemy",
-                                "Kill any enemy"
+                                "Kill your first enemy"
                         ),
                         new AchievementDefinitionCommand(
                                 "Boss Defeated",
-                                "Defeat the level 1 boss",
-                                "Beat the boss in level 1"
+                                "Defeat the level 1 boss"
                         )
                 )
         );

@@ -1,7 +1,7 @@
 package be.kdg.player.adapter.in.listener;
 
 import be.kdg.common.config.RabbitMQTopology;
-import be.kdg.common.events.GameAddedEvent;
+import be.kdg.common.events.GameApprovedEvent;
 import be.kdg.common.events.chess.ChessGameRegisteredEvent;
 import be.kdg.player.port.in.command.GameAddedProjectionCommand;
 import be.kdg.player.port.in.GameProjector;
@@ -23,8 +23,8 @@ public class GameEventListener {
         this.projector = projector;
     }
 
-    @EventListener(GameAddedEvent.class)
-    public void onGameAdded(GameAddedEvent event) {
+    @EventListener(GameApprovedEvent.class)
+    public void onGameAdded(GameApprovedEvent event) {
         logger.info("Game added event received: {}", event);
 
         projector.project(new GameAddedProjectionCommand(

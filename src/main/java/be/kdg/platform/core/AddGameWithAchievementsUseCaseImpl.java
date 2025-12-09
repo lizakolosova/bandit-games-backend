@@ -28,11 +28,11 @@ public class AddGameWithAchievementsUseCaseImpl implements AddGameWithAchievemen
 
         if (command.achievements() != null) {
             command.achievements().forEach(a ->
-                    game.addAchievement(a.name(), a.description(), a.howToUnlock())
+                    game.addAchievement(a.name(), a.description())
             );
         }
-
-        eventPublisher.publishEvents(game.pullDomainEvents());
-        return addGamePort.add(game);
+        Game saved = addGamePort.add(game);
+        eventPublisher.publishEvents(saved.pullDomainEvents());
+        return saved;
     }
 }
