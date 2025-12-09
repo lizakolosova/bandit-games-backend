@@ -3,10 +3,9 @@ package be.kdg.gameplay.port.in.command;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record ChessGameCreatedProjectionCommand(
+public record UnifiedMatchUpdatedProjectionCommand(
         UUID matchId,
-        String gameName,
-        UUID whitePlayerId,
-        UUID blackPlayerId,
+        UUID playerId1,
+        UUID playerId2,
         LocalDateTime timestamp
 ) {}

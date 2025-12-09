@@ -1,7 +1,7 @@
 package be.kdg.player.adapter.in.listener;
 
 import be.kdg.common.events.AchievementAddedEvent;
-import be.kdg.player.port.in.AchievementProjectionProjector;
+import be.kdg.player.port.in.AchievementDefinitionProjector;
 import be.kdg.player.port.in.command.AchievementAddedProjectionCommand;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AchievementAddedEventListener {
 
-    private final AchievementProjectionProjector projector;
+    private final AchievementDefinitionProjector projector;
 
-    public AchievementAddedEventListener(AchievementProjectionProjector projector) {
+    public AchievementAddedEventListener(AchievementDefinitionProjector projector) {
         this.projector = projector;
     }
 

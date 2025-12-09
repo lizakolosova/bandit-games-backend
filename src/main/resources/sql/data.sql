@@ -207,4 +207,5 @@ INSERT INTO kdg_player.achievement_projection (achievement_id, description, name
                                                                                                ('77be0fa9-da6e-4229-bcac-6274ff534990', 'Move your rook for the first time', 'ROOKIE_MOVE', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
                                                                                                ('05b6c2f1-14d6-49bc-8841-71845cfc522e', 'Make 3 pawn moves in a row', 'PAWN_STORM', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca');
 
-
+INSERT INTO kdg_gameplay.game_room(uuid, created_at, game_id, game_room_type, host_player_id, invitation_status, invited_player_id, status, host_player_name, invited_player_name) VALUES
+    ('a50e8400-e29b-41d4-a716-446655440001', NOW(), '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', 'CLOSED', 'e7b0794b-a64a-4fd4-bd0d-a80186de2953', 'ACCEPTED', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', 'FINALIZED', 'Tower2', 'Tower1' );

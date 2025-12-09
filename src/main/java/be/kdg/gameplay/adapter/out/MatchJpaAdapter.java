@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -40,11 +39,8 @@ public class MatchJpaAdapter implements AddMatchPort, UpdateMatchPort, LoadMatch
         return match;
     }
     @Override
-    public List<Match> loadByPlayerId(UUID playerId) {
-        List<MatchJpaEntity> entities = matches.findByPlayerId(playerId);
-        return entities.stream()
-                .map(MatchJpaMapper::toDomain)
-                .toList();
+    public Match loadByPlayerId(UUID playerId) {
+        return  matches.findFirstByPlayersContainingOrderByStartedAtDesc(playerId)
+                .map(MatchJpaMapper::toDomain).orElseThrow(NotFoundException::new);
     }
-
 }

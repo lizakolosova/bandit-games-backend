@@ -80,7 +80,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "player1",
+  "username": "good acc",
   "email": "player1@example.com",
   "password": "Test123!",
   "confirmPassword": "Test123!"
@@ -92,24 +92,44 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "Space Shooter",
-  "rules": "Shoot enemies",
-  "pictureUrl": "http://example.com/img",
-  "gameUrl": "http://example.com/game",
-  "category": "Arcade",
-  "developedBy": "Me",
-  "createdAt": "2024-01-01",
-  "averageMinutes": 15,
+  "name": "Tic Tac Toe",
+  "rules": "Players take turns marking Xs and Os on a 3×3 grid. The first to get three in a row wins.",
+  "pictureUrl": "https://upload.wikimedia.org/wikipedia/commons/3/32/Tic_tac_toe.svg",
+  "gameUrl": "https://en.wikipedia.org/wiki/Tic-tac-toe",
+  "category": "Strategy",
+  "developedBy": "Unknown",
+  "createdAt": "2025-01-01",
+  "averageMinutes": 5,
   "achievements": [
     {
-      "name": "First Kill",
-      "description": "Kill your first enemy",
-      "howToUnlock": "Perform any kill"
+      "name": "FIRST_WIN",
+      "description": "Win your first match",
+      "howToUnlock": "Win your first match"
     },
     {
-      "name": "Boss Defeated",
-      "description": "Kill the first boss",
-      "howToUnlock": "Beat level 1"
+      "name": "FAST_WIN",
+      "description": "Win in 5 moves or fewer",
+      "howToUnlock": "Win in 5 moves or fewer"
+    },
+    {
+      "name": "WIN_STREAK",
+      "description": "Win 3 games in a row",
+      "howToUnlock": "Win 3 games in a row"
+    },
+    {
+      "name": "BEAT_EASY_AI",
+      "description": "Beat Easy AI once",
+      "howToUnlock": "Beat Easy AI once"
+    },
+    {
+      "name": "BEAT_MEDIUM_AI",
+      "description": "Beat Medium AI once",
+      "howToUnlock": "Beat Medium AI once"
+    },
+    {
+      "name": "BEAT_HARD_AI",
+      "description": "Beat Hard AI once",
+      "howToUnlock": "Beat Hard AI once"
     }
   ]
 }
@@ -170,6 +190,6 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwQTRZeE
 
 ### finalize the room
 POST http://localhost:8081/api/game-rooms/3d58b82d-bf61-4bfd-9aea-7758d0b17100/finalize
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwQTRZeEhBbTdfdzlra2NLSlNNZGFyWm9Ja1pPQXpCa3F2cngzanhDR0pJIn0.eyJleHAiOjE3NjQ5NzM0NTIsImlhdCI6MTc2NDk3MzE1MiwianRpIjoib25ydHJvOmI2NjNjMmQyLTNjNTAtYjc2Zi1iYTcyLTk5M2FjOWMyYTUzNiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMvb2ctcmVhbG0iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiYTI3NWI0YjktMDIxOC00NWE5LWE5ZTYtODQ0YWQ3YzllMjM4IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicGxheWVyLXNlcnZpY2UiLCJzaWQiOiJlZTkwYmM5NS0wZGIzLTQ4MjktYTdhYi00NDNiNjVjNzdjNzUiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1vZy1yZWFsbSJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IkxpemEgS29sb3NvdmEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJqb2huIiwiZ2l2ZW5fbmFtZSI6IkxpemEiLCJmYW1pbHlfbmFtZSI6IktvbG9zb3ZhIiwiZW1haWwiOiJsaXphLmtvbG9zb3ZhQHN0dWRlbnQua2RnLmJlIn0.EloSkGSXyznM_62zO8QlTbcHhduT274wZzCVPUm7PtWROubkkVsmI3J0252DLRBbbRZJ53GVm_zeYJ4fRoCLOKTw57M9weGD7IRQkhxoDLGqHMZOr_Xen20nnn5MnZBEWyNSH5hItUAzRmTK3FAmLIlncHSX8kiJZml7lzmDF45ZtAu9aLA8EtZW12GU7FVHDkNk4BUHj3q5u9Oz-r0w8MjgA3uumjcaWuLddoJLznRjYLiKBzrXVQTkDEfI4ByDlI22TRYwg17egsKCmBmdmRb6upQWzi-QlJwpt_98mf4ZKhhURzVMxRzIvJEPlk6MULSVeEEa3Aze5Kd7gO6YgA
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwQTRZeEhBbTdfdzlra2NLSlNNZGFyWm9Ja1pPQXpCa3F2cngzanhDR0pJIn0.eyJleHAiOjE3NjUyOTMwNTIsImlhdCI6MTc2NTI5Mjc1MiwianRpIjoib25ydHJvOjA4N2NlMjY1LThmMTYtNzU2YS1mZDA3LTIxMmNlOTQxMWQ1YyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMvb2ctcmVhbG0iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiYTI3NWI0YjktMDIxOC00NWE5LWE5ZTYtODQ0YWQ3YzllMjM4IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicGxheWVyLXNlcnZpY2UiLCJzaWQiOiIzODcyYTI3ZC02MTAwLTRiMDMtYWU5My04MTNjYjIwY2YyNTgiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1vZy1yZWFsbSJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IkxpemEgS29sb3NvdmEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJqb2huIiwiZ2l2ZW5fbmFtZSI6IkxpemEiLCJmYW1pbHlfbmFtZSI6IktvbG9zb3ZhIiwiZW1haWwiOiJsaXphLmtvbG9zb3ZhQHN0dWRlbnQua2RnLmJlIn0.LvEEQKcfe6Lj-oJn1TTEXvqWZPPO-TJ7UaBdTtSgQfRuqOuGzhw8v4wNau24bSlBNhA-t-pNppJAiWKqV8c_Ml3XgYg-rrI28XbRxNvLWaxWnFNW85gHggoqfVeS7-Set1j8cC2IUOJogapwLbHWfDir_6p8UJbAYRqv1JIFEThMUw9cfPfrr3bv07hAkt3wTGKYTnA2xFLA25LW7q5Q0te7SYcyTg7H-h3o3LmTsVq7ZsbTp1asH9F2z0QrNShIaJz8_JQHMskbI2hj-boOrajwZmeFlFBV3fqKIwVcvZrScHkd_u7iJrN1hG3PK7kjJvUJJ3e1AlaaD5wuhZSHQA
 Content-Type: application/json
 Accept: application/json
