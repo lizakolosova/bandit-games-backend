@@ -3,8 +3,12 @@ package be.kdg.gameplay.adapter.in.listener;
 import be.kdg.common.events.tictactoe.TicTacToeMatchCreatedEvent;
 import be.kdg.common.events.tictactoe.TicTacToeMatchUpdatedEvent;
 import be.kdg.common.events.tictactoe.TicTacToeMatchEndedEvent;
+import be.kdg.gameplay.adapter.out.GameRoomStatusBroadcaster;
+import be.kdg.gameplay.domain.GameRoom;
+import be.kdg.gameplay.domain.valueobj.GameRoomId;
 import be.kdg.gameplay.port.in.TicTacToeGameProjector;
 import be.kdg.gameplay.port.in.command.*;
+import be.kdg.gameplay.port.out.LoadGameRoomPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,11 +29,17 @@ class TicTacToeGameplayEventListenerTest {
     @Mock
     private TicTacToeGameProjector projector;
 
+    @Mock
+    private GameRoomStatusBroadcaster broadcaster;
+
+    @Mock
+    private LoadGameRoomPort loadGameRoomPort;
+
     private TicTacToeGameplayEventListener listener;
 
     @BeforeEach
     void setUp() {
-        listener = new TicTacToeGameplayEventListener(projector);
+        listener = new TicTacToeGameplayEventListener(projector, broadcaster, loadGameRoomPort);
     }
 
     @Test
@@ -46,6 +56,12 @@ class TicTacToeGameplayEventListenerTest {
 
         ArgumentCaptor<TicTacToeGameCreatedProjectionCommand> captor =
                 ArgumentCaptor.forClass(TicTacToeGameCreatedProjectionCommand.class);
+
+        GameRoom mockGameRoom = mock(GameRoom.class);
+        when(mockGameRoom.getGameRoomId()).thenReturn(GameRoomId.of(UUID.randomUUID()));
+
+        when(loadGameRoomPort.findByPlayers(hostId, oppId))
+                .thenReturn(mockGameRoom);
 
         // Act
         listener.onGameCreated(event);

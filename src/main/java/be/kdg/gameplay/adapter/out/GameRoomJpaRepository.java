@@ -3,8 +3,10 @@ package be.kdg.gameplay.adapter.out;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface GameRoomJpaRepository extends JpaRepository<GameRoomJpaEntity, UUID> {
+    Optional<GameRoomJpaEntity> findByHostPlayerIdAndInvitedPlayerId(UUID hostPlayerId, UUID invitedPlayerId);
 }

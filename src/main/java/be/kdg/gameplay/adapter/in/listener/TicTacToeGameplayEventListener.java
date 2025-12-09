@@ -4,8 +4,11 @@ import be.kdg.common.config.RabbitMQTopology;
 import be.kdg.common.events.tictactoe.TicTacToeMatchCreatedEvent;
 import be.kdg.common.events.tictactoe.TicTacToeMatchUpdatedEvent;
 import be.kdg.common.events.tictactoe.TicTacToeMatchEndedEvent;
+import be.kdg.gameplay.adapter.out.GameRoomStatusBroadcaster;
+import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.port.in.TicTacToeGameProjector;
 import be.kdg.gameplay.port.in.command.*;
+import be.kdg.gameplay.port.out.LoadGameRoomPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -19,8 +22,14 @@ public class TicTacToeGameplayEventListener {
     private final TicTacToeGameProjector projector;
     private static final Logger logger = LoggerFactory.getLogger(TicTacToeGameplayEventListener.class);
 
-    public TicTacToeGameplayEventListener(TicTacToeGameProjector projector) {
+
+    private final GameRoomStatusBroadcaster broadcaster;
+    private final LoadGameRoomPort loadGameRoomPort;
+
+    public TicTacToeGameplayEventListener(TicTacToeGameProjector projector, GameRoomStatusBroadcaster broadcaster, LoadGameRoomPort loadGameRoomPort) {
         this.projector = projector;
+        this.broadcaster = broadcaster;
+        this.loadGameRoomPort = loadGameRoomPort;
     }
 
     @RabbitListener(queues = RabbitMQTopology.TTT_GAME_STARTED_QUEUE)
@@ -33,6 +42,14 @@ public class TicTacToeGameplayEventListener {
                 event.opponentPlayerId(),
                 event.timestamp()
         ));
+        GameRoom gameRoom = loadGameRoomPort.findByPlayers(
+                event.hostPlayerId(),
+                event.opponentPlayerId()
+        );
+        broadcaster.broadcastMatchStarted(
+                gameRoom.getGameRoomId().uuid().toString(),
+                event.matchId().toString()
+        );
     }
 
     @RabbitListener(queues = RabbitMQTopology.TTT_MOVE_MADE_QUEUE)

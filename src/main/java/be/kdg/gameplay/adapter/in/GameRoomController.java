@@ -3,11 +3,13 @@ package be.kdg.gameplay.adapter.in;
 import be.kdg.gameplay.adapter.in.request.CreateGameRoomRequest;
 import be.kdg.gameplay.adapter.in.response.GameRoomDto;
 import be.kdg.gameplay.domain.GameRoom;
+import be.kdg.gameplay.domain.valueobj.GameRoomId;
 import be.kdg.gameplay.domain.valueobj.GameRoomType;
 import be.kdg.gameplay.port.in.*;
 import be.kdg.gameplay.port.in.command.AcceptInvitationCommand;
 import be.kdg.gameplay.port.in.command.CreateGameRoomCommand;
 import be.kdg.gameplay.port.in.command.RejectInvitationCommand;
+import be.kdg.gameplay.port.out.LoadGameRoomPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -23,12 +25,14 @@ public class GameRoomController {
     private final AcceptInvitationUseCase acceptInvitationUseCase;
     private final RejectInvitationUseCase rejectInvitationUseCase;
     private final FinalizeRoomUseCase finalizeRoomUseCase;
+    private final LoadGameRoomPort loadGameRoomPort;
 
-    public GameRoomController(FinalizeRoomUseCase finalizeRoomUseCase, RejectInvitationUseCase rejectInvitationUseCase, AcceptInvitationUseCase acceptInvitationUseCase, CreateGameRoomUseCase createGameRoomUseCase) {
+    public GameRoomController(FinalizeRoomUseCase finalizeRoomUseCase, RejectInvitationUseCase rejectInvitationUseCase, AcceptInvitationUseCase acceptInvitationUseCase, CreateGameRoomUseCase createGameRoomUseCase, LoadGameRoomPort loadGameRoomPort) {
         this.finalizeRoomUseCase = finalizeRoomUseCase;
         this.rejectInvitationUseCase = rejectInvitationUseCase;
         this.acceptInvitationUseCase = acceptInvitationUseCase;
         this.createGameRoomUseCase = createGameRoomUseCase;
+        this.loadGameRoomPort = loadGameRoomPort;
     }
 
     @PostMapping
@@ -39,6 +43,12 @@ public class GameRoomController {
                 request.invitedPlayerId() == null ? null : request.invitedPlayerId(), GameRoomType.valueOf(request.gameRoomType()));
 
         return ResponseEntity.ok(GameRoomDto.from(createGameRoomUseCase.create(command)));
+    }
+
+    @GetMapping("/{roomId}")
+    public ResponseEntity<GameRoomDto> getGameRoom(@PathVariable UUID roomId) {
+        GameRoom room = loadGameRoomPort.loadById(GameRoomId.of(roomId));
+        return ResponseEntity.ok(GameRoomDto.from(room));
     }
 
     @PostMapping("/{roomId}/accept")
@@ -63,5 +73,7 @@ public class GameRoomController {
 
         return ResponseEntity.ok(GameRoomDto.from(gameRoom));
     }
+
+
 }
 
