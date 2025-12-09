@@ -3,6 +3,7 @@ package be.kdg.gameplay.adapter.in;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.adapter.in.request.CreateGameRoomRequest;
+import be.kdg.gameplay.adapter.out.GameRoomStatusBroadcaster;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.valueobj.GameRoomStatus;
 import be.kdg.gameplay.domain.valueobj.GameRoomType;
@@ -10,6 +11,7 @@ import be.kdg.gameplay.port.in.*;
 import be.kdg.gameplay.port.in.command.AcceptInvitationCommand;
 import be.kdg.gameplay.port.in.command.CreateGameRoomCommand;
 import be.kdg.gameplay.port.in.command.RejectInvitationCommand;
+import be.kdg.gameplay.port.out.LoadGameRoomPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,15 @@ class GameRoomControllerIntegrationTest {
 
     @MockitoBean
     private FinalizeRoomUseCase finalizeRoomUseCase;
+
+    @MockitoBean
+    private GameRoomStatusBroadcaster gameRoomStatusBroadcaster;
+
+    @MockitoBean
+    private LoadGameRoomPort loadGameRoomPort;
+
+    @MockitoBean
+    private TicTacToeGameProjector ticTacToeGameProjector;
 
     private UUID testPlayerId;
     private UUID testGameId;

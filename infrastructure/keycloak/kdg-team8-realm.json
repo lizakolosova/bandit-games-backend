@@ -1,6 +1,6 @@
 {
   "id" : "4180fb9c-0f6c-4dab-956a-52c05477032c",
-  "realm" : "kdg-team8",
+  "realm" : "og-realm",
   "notBefore" : 0,
   "defaultSignatureAlgorithm" : "RS256",
   "revokeRefreshToken" : false,
@@ -247,7 +247,7 @@
         "attributes" : { }
       } ],
       "security-admin-console" : [ ],
-      "kdg-frontend" : [ {
+      "player-service" : [ {
         "id" : "02241617-7378-4ca7-b076-7c3db57a4c39",
         "name" : "PLAYER",
         "description" : "",
@@ -533,8 +533,8 @@
     "optionalClientScopes" : [ "address", "phone", "organization", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "f79ec278-6336-4f83-ab24-f2e4b8a7342f",
-    "clientId" : "kdg-frontend",
-    "name" : "kdg-frontend",
+    "clientId" : "player-service",
+    "name" : "player-service",
     "description" : "",
     "rootUrl" : "http://localhost:5173",
     "adminUrl" : "http://localhost:5173",

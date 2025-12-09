@@ -53,11 +53,26 @@ public class GameRoom {
     }
 
     public void acceptInvitation(PlayerId player) {
-        if (!player.equals(invitedPlayerId))
-            throw GameRoomException.notAllowed();
+        if (gameRoomType == GameRoomType.OPEN) {
+            if (invitedPlayerId == null) {
+                this.invitedPlayerId = player;
+                this.invitationStatus = InvitationStatus.ACCEPTED;
+                this.status = GameRoomStatus.READY;
+                return;
+            } else if (!player.equals(invitedPlayerId)) {
+                throw GameRoomException.notAllowed();
+            }
+        }
 
-        if (invitationStatus != InvitationStatus.PENDING)
+        if (gameRoomType == GameRoomType.CLOSED) {
+            if (!player.equals(invitedPlayerId)) {
+                throw GameRoomException.notAllowed();
+            }
+        }
+
+        if (invitationStatus != InvitationStatus.PENDING) {
             throw GameRoomException.notReady();
+        }
 
         this.invitationStatus = InvitationStatus.ACCEPTED;
         this.status = GameRoomStatus.READY;
@@ -74,6 +89,7 @@ public class GameRoom {
         this.status = GameRoomStatus.WAITING;
         this.invitedPlayerId = null;
     }
+
     public GameRoom finalizeRoom(PlayerId player) {
         if (!player.equals(hostPlayerId))
             throw GameRoomException.notAllowed();
