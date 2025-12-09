@@ -22,7 +22,7 @@ public class GameViewViewProjectionJpaAdapter implements AddGameViewProjectionPo
 
     @Override
     public GameViewProjection findByName(String name) {
-        return repository.findByName(name)
+        return repository.findByNameIgnoreCase(name)
                 .map(GameViewProjectionMapper::toDomain)
                 .orElseThrow(() -> new IllegalStateException("Game projection not found: " + name));
     }

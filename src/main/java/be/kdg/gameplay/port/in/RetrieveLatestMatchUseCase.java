@@ -1,8 +1,9 @@
 package be.kdg.gameplay.port.in;
 
-import java.util.Optional;
+import be.kdg.gameplay.domain.Match;
+
 import java.util.UUID;
 
 public interface RetrieveLatestMatchUseCase {
-    Optional<UUID> retrieveLatestMatchIdByPlayer(UUID playerId);
+    Match LoadLatestMatchByPlayer(UUID playerId);
 }

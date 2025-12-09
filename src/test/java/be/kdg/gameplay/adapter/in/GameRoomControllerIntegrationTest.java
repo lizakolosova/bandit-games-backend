@@ -56,9 +56,6 @@ class GameRoomControllerIntegrationTest {
     @MockitoBean
     private LoadGameRoomPort loadGameRoomPort;
 
-    @MockitoBean
-    private TicTacToeGameProjector ticTacToeGameProjector;
-
     private UUID testPlayerId;
     private UUID testGameId;
     private UUID testRoomId;

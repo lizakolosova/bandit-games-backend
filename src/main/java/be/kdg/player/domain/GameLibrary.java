@@ -1,5 +1,6 @@
 package be.kdg.player.domain;
 
+import be.kdg.gameplay.domain.Match;
 import be.kdg.player.domain.valueobj.GameLibraryId;
 
 import java.time.Duration;
@@ -58,6 +59,24 @@ public class GameLibrary {
         this.totalPlaytime = this.totalPlaytime.plus(duration);
     }
 
+    public void recordMatchResult(UUID playerId, LocalDateTime startedAt, LocalDateTime finishedAt, UUID winnerPlayerId) {
+        this.updateLastPlayed(LocalDateTime.now());
+        this.matchesPlayed++;
+
+        if (startedAt != null && finishedAt != null) {
+            this.increasePlaytime(Duration.between(startedAt, finishedAt));
+        }
+
+        if (winnerPlayerId == null) {
+            this.gamesDraw++;
+        } else if (winnerPlayerId.equals(playerId)) {
+            this.gamesWon++;
+        } else {
+            this.gamesLost++;
+        }
+    }
+
+
     public UUID getGameId() {
         return gameId;
     }
@@ -80,5 +99,21 @@ public class GameLibrary {
 
     public GameLibraryId getGameLibraryId() {
         return gameLibraryId;
+    }
+
+    public int getMatchesPlayed() {
+        return matchesPlayed;
+    }
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    public int getGamesDraw() {
+        return gamesDraw;
+    }
+
+    public int getGamesLost() {
+        return gamesLost;
     }
 }

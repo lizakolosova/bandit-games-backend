@@ -45,7 +45,7 @@ public class GameEventListener {
         logger.info("Game registered event received: {}", event);
         projector.project(new RegisterPlayerGameProjectionCommand(
                 event.registrationId(),
-                "Chess",
+                "CHESS",
                 event.pictureUrl(),
                 "Board game",
                 "Standard rules",

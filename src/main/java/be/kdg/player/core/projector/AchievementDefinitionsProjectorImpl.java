@@ -3,7 +3,7 @@ package be.kdg.player.core.projector;
 import be.kdg.common.valueobj.AchievementId;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.player.domain.AchievementProjection;
-import be.kdg.player.port.in.AchievementProjectionProjector;
+import be.kdg.player.port.in.AchievementDefinitionProjector;
 import be.kdg.player.port.in.command.AchievementAddedProjectionCommand;
 import be.kdg.player.port.out.AddAchievementProjectionPort;
 import org.springframework.stereotype.Service;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class AchievementProjectionProjectorImpl implements AchievementProjectionProjector {
+public class AchievementDefinitionsProjectorImpl implements AchievementDefinitionProjector {
 
     private final AddAchievementProjectionPort achievements;
 
-    public AchievementProjectionProjectorImpl(AddAchievementProjectionPort achievements) {
+    public AchievementDefinitionsProjectorImpl(AddAchievementProjectionPort achievements) {
         this.achievements = achievements;
     }
 

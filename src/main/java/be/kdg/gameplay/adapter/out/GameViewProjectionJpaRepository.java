@@ -6,6 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface GameViewProjectionJpaRepository extends JpaRepository<GameViewProjectionJpaEntity, UUID> {
-    Optional<GameViewProjectionJpaEntity> findByName(String name);
+    Optional<GameViewProjectionJpaEntity> findByNameIgnoreCase(String name);
 }
 
