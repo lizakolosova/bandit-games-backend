@@ -41,7 +41,7 @@ public class ChessPlatformProjectorImpl implements ChessPlatformProjector {
         List<AchievementEntry> achievements = command.achievements();
         if (command.achievements() != null) {
             achievements.forEach(a ->
-                    game.addAchievement(a.code(), a.description(), a.description())
+                    game.addAchievement(a.code(), a.description())
             );
         }
         eventPublisher.publishEvents(game.pullDomainEvents());

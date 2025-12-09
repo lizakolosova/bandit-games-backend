@@ -9,8 +9,10 @@ import be.kdg.platform.port.in.*;
 
 import be.kdg.platform.port.in.command.AchievementDefinitionCommand;
 import be.kdg.platform.port.in.command.AddGameWithAchievementsCommand;
+import be.kdg.platform.port.in.command.ApproveGameCommand;
 import be.kdg.platform.port.in.command.ViewGameCommand;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +25,13 @@ public class GameController {
     private final FindAllGamesPort findAllGamesPort;
     private final ViewGameUseCase viewGameUseCase;
     private final AddGameWithAchievementsUseCase addGameWithAchievementsUseCase;
+    private final ApproveGameUseCase approveGameUseCase;
 
-    public GameController(FindAllGamesPort findAllGamesPort, ViewGameUseCase viewGameUseCase, AddGameWithAchievementsUseCase addGameWithAchievementsUseCase) {
+    public GameController(FindAllGamesPort findAllGamesPort, ViewGameUseCase viewGameUseCase, AddGameWithAchievementsUseCase addGameWithAchievementsUseCase, ApproveGameUseCase approveGameUseCase) {
         this.findAllGamesPort = findAllGamesPort;
         this.viewGameUseCase = viewGameUseCase;
         this.addGameWithAchievementsUseCase = addGameWithAchievementsUseCase;
+        this.approveGameUseCase = approveGameUseCase;
     }
 
     @GetMapping
@@ -54,12 +58,19 @@ public class GameController {
         AddGameWithAchievementsCommand command = new AddGameWithAchievementsCommand(request.name(), request.rules(), request.pictureUrl(),
                 request.gameUrl(), request.category(), request.developedBy(), request.createdAt(), request.averageMinutes(),
                 request.achievements().stream()
-                        .map(a -> new AchievementDefinitionCommand(a.name(), a.description(), a.howToUnlock()))
+                        .map(a -> new AchievementDefinitionCommand(a.name(), a.description()))
                         .toList()
         );
 
         Game game = addGameWithAchievementsUseCase.create(command);
 
         return ResponseEntity.ok(GameDto.toDto(game));
+    }
+
+    @PreAuthorize("hasRole('admin')")
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<Void> approve(@PathVariable UUID id) throws GameNotFoundException {
+        approveGameUseCase.approve(new ApproveGameCommand(id));
+        return ResponseEntity.noContent().build();
     }
 }

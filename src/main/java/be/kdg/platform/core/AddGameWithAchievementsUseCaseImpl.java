@@ -28,7 +28,7 @@ public class AddGameWithAchievementsUseCaseImpl implements AddGameWithAchievemen
 
         if (command.achievements() != null) {
             command.achievements().forEach(a ->
-                    game.addAchievement(a.name(), a.description(), a.howToUnlock())
+                    game.addAchievement(a.name(), a.description())
             );
         }
 

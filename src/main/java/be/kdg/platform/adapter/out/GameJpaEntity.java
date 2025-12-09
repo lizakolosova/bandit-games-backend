@@ -33,7 +33,11 @@ public class GameJpaEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
+    @Column
     private int averageMinutes;
+
+    @Column
+    private boolean approved;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<AchievementDefinitionJpaEntity> achievements = new ArrayList<>();
@@ -41,15 +45,8 @@ public class GameJpaEntity {
     public GameJpaEntity() {
     }
 
-    public GameJpaEntity(UUID uuid,
-                         String name,
-                         String rules,
-                         String pictureUrl,
-                         String gameUrl,
-                         String category,
-                         String developedBy,
-                         LocalDate createdAt,
-                         int averageMinutes) {
+    public GameJpaEntity(UUID uuid, String name, String rules, String pictureUrl, String gameUrl, String category,
+                         String developedBy, LocalDate createdAt, int averageMinutes, boolean approved) {
         this.uuid = uuid;
         this.name = name;
         this.rules = rules;
@@ -59,6 +56,7 @@ public class GameJpaEntity {
         this.developedBy = developedBy;
         this.createdAt = createdAt;
         this.averageMinutes = averageMinutes;
+        this.approved = approved;
     }
 
     public UUID getUuid() {

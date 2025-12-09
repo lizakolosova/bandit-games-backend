@@ -24,8 +24,7 @@ public record GameDetailsDto(
                         .map(a -> new AchievementDto(
                                 a.getAchievementId().uuid().toString(),
                                 a.getName(),
-                                a.getDescription(),
-                                a.getHowToUnlock()
+                                a.getDescription()
                         ))
                         .toList();
 
