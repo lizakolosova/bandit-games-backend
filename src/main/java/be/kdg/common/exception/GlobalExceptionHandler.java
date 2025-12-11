@@ -1,6 +1,5 @@
-package be.kdg.gameplay.adapter.in;
+package be.kdg.common.exception;
 
-import be.kdg.common.exception.GameRoomException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,11 +19,11 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericError(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(IllegalAccessException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalAccessException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
-                        "error", "InternalServerError",
+                        "error", "BAD_REQUEST",
                         "message", ex.getMessage()
                 ));
     }

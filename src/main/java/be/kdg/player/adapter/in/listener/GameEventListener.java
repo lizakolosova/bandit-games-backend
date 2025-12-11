@@ -1,14 +1,10 @@
 package be.kdg.player.adapter.in.listener;
 
-import be.kdg.common.config.RabbitMQTopology;
 import be.kdg.common.events.GameApprovedEvent;
-import be.kdg.common.events.chess.ChessGameRegisteredEvent;
 import be.kdg.player.port.in.command.GameAddedProjectionCommand;
 import be.kdg.player.port.in.GameProjector;
-import be.kdg.player.port.in.command.RegisterPlayerGameProjectionCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +21,7 @@ public class GameEventListener {
 
     @EventListener(GameApprovedEvent.class)
     public void onGameAdded(GameApprovedEvent event) {
-        logger.info("Game added event received: {}", event);
+        logger.info("Game approved event received: {}", event);
 
         projector.project(new GameAddedProjectionCommand(
                 event.gameId(),
@@ -37,21 +33,6 @@ public class GameEventListener {
                 event.createdAt(),
                 event.averageMinutes(),
                 event.achievementCount()
-        ));
-    }
-
-    @RabbitListener(queues = RabbitMQTopology.PLAYER_GAME_REGISTERED_QUEUE)
-    public void onCatalogUpdate(ChessGameRegisteredEvent event) {
-        logger.info("Game registered event received: {}", event);
-        projector.project(new RegisterPlayerGameProjectionCommand(
-                event.registrationId(),
-                "CHESS",
-                event.pictureUrl(),
-                "Board game",
-                "Standard rules",
-                event.availableAchievements().size(),
-                15,
-                "Chess platform"
         ));
     }
 }

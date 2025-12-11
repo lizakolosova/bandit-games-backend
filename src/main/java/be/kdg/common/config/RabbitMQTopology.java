@@ -19,10 +19,6 @@ public class RabbitMQTopology {
 
     public static final String PLATFORM_GAME_REGISTERED_QUEUE = "platform.game.registered.queue";
 
-    public static final String GAMEPLAY_GAME_REGISTERED_QUEUE = "gameplay.game.registered.queue";
-
-    public static final String PLAYER_GAME_REGISTERED_QUEUE = "player.game.registered.queue";
-
     public static final String GAME_ENDED_KEY = "game.ended";
     public static final String ACHIEVEMENT_KEY = "achievement.acquired";
     public static final String GAME_CREATED_KEY = "game.created";
@@ -106,29 +102,6 @@ public class RabbitMQTopology {
                 .with(GAME_REGISTERED_ROUTING_KEY);
     }
 
-    @Bean
-    public Queue gameplayGameRegisteredQueue() {
-        return QueueBuilder.durable(GAMEPLAY_GAME_REGISTERED_QUEUE).build();
-    }
-
-    @Bean
-    public Binding gameplayGameRegisteredBinding() {
-        return BindingBuilder.bind(gameplayGameRegisteredQueue())
-                .to(chessGameExchange())
-                .with(GAME_REGISTERED_ROUTING_KEY);
-    }
-
-    @Bean
-    public Queue playerGameRegisteredQueue() {
-        return QueueBuilder.durable(PLAYER_GAME_REGISTERED_QUEUE).build();
-    }
-
-    @Bean
-    public Binding playerGameRegisteredBinding() {
-        return BindingBuilder.bind(playerGameRegisteredQueue())
-                .to(chessGameExchange())
-                .with(GAME_REGISTERED_ROUTING_KEY);
-    }
     @Bean
     public Queue matchBeforeStartedQueue() {
         return QueueBuilder.durable(QUEUE).build();

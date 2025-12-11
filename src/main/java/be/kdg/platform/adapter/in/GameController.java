@@ -67,7 +67,7 @@ public class GameController {
         return ResponseEntity.ok(GameDto.toDto(game));
     }
 
-    @PreAuthorize("hasRole('admin')")
+//    @PreAuthorize("hasRole('admin')")
     @PostMapping("/{id}/approve")
     public ResponseEntity<Void> approve(@PathVariable UUID id) throws GameNotFoundException {
         approveGameUseCase.approve(new ApproveGameCommand(id));

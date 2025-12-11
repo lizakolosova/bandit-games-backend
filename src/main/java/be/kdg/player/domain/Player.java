@@ -10,6 +10,7 @@ import be.kdg.common.exception.NotFoundException;
 import be.kdg.player.domain.valueobj.ReceiverId;
 import be.kdg.player.domain.valueobj.SenderId;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -81,7 +82,7 @@ public class Player {
         return gameLibraries.stream()
                 .filter(g -> g.getGameId().equals(gameId))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(()-> NotFoundException.game(gameId));
     }
 
     public List<DomainEvent> pullDomainEvents() {
@@ -90,21 +91,10 @@ public class Player {
         return copy;
     }
 
-//    public void recordGameResult(UUID gameId, String winner, String playerName) {
-//        GameLibrary library = findGameInLibrary(gameId);
-//        if (library == null) {
-//            library = addGameToLibrary(gameId);
-//        }
-//        library.recordGamePlayed();
-//
-//        if ("DRAW".equals(winner)) {
-//        library.recordDraw();
-//        } else if (playerName.equals(winner)) {
-//        library.recordWin();
-//        } else {
-//        library.recordLoss();
-//        }
-//    }
+    public void recordGameResult(UUID gameId, UUID playerId, LocalDateTime startedAt, LocalDateTime finishedAt, UUID winnerPlayerId) {
+        GameLibrary library = findGameInLibrary(gameId);
+        library.recordMatchResult(playerId, startedAt, finishedAt, winnerPlayerId);
+    }
 
     public void unlockAchievement(AchievementId achievementId, GameId gameId) {
     boolean alreadyUnlocked = achievements.stream()

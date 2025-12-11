@@ -98,5 +98,9 @@ public class GameJpaEntity {
     public List<AchievementDefinitionJpaEntity> getAchievements() {
         return achievements;
     }
+
+    public boolean isApproved() {
+        return approved;
+    }
 }
 

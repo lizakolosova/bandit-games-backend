@@ -48,8 +48,9 @@ public class UnifiedGameplayEventListener {
     public void onChessMatchCreated(ChessMatchCreatedEvent event) {
         logger.info("Chess match created: {}", event.gameId());
         GameViewProjection game = loadGameViewProjectionPort.findByName("CHESS");
+        logger.info("Chess id: {}", game.getGameId());
         var unifiedEvent = chessTranslator.translateToMatchCreated(event, game.getGameId());
-
+        logger.info("event chess id: {}", unifiedEvent.gameId());
         projector.project(new UnifiedMatchCreatedProjectionCommand(
                 unifiedEvent.matchId(),
                 unifiedEvent.gameId(),
@@ -60,7 +61,6 @@ public class UnifiedGameplayEventListener {
         GameRoom gameRoom = loadGameRoomPort.findByPlayers(event.whitePlayerId(), event.blackPlayerId());
         broadcaster.broadcastMatchStarted(gameRoom.getGameRoomId().uuid().toString(), event.gameId().toString()
         );
-
     }
 
     @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_UPDATED_QUEUE, containerFactory = "externalRabbitListenerContainerFactory")

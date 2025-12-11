@@ -6,23 +6,20 @@ import java.util.List;
 import java.util.UUID;
 
 public record TicTacToeMatchEndedEvent(
-        LocalDateTime occurredAt,
         UUID matchId,
-        UUID winnerId,
-        String endReason,
-        int totalMoves,
+        UUID gameId,
+        UUID hostPlayerId,
+        UUID opponentPlayerId,
         List<String> finalBoardState,
+        String endReason,
+        UUID winnerId,
+        int totalMoves,
         String messageType,
         LocalDateTime timestamp
 ) implements DomainEvent {
 
-    public TicTacToeMatchEndedEvent(UUID matchId, UUID winnerId, String endReason, int totalMoves, List<String> finalBoardState,
-                                    String messageType, LocalDateTime timestamp) {
-        this(LocalDateTime.now(), matchId, winnerId, endReason, totalMoves, finalBoardState, messageType, timestamp);
-    }
-
     @Override
     public LocalDateTime eventPit() {
-        return occurredAt;
+        return timestamp;
     }
 }

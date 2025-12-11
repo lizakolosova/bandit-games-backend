@@ -26,11 +26,12 @@ public class TestHelper {
     @Autowired
     private PlayerJpaRepository players;
     @Autowired
-    private  DataSource dataSource;
-    @Autowired
     private AchievementDefinitionJpaRepository achievementDefs;
     @Autowired
     private GameProjectionJpaRepository gameProjections;
+    @Autowired
+    private  DataSource dataSource;
+
 
     @PostConstruct
     public void createSchemas() {
@@ -39,11 +40,13 @@ public class TestHelper {
 
             stmt.execute("CREATE SCHEMA IF NOT EXISTS kdg_platform");
             stmt.execute("CREATE SCHEMA IF NOT EXISTS kdg_player");
+            stmt.execute("CREATE SCHEMA IF NOT EXISTS kdg_gameplay");
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to create schemas", e);
         }
     }
+
 
     public void cleanUp() {
         games.deleteAll();

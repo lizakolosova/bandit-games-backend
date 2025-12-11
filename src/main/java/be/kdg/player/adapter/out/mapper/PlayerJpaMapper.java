@@ -14,6 +14,7 @@ import java.time.Duration;
 
 public class PlayerJpaMapper {
 
+
     public static Player toDomain(PlayerJpaEntity entity) {
 
         Player domain = new Player(
@@ -22,7 +23,7 @@ public class PlayerJpaMapper {
                 entity.getEmail(),
                 entity.getPictureUrl(),
                 entity.getCreatedAt()
-        );
+            );
 
         entity.getGameLibraries().forEach(gl -> {
 
@@ -34,7 +35,11 @@ public class PlayerJpaMapper {
                     gl.getTotalPlaytimeSeconds() == null
                             ? Duration.ZERO
                             : Duration.ofSeconds(gl.getTotalPlaytimeSeconds()),
-                    gl.isFavourite()
+                    gl.isFavourite(),
+                    gl.getMatchesPlayed(),
+                    gl.getGamesWon(),
+                    gl.getGamesLost(),
+                    gl.getGamesDraw()
             );
 
             domain.getGameLibraries().add(lib);
@@ -54,12 +59,13 @@ public class PlayerJpaMapper {
                                 new GameId(a.getGameId())
                         )
                 )
-        );
+            );
 
         return domain;
-    }
+        }
 
-    public static PlayerJpaEntity toEntity(Player domain) {
+        public static PlayerJpaEntity toEntity(Player domain) {
+
 
         PlayerJpaEntity entity = new PlayerJpaEntity(
                 domain.getPlayerId().uuid(),
@@ -73,27 +79,23 @@ public class PlayerJpaMapper {
 
             GameLibraryJpaEntity jpa = new GameLibraryJpaEntity(
                     gl.getGameLibraryId().uuid(),
+                    gl.getGameId(),
+                    gl.getAddedAt(),
+                    gl.getTotalPlaytime() == null ? 0L : gl.getTotalPlaytime().getSeconds(),
+                    gl.getLastPlayedAt(),
+                    gl.isFavourite(),
                     entity,
-                    gl.getGameId()
+                    gl.getMatchesPlayed(),
+                    gl.getGamesWon(),
+                    gl.getGamesLost(),
+                    gl.getGamesDraw()
             );
-
-            jpa.setAddedAt(gl.getAddedAt());
-            jpa.setLastPlayedAt(gl.getLastPlayedAt());
-            jpa.setTotalPlaytimeSeconds(
-                    gl.getTotalPlaytime() == null
-                            ? 0L
-                            : gl.getTotalPlaytime().getSeconds()
-            );
-            jpa.setFavourite(gl.isFavourite());
 
             entity.getGameLibraries().add(jpa);
         });
 
         domain.getFriends().forEach(f ->
-                entity.getFriends().add(
-                        new FriendEmbeddable(f.friendId(), f.since())
-                )
-        );
+                entity.getFriends().add(new FriendEmbeddable(f.friendId(), f.since())));
 
         domain.getAchievements().forEach(a -> {
             PlayerAchievementJpaEntity achEntity =
@@ -108,5 +110,6 @@ public class PlayerJpaMapper {
         });
 
         return entity;
+
     }
 }
