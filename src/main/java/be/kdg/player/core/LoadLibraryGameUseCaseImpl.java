@@ -41,13 +41,10 @@ public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
 
         GameProjection projection =
                 loadGameProjectionPort.loadProjection(GameId.of(command.gameId()));
-
         List<UnlockedAchievementDto> unlockedAchievements = player.getAchievements().stream()
                 .filter(a -> a.getGameId().uuid().equals(command.gameId()))
                 .map(a -> new UnlockedAchievementDto(
-                        a.getAchievementId().toString(),   // TODO replace with real title
-                        "TODO description",
-                        0,                                  // TODO global percentage
+                        a.getAchievementId().toString(),
                         a.getUnlockedAt()
                 ))
                 .toList();

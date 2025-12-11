@@ -28,7 +28,7 @@ public class ChessEventTranslator implements EventTranslator {
 
         return new UnifiedMatchCreatedEvent(
                 chessEvent.gameId(),
-                null,
+                gameId.uuid(),
                 "CHESS",
                 List.of(chessEvent.whitePlayerId(), chessEvent.blackPlayerId()),
                 chessEvent.messageType(),

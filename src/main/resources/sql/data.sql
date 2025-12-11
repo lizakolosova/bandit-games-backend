@@ -63,16 +63,16 @@ ON CONFLICT (uuid) DO NOTHING;
 -- ============================================
 
 -- Add games to player libraries (using player_game_library table)
-INSERT INTO kdg_player.player_game_library (id, player_id, game_id, added_at, last_played_at, total_playtime_seconds, favourite)
+INSERT INTO kdg_player.player_game_library (id, player_id, game_id, added_at, last_played_at, total_playtime_seconds, favourite, games_lost, games_won, games_draw, matches_played)
 VALUES
     -- HogCranker's library
-    ('850e8400-e29b-41d4-a716-446655440001', '750e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '30 days', CURRENT_TIMESTAMP - INTERVAL '2 days', 7200, true),
-    ('850e8400-e29b-41d4-a716-446655440002', '750e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP - INTERVAL '20 days', CURRENT_TIMESTAMP - INTERVAL '1 day', 2700, true),
-    ('850e8400-e29b-41d4-a716-446655440003', '750e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440003', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '5 days', 4800, false),
+    ('8496c496-a884-48ed-9bb3-7c3aa50fb8ca', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', CURRENT_TIMESTAMP - INTERVAL '30 days', CURRENT_TIMESTAMP - INTERVAL '2 days', 7200, true,0,0,0,0),
+    ('850e8400-e29b-41d4-a716-446655440002', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', '550e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP - INTERVAL '20 days', CURRENT_TIMESTAMP - INTERVAL '1 day', 2700, true,0,0,0,0),
+    ('850e8400-e29b-41d4-a716-446655440003', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', '550e8400-e29b-41d4-a716-446655440003', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '5 days', 4800, false,0,0,0,0),
 
     -- Player123's library
-    ('850e8400-e29b-41d4-a716-446655440004', '57423a96-12fb-49d7-b2f3-78c3be67bdaa', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '1 hour', 5400, true),
-    ('850e8400-e29b-41d4-a716-446655440005', '57423a96-12fb-49d7-b2f3-78c3be67bdaa', '550e8400-e29b-41d4-a716-446655440004', CURRENT_TIMESTAMP - INTERVAL '5 days', CURRENT_TIMESTAMP - INTERVAL '3 hours', 3600, false)
+    ('8496c496-a884-48ed-9bb3-446655440004', 'e7b0794b-a64a-4fd4-bd0d-a80186de2953', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '1 hour', 5400, true,0,0,0,0),
+    ('850e8400-e29b-41d4-a716-446655440005', 'e7b0794b-a64a-4fd4-bd0d-a80186de2953', '550e8400-e29b-41d4-a716-446655440004', CURRENT_TIMESTAMP - INTERVAL '5 days', CURRENT_TIMESTAMP - INTERVAL '3 hours', 3600, false,0,0,0,0)
 ON CONFLICT (id) DO NOTHING;
 
 -- ============================================

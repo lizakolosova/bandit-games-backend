@@ -2,6 +2,7 @@ package be.kdg.gameplay.core.projector;
 
 import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
+import be.kdg.gameplay.adapter.out.GameplayEventPublisher;
 import be.kdg.gameplay.domain.Match;
 import be.kdg.gameplay.domain.valueobj.MatchId;
 import be.kdg.gameplay.domain.valueobj.MatchStatus;
@@ -22,13 +23,13 @@ public class UnifiedMatchProjectorImpl implements UnifiedMatchProjector {
     private final LoadMatchPort loadMatchPort;
     private final UpdateMatchPort updateMatchPort;
     private final AddMatchPort addMatchPort;
+    private final GameplayEventPublisher eventPublisher;
 
-    public UnifiedMatchProjectorImpl(LoadMatchPort loadMatchPort,
-                                     UpdateMatchPort updateMatchPort,
-                                     AddMatchPort addMatchPort) {
+    public UnifiedMatchProjectorImpl(LoadMatchPort loadMatchPort, UpdateMatchPort updateMatchPort, AddMatchPort addMatchPort, GameplayEventPublisher eventPublisher) {
         this.loadMatchPort = loadMatchPort;
         this.updateMatchPort = updateMatchPort;
         this.addMatchPort = addMatchPort;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -74,5 +75,6 @@ public class UnifiedMatchProjectorImpl implements UnifiedMatchProjector {
         match.finish(command.timestamp(), winner);
 
         updateMatchPort.update(match);
+        eventPublisher.publishEvents(match.pullDomainEvents());
     }
 }

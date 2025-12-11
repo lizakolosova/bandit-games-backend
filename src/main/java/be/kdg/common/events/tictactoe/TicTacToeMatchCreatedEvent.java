@@ -2,24 +2,22 @@ package be.kdg.common.events.tictactoe;
 
 import be.kdg.common.events.DomainEvent;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record TicTacToeMatchCreatedEvent(
-        LocalDateTime occurredAt,
         UUID matchId,
+        UUID gameId,
         UUID hostPlayerId,
         UUID opponentPlayerId,
+        List<String> currentBoardState,
+        String status,
         String messageType,
         LocalDateTime timestamp
 ) implements DomainEvent {
 
-    public TicTacToeMatchCreatedEvent(UUID matchId, UUID hostPlayerId, UUID opponentPlayerId, String messageType,
-            LocalDateTime timestamp) {
-        this(LocalDateTime.now(), matchId, hostPlayerId, opponentPlayerId, messageType, timestamp);
-    }
-
     @Override
     public LocalDateTime eventPit() {
-        return occurredAt;
+        return timestamp;
     }
 }

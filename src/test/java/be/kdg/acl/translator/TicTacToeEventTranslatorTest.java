@@ -18,6 +18,7 @@ class TicTacToeEventTranslatorTest {
     private TicTacToeEventTranslator translator;
 
     UUID matchId = UUID.randomUUID();
+    UUID gameIdUuid = UUID.randomUUID();
     UUID p1 = UUID.randomUUID();
     UUID p2 = UUID.randomUUID();
     UUID achievementId = UUID.randomUUID();
@@ -32,7 +33,8 @@ class TicTacToeEventTranslatorTest {
     @Test
     void shouldTranslateMatchCreatedCorrectly() {
         TicTacToeMatchCreatedEvent event = new TicTacToeMatchCreatedEvent(
-                matchId, p1, p2, "message type", now
+                matchId, gameIdUuid, p1, p2, List.of("", "", "", "", "", "", "", "", ""),
+                "ACTIVE", "message type", now
         );
 
         UnifiedMatchCreatedEvent unified =
@@ -49,7 +51,8 @@ class TicTacToeEventTranslatorTest {
     @Test
     void translateMatchCreatedShouldFailForWrongEvent() {
         DomainEvent wrong = new TicTacToeMatchEndedEvent(
-                matchId, p1, "WIN", 3, List.of(), "endType", now
+                matchId, gameIdUuid, p1, p2, List.of("X", "O", "X", "", "", "", "", "", ""),
+                "WIN", p1, 3, "endType", now
         );
 
         assertThrows(IllegalArgumentException.class,
@@ -59,7 +62,9 @@ class TicTacToeEventTranslatorTest {
     @Test
     void shouldTranslateMatchUpdatedCorrectly() {
         TicTacToeMatchMoveMadeEvent event = new TicTacToeMatchMoveMadeEvent(
-                matchId, p1, 1, 1, List.of("MOVE"), "message type", now
+                matchId, gameIdUuid, p1, 4, "X", 1,
+                List.of("", "", "", "", "X", "", "", "", ""),
+                p1, p2, now, "message type", now
         );
 
         UnifiedMatchUpdatedEvent unified =
@@ -75,7 +80,8 @@ class TicTacToeEventTranslatorTest {
     @Test
     void translateMatchUpdatedShouldFailForWrongEvent() {
         DomainEvent wrong = new TicTacToeMatchCreatedEvent(
-                matchId, p1, p2, "message", now
+                matchId, gameIdUuid, p1, p2, List.of("", "", "", "", "", "", "", "", ""),
+                "ACTIVE", "message", now
         );
 
         assertThrows(IllegalArgumentException.class,
@@ -85,7 +91,9 @@ class TicTacToeEventTranslatorTest {
     @Test
     void shouldTranslateMatchEndedCorrectly() {
         TicTacToeMatchEndedEvent event = new TicTacToeMatchEndedEvent(
-                matchId, p1, "WIN", 5, List.of(), "message type", now
+                matchId, gameIdUuid, p1, p2,
+                List.of("X", "X", "X", "O", "O", "", "", "", ""),
+                "WIN", p1, 5, "message type", now
         );
 
         UnifiedMatchEndedEvent unified = translator.translateToMatchEnded(event);
@@ -101,7 +109,9 @@ class TicTacToeEventTranslatorTest {
     @Test
     void translateMatchEndedShouldFailForWrongEvent() {
         DomainEvent wrong = new TicTacToeMatchMoveMadeEvent(
-                matchId, p1, 0, 0, List.of("moves"), "msg", now
+                matchId, gameIdUuid, p1, 0, "X", 1,
+                List.of("X", "", "", "", "", "", "", "", ""),
+                p1, p2, now, "msg", now
         );
 
         assertThrows(IllegalArgumentException.class,
@@ -110,7 +120,9 @@ class TicTacToeEventTranslatorTest {
 
     @Test
     void shouldTranslateAchievementCorrectly() {
-        TicTacToeAchievementAchievedEvent event = new TicTacToeAchievementAchievedEvent(p1,achievementId, "ACH_TYPE", matchId, gameId.uuid(), "msg", now);
+        TicTacToeAchievementAchievedEvent event = new TicTacToeAchievementAchievedEvent(
+                p1, achievementId, "ACH_TYPE", matchId, gameId.uuid(), "msg", now
+        );
 
         UnifiedAchievementAchievedEvent unified = translator.translateToAchievementAchieved(event);
 
@@ -126,22 +138,27 @@ class TicTacToeEventTranslatorTest {
     @Test
     void translateToAchievementShouldFailForWrongEvent() {
         DomainEvent wrong = new TicTacToeMatchCreatedEvent(
-                matchId, p1, p2, "msg", now
+                matchId, gameIdUuid, p1, p2, List.of("", "", "", "", "", "", "", "", ""),
+                "ACTIVE", "msg", now
         );
 
-        assertThrows(IllegalArgumentException.class, () -> translator.translateToAchievementAchieved(wrong));
+        assertThrows(IllegalArgumentException.class,
+                () -> translator.translateToAchievementAchieved(wrong));
     }
 
     @Test
     void shouldReturnTrueForSupportedEvents() {
         assertTrue(translator.canTranslate(
-                new TicTacToeMatchCreatedEvent(matchId, p1, p2, "msg", now)));
-        assertTrue(translator.canTranslate(new TicTacToeMatchMoveMadeEvent(matchId, p1, 0, 0, List.of( "MOVE"),
-                "msg", now)));
-        assertTrue(translator.canTranslate(new TicTacToeMatchEndedEvent(matchId, p1, "WIN", 4, List.of(),
-                "msg", now)));
-        assertTrue(translator.canTranslate(new TicTacToeAchievementAchievedEvent(p1,achievementId, "TYPE", matchId,
-                gameId.uuid(),
-                "msg", now)));
+                new TicTacToeMatchCreatedEvent(matchId, gameIdUuid, p1, p2,
+                        List.of("", "", "", "", "", "", "", "", ""), "ACTIVE", "msg", now)));
+        assertTrue(translator.canTranslate(
+                new TicTacToeMatchMoveMadeEvent(matchId, gameIdUuid, p1, 0, "X", 1,
+                        List.of("X", "", "", "", "", "", "", "", ""), p1, p2, now, "msg", now)));
+        assertTrue(translator.canTranslate(
+                new TicTacToeMatchEndedEvent(matchId, gameIdUuid, p1, p2,
+                        List.of("X", "X", "X", "O", "O", "", "", "", ""), "WIN", p1, 4, "msg", now)));
+        assertTrue(translator.canTranslate(
+                new TicTacToeAchievementAchievedEvent(p1, achievementId, "TYPE", matchId,
+                        gameId.uuid(), "msg", now)));
     }
 }

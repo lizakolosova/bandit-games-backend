@@ -143,7 +143,9 @@ class UnifiedGameplayEventListenerTest {
     void shouldProjectAndBroadcastTicTacToeMatchCreated() {
 
         TicTacToeMatchCreatedEvent event = new TicTacToeMatchCreatedEvent(
-                matchId, p1, p2,"message type", now
+                matchId, gameId, p1, p2,
+                List.of("", "", "", "", "", "", "", "", ""),
+                "ACTIVE", "message type", now
         );
 
         UnifiedMatchCreatedEvent unified = new UnifiedMatchCreatedEvent(
@@ -168,7 +170,9 @@ class UnifiedGameplayEventListenerTest {
     void shouldProjectTicTacToeMatchEndedEvent() {
 
         TicTacToeMatchEndedEvent event = new TicTacToeMatchEndedEvent(
-                matchId, p1, "WIN", 5,List.of("something"), "message type", now
+                matchId, gameId, p1, p2,
+                List.of("X", "X", "X", "O", "O", "", "", "", ""),
+                "WIN", p1, 5, "message type", now
         );
 
         UnifiedMatchEndedEvent unified = new UnifiedMatchEndedEvent(
@@ -195,8 +199,11 @@ class UnifiedGameplayEventListenerTest {
 
     @Test
     void shouldFailWhenRoomIsMissing() {
-        TicTacToeMatchCreatedEvent event = new TicTacToeMatchCreatedEvent(UUID.randomUUID(), UUID.randomUUID(),
-                UUID.randomUUID(),"message type", LocalDateTime.now());
+        TicTacToeMatchCreatedEvent event = new TicTacToeMatchCreatedEvent(
+                UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(),
+                List.of("", "", "", "", "", "", "", "", ""),
+                "ACTIVE", "message type", LocalDateTime.now()
+        );
 
         UnifiedMatchCreatedEvent unified = new UnifiedMatchCreatedEvent(event.matchId(), UUID.randomUUID(), "TIC_TAC_TOE",
                 List.of(event.hostPlayerId(), event.opponentPlayerId()),"message type", LocalDateTime.now());

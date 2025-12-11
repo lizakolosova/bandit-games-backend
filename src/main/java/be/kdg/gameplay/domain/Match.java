@@ -1,12 +1,14 @@
 package be.kdg.gameplay.domain;
 
+import be.kdg.common.events.DomainEvent;
+import be.kdg.common.events.unified.MatchStatisticsEvent;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.gameplay.domain.valueobj.MatchId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.domain.valueobj.MatchStatus;
-import jakarta.persistence.OrderColumn;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Match {
@@ -21,6 +23,8 @@ public class Match {
     private LocalDateTime finishedAt;
 
     private PlayerId winnerPlayerId;
+
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
 
 
     public Match(MatchId matchId, GameId gameId, List<PlayerId> players, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, PlayerId winnerPlayerId) {
@@ -48,6 +52,23 @@ public class Match {
         this.status = MatchStatus.FINISHED;
         this.finishedAt = finishedAt;
         this.winnerPlayerId = winner;
+        registerEvent(new MatchStatisticsEvent(
+                this.matchId.uuid(),
+                this.gameId.uuid(),
+                this.players.stream().map(PlayerId::uuid).toList(),
+                winner != null ? winner.uuid() : null,
+                this.startedAt,
+                this.finishedAt));
+    }
+
+    public List<DomainEvent> pullDomainEvents() {
+        var copy = List.copyOf(domainEvents);
+        domainEvents.clear();
+        return copy;
+    }
+
+    public void registerEvent(DomainEvent event) {
+        domainEvents.add(event);
     }
 
     public MatchId getMatchId() {

@@ -1,6 +1,5 @@
 package be.kdg.player.domain;
 
-import be.kdg.gameplay.domain.Match;
 import be.kdg.player.domain.valueobj.GameLibraryId;
 
 import java.time.Duration;
@@ -27,6 +26,10 @@ public class GameLibrary {
         this.addedAt = LocalDateTime.now();
         this.totalPlaytime = Duration.ZERO;
         this.isFavourite = false;
+        this.matchesPlayed = 0;
+        this.gamesWon = 0;
+        this.gamesLost = 0;
+        this.gamesDraw = 0;
     }
 
     public GameLibrary(GameLibraryId gameLibraryId,
@@ -41,6 +44,19 @@ public class GameLibrary {
         this.lastPlayedAt = lastPlayedAt;
         this.totalPlaytime = totalPlaytime != null ? totalPlaytime : Duration.ZERO;
         this.isFavourite = isFavourite;
+    }
+
+    public GameLibrary(GameLibraryId gameLibraryId, UUID gameId, LocalDateTime addedAt, LocalDateTime lastPlayedAt, Duration totalPlaytime, boolean isFavourite, int matchesPlayed, int gamesWon, int gamesLost, int gamesDraw) {
+        this.gameLibraryId = gameLibraryId;
+        this.gameId = gameId;
+        this.addedAt = addedAt;
+        this.lastPlayedAt = lastPlayedAt;
+        this.totalPlaytime = totalPlaytime;
+        this.isFavourite = isFavourite;
+        this.matchesPlayed = matchesPlayed;
+        this.gamesWon = gamesWon;
+        this.gamesLost = gamesLost;
+        this.gamesDraw = gamesDraw;
     }
 
     public void markAsFavourite() {
@@ -116,4 +132,5 @@ public class GameLibrary {
     public int getGamesLost() {
         return gamesLost;
     }
+
 }
