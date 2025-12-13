@@ -59,6 +59,18 @@ public class Player {
         return library;
     }
 
+    public GameLibrary purchaseGame(UUID gameId, String paymentIntentId) {
+        GameLibrary existing = findGameInLibrary(gameId);
+        if (existing != null && existing.isPurchased()) {
+            throw new IllegalStateException("Game already purchased");
+        }
+
+        GameLibrary library = new GameLibrary(gameId);
+        library.markAsPurchased(paymentIntentId);
+        gameLibraries.add(library);
+        return library;
+    }
+
     public void markGameAsFavourite(UUID gameId) {
         GameLibrary entry = findGameInLibrary(gameId);
         if (entry == null) {

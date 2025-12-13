@@ -21,6 +21,9 @@ public class GameLibraryJpaEntity {
 
     private boolean favourite;
 
+    private LocalDateTime purchasedAt;  
+    private String stripePaymentIntentId;  
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id", nullable = false)
     private PlayerJpaEntity player;
@@ -34,6 +37,18 @@ public class GameLibraryJpaEntity {
         this.addedAt = LocalDateTime.now();
         this.totalPlaytimeSeconds = 0L;
         this.favourite = false;
+    }
+
+    public GameLibraryJpaEntity(UUID id, UUID gameId, LocalDateTime addedAt, LocalDateTime lastPlayedAt, Long totalPlaytimeSeconds, boolean favourite, LocalDateTime purchasedAt, String stripePaymentIntentId, PlayerJpaEntity player) {
+        this.id = id;
+        this.gameId = gameId;
+        this.addedAt = addedAt;
+        this.lastPlayedAt = lastPlayedAt;
+        this.totalPlaytimeSeconds = totalPlaytimeSeconds;
+        this.favourite = favourite;
+        this.purchasedAt = purchasedAt;
+        this.stripePaymentIntentId = stripePaymentIntentId;
+        this.player = player;
     }
 
     public UUID getId() {
@@ -64,6 +79,14 @@ public class GameLibraryJpaEntity {
         return player;
     }
 
+    public LocalDateTime getPurchasedAt() {  
+        return purchasedAt;
+    }
+
+    public String getStripePaymentIntentId() {  
+        return stripePaymentIntentId;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -90,5 +113,13 @@ public class GameLibraryJpaEntity {
 
     public void setPlayer(PlayerJpaEntity player) {
         this.player = player;
+    }
+
+    public void setPurchasedAt(LocalDateTime purchasedAt) {  
+        this.purchasedAt = purchasedAt;
+    }
+
+    public void setStripePaymentIntentId(String stripePaymentIntentId) {  
+        this.stripePaymentIntentId = stripePaymentIntentId;
     }
 }

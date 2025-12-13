@@ -10,10 +10,12 @@ public class GameLibrary {
 
     private GameLibraryId gameLibraryId;
     private UUID gameId;
-    private  LocalDateTime addedAt;
+    private LocalDateTime addedAt;
     private LocalDateTime lastPlayedAt;
     private Duration totalPlaytime;
     private boolean isFavourite;
+    private LocalDateTime purchasedAt;
+    private String stripePaymentIntentId;
 
     public GameLibrary(UUID gameId) {
         this.gameLibraryId = GameLibraryId.create();
@@ -21,6 +23,24 @@ public class GameLibrary {
         this.addedAt = LocalDateTime.now();
         this.totalPlaytime = Duration.ZERO;
         this.isFavourite = false;
+    }
+
+    public GameLibrary(GameLibraryId gameLibraryId,
+                       UUID gameId,
+                       LocalDateTime addedAt,
+                       LocalDateTime lastPlayedAt,
+                       Duration totalPlaytime,
+                       boolean isFavourite,
+                       LocalDateTime purchasedAt,
+                       String stripePaymentIntentId) {
+        this.gameLibraryId = gameLibraryId;
+        this.gameId = gameId;
+        this.addedAt = addedAt;
+        this.lastPlayedAt = lastPlayedAt;
+        this.totalPlaytime = totalPlaytime != null ? totalPlaytime : Duration.ZERO;
+        this.isFavourite = isFavourite;
+        this.purchasedAt = purchasedAt;
+        this.stripePaymentIntentId = stripePaymentIntentId;
     }
 
     public GameLibrary(GameLibraryId gameLibraryId,
@@ -35,6 +55,13 @@ public class GameLibrary {
         this.lastPlayedAt = lastPlayedAt;
         this.totalPlaytime = totalPlaytime != null ? totalPlaytime : Duration.ZERO;
         this.isFavourite = isFavourite;
+    }
+    public void markAsPurchased(String paymentIntentId) {
+        this.purchasedAt = LocalDateTime.now();
+        this.stripePaymentIntentId = paymentIntentId;
+    }
+    public boolean isPurchased() {  //
+        return purchasedAt != null;
     }
 
     public void markAsFavourite() {
@@ -76,4 +103,13 @@ public class GameLibrary {
     public GameLibraryId getGameLibraryId() {
         return gameLibraryId;
     }
+
+    public LocalDateTime getPurchasedAt() {
+        return purchasedAt;
+    }
+
+    public String getStripePaymentIntentId() {
+        return stripePaymentIntentId;
+    }
+
 }

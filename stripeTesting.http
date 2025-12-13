@@ -1,0 +1,201 @@
+### Variables
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### Player IDs from sample data
+@gamerPro123 = 750e8400-e29b-41d4-a716-446655440001
+@chessMaster = 750e8400-e29b-41d4-a716-446655440002
+@speedyGonzales = 750e8400-e29b-41d4-a716-446655440003
+@puzzleWizard = 750e8400-e29b-41d4-a716-446655440004
+@battleKnight = 750e8400-e29b-41d4-a716-446655440005
+@casualGamer = 750e8400-e29b-41d4-a716-446655440006
+
+### Game IDs from sample data
+@chessMasterGame = 550e8400-e29b-41d4-a716-446655440001
+@speedRacer = 550e8400-e29b-41d4-a716-446655440002
+@puzzleQuest = 550e8400-e29b-41d4-a716-446655440003
+@battleArena = 550e8400-e29b-41d4-a716-446655440004
+@memoryCards = 550e8400-e29b-41d4-a716-446655440005
+
+###############################################################################
+### 1. Successful Purchase - CasualGamer buys Puzzle Quest (9.99 EUR)
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "{{casualGamer}}",
+  "gameId": "{{puzzleQuest}}"
+}
+
+###############################################################################
+### 2. Successful Purchase - PuzzleWizard buys Battle Arena (24.99 EUR)
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "{{puzzleWizard}}",
+  "gameId": "{{battleArena}}"
+}
+
+###############################################################################
+### 3. Successful Purchase - BattleKnight buys Memory Cards (4.99 EUR)
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "{{battleKnight}}",
+  "gameId": "{{memoryCards}}"
+}
+
+###############################################################################
+### 4. Failed Purchase - GamerPro123 already owns Chess Master
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "{{gamerPro123}}",
+  "gameId": "{{chessMasterGame}}"
+}
+
+###############################################################################
+### 5. Failed Purchase - GamerPro123 already owns Speed Racer
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "{{gamerPro123}}",
+  "gameId": "{{speedRacer}}"
+}
+
+###############################################################################
+### 6. Failed Purchase - ChessMaster already owns Chess Master game
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "{{chessMaster}}",
+  "gameId": "{{chessMasterGame}}"
+}
+
+###############################################################################
+### 7. Failed Purchase - Invalid Player ID
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "00000000-0000-0000-0000-000000000000",
+  "gameId": "{{puzzleQuest}}"
+}
+
+###############################################################################
+### 8. Failed Purchase - Invalid Game ID
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "{{casualGamer}}",
+  "gameId": "00000000-0000-0000-0000-000000000000"
+}
+
+###############################################################################
+### 9. Failed Purchase - Both Invalid IDs
+###############################################################################
+POST {{baseUrl}}/api/payments/initiate-purchase
+Content-Type: {{contentType}}
+
+{
+  "playerId": "00000000-0000-0000-0000-000000000000",
+  "gameId": "00000000-0000-0000-0000-000000000000"
+}
+
+###############################################################################
+### 10. Webhook Test - Payment Intent Succeeded
+### Note: Replace the signature and payload with real Stripe webhook data
+### You can use Stripe CLI: stripe trigger payment_intent.succeeded
+###############################################################################
+POST {{baseUrl}}/api/payments/webhook
+Content-Type: {{contentType}}
+Stripe-Signature: t=1234567890,v1=your_signature_here,v0=fallback_signature
+
+{
+  "id": "evt_test_webhook",
+  "object": "event",
+  "api_version": "2023-10-16",
+  "created": 1234567890,
+  "data": {
+    "object": {
+      "id": "pi_1abc123xyz",
+      "object": "payment_intent",
+      "amount": 999,
+      "currency": "eur",
+      "status": "succeeded",
+      "metadata": {
+        "playerId": "{{casualGamer}}",
+        "gameId": "{{puzzleQuest}}"
+      }
+    }
+  },
+  "type": "payment_intent.succeeded"
+}
+
+###############################################################################
+### 11. Webhook Test - Invalid Signature (should fail with 400)
+###############################################################################
+POST {{baseUrl}}/api/payments/webhook
+Content-Type: {{contentType}}
+Stripe-Signature: invalid_signature
+
+{
+  "id": "evt_test_invalid",
+  "type": "payment_intent.succeeded",
+  "data": {
+    "object": {
+      "id": "pi_invalid"
+    }
+  }
+}
+
+###############################################################################
+### REFERENCE DATA
+###############################################################################
+
+# Players and their current owned games (from sample data):
+#
+# GamerPro123 (750e8400-e29b-41d4-a716-446655440001)
+#   - Owns: Chess Master, Speed Racer
+#   - Can buy: Puzzle Quest, Battle Arena, Memory Cards
+#
+# ChessMaster (750e8400-e29b-41d4-a716-446655440002)
+#   - Owns: Chess Master
+#   - Can buy: Speed Racer, Puzzle Quest, Battle Arena, Memory Cards
+#
+# SpeedyGonzales (750e8400-e29b-41d4-a716-446655440003)
+#   - Owns: Speed Racer
+#   - Can buy: Chess Master, Puzzle Quest, Battle Arena, Memory Cards
+#
+# PuzzleWizard (750e8400-e29b-41d4-a716-446655440004)
+#   - Owns: Puzzle Quest
+#   - Can buy: Chess Master, Speed Racer, Battle Arena, Memory Cards
+#
+# BattleKnight (750e8400-e29b-41d4-a716-446655440005)
+#   - Owns: Battle Arena
+#   - Can buy: Chess Master, Speed Racer, Puzzle Quest, Memory Cards
+#
+# CasualGamer (750e8400-e29b-41d4-a716-446655440006)
+#   - Owns: Nothing yet!
+#   - Can buy: All games
+
+# Game Prices:
+# Chess Master: 19.99 EUR
+# Speed Racer: 14.99 EUR
+# Puzzle Quest: 9.99 EUR
+# Battle Arena: 24.99 EUR
+# Memory Cards: 4.99 EUR

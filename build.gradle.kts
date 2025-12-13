@@ -49,6 +49,8 @@ dependencies {
 
     runtimeOnly("org.postgresql:postgresql")
 
+    implementation("com.stripe:stripe-java:24.16.0")
+
     implementation("org.springframework.modulith:spring-modulith-starter-core")
     implementation("org.springframework.modulith:spring-modulith-core")
 

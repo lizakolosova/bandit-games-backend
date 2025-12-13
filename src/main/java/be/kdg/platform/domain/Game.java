@@ -5,6 +5,7 @@ import be.kdg.common.events.GameAddedEvent;
 import be.kdg.common.valueobj.AchievementId;
 import be.kdg.common.valueobj.GameId;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 public class Game {
@@ -19,6 +20,7 @@ public class Game {
     private LocalDate createdAt;
     private int averageMinutes;
     private List<AchievementDefinition> achievements;
+    private BigDecimal price;
     private final List<DomainEvent> domainEvents = new ArrayList<>();
     public Game(String name, String rules, String pictureUrl, String gameUrl, String category, String developedBy,
                 LocalDate createdAt, int averageMinutes) {

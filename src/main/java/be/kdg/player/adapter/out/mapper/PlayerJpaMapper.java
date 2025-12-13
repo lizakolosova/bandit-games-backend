@@ -34,7 +34,9 @@ public class PlayerJpaMapper {
                     gl.getTotalPlaytimeSeconds() == null
                             ? Duration.ZERO
                             : Duration.ofSeconds(gl.getTotalPlaytimeSeconds()),
-                    gl.isFavourite()
+                    gl.isFavourite(),
+                    gl.getPurchasedAt(),
+                    gl.getStripePaymentIntentId()
             );
 
             domain.getGameLibraries().add(lib);
@@ -85,6 +87,8 @@ public class PlayerJpaMapper {
                             : gl.getTotalPlaytime().getSeconds()
             );
             jpa.setFavourite(gl.isFavourite());
+            jpa.setPurchasedAt(gl.getPurchasedAt());
+            jpa.setStripePaymentIntentId(gl.getStripePaymentIntentId());
 
             entity.getGameLibraries().add(jpa);
         });
