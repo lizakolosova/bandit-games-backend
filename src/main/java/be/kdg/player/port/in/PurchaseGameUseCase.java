@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface PurchaseGameUseCase {
     PurchaseGameResponse initiateGamePurchase(UUID playerId, UUID gameId);
-    void confirmGamePurchase(String paymentIntentId);
+    void confirmGamePurchase(String paymentIntentId, java.util.Map<String, String> metadata);
 }

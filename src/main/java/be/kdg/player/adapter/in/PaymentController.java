@@ -21,6 +21,9 @@ public class PaymentController {
     @Value("${stripe.webhook.secret}")
     private String webhookSecret;
 
+    @Value("${stripe.webhook.verification.enabled:true}")
+    private boolean webhookVerificationEnabled;
+
     public PaymentController(PurchaseGameUseCase purchaseGameUseCase) {
         this.purchaseGameUseCase = purchaseGameUseCase;
     }
@@ -42,41 +45,51 @@ public class PaymentController {
     @PostMapping("/webhook")
     public ResponseEntity<String> handleWebhook(
             @RequestBody String payload,
-            @RequestHeader("Stripe-Signature") String sigHeader) {
+            @RequestHeader(value = "Stripe-Signature", required = false) String sigHeader) {
 
         System.out.println("=== WEBHOOK RECEIVED ===");
+        System.out.println("Verification enabled: " + webhookVerificationEnabled);
         System.out.println("Payload: " + payload);
-        System.out.println("Signature: " + sigHeader);
 
         Event event;
 
         try {
-            event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
+            if (webhookVerificationEnabled) {
+                // Production: Verify webhook signature
+                System.out.println("Verifying signature: " + sigHeader);
+                event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
+            } else {
+                // Test mode: Skip signature verification
+                System.out.println(" Skipping signature verification (test mode)");
+                event = Event.GSON.fromJson(payload, Event.class);
+            }
             System.out.println("Event type: " + event.getType());
         } catch (SignatureVerificationException e) {
             System.err.println("Signature verification failed: " + e.getMessage());
             return ResponseEntity.status(400).body("Invalid signature");
         } catch (Exception e) {
             System.err.println("Webhook error: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(400).body("Webhook error: " + e.getMessage());
         }
 
         if ("payment_intent.succeeded".equals(event.getType())) {
-            System.out.println("Processing payment_intent.succeeded");
+            // Helper to handle the deserialization quirk discussed earlier
+            PaymentIntent paymentIntent = event.getDataObjectDeserializer().getObject()
+                    .map(obj -> (PaymentIntent) obj)
+                    .orElseGet(() -> Event.GSON.fromJson(
+                            event.getDataObjectDeserializer().getRawJson(),
+                            PaymentIntent.class));
 
-            PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer()
-                    .getObject()
-                    .orElseThrow(() -> new RuntimeException("Failed to deserialize payment intent"));
-
-            System.out.println("Payment Intent ID: " + paymentIntent.getId());
-            System.out.println("Metadata: " + paymentIntent.getMetadata());
+            // Get metadata directly from the object
+            var metadata = paymentIntent.getMetadata();
+            String piId = paymentIntent.getId();
 
             try {
-                purchaseGameUseCase.confirmGamePurchase(paymentIntent.getId());
-                System.out.println(" Purchase confirmed successfully!");
+                // Pass the metadata map directly to the use case
+                purchaseGameUseCase.confirmGamePurchase(piId, metadata);
+                System.out.println("Purchase confirmed successfully!");
             } catch (Exception e) {
-                System.err.println(" Failed to confirm purchase: " + e.getMessage());
-                e.printStackTrace();
                 return ResponseEntity.status(500).body("Failed to process payment");
             }
         }
