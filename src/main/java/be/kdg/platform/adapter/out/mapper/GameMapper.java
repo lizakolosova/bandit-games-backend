@@ -30,7 +30,8 @@ public class GameMapper {
                 game.getCategory(),
                 game.getDevelopedBy(),
                 game.getCreatedAt(),
-                game.getAverageMinutes()
+                game.getAverageMinutes(),
+                game.isApproved()
         );
     }
 }

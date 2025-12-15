@@ -3,6 +3,8 @@ package be.kdg.gameplay.adapter.out;
 import be.kdg.gameplay.domain.valueobj.MatchStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -20,8 +22,9 @@ public class MatchJpaEntity {
             schema = "kdg_gameplay",
             joinColumns = @JoinColumn(name = "match_id")
     )
+    @OrderColumn(name = "player_order")
     @Column(name = "player_id")
-    private java.util.Set<UUID> players;
+    private List<UUID> players;
 
     @Enumerated(EnumType.STRING)
     private MatchStatus status;
@@ -29,33 +32,38 @@ public class MatchJpaEntity {
     private LocalDateTime startedAt;
     private LocalDateTime finishedAt;
 
+    private int totalMoves;
+    private String endReason;
+
     private UUID winnerPlayerId;
 
     protected MatchJpaEntity() {}
 
-    public MatchJpaEntity(
-            UUID matchId,
-            UUID gameId,
-            java.util.Set<UUID> players,
-            MatchStatus status,
-            LocalDateTime startedAt,
-            LocalDateTime finishedAt,
-            UUID winnerPlayerId
-    ) {
+    public MatchJpaEntity(UUID matchId, List<UUID> players, UUID gameId, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, int totalMoves, String endReason, UUID winnerPlayerId) {
         this.matchId = matchId;
-        this.gameId = gameId;
         this.players = players;
+        this.gameId = gameId;
         this.status = status;
         this.startedAt = startedAt;
         this.finishedAt = finishedAt;
+        this.totalMoves = totalMoves;
+        this.endReason = endReason;
         this.winnerPlayerId = winnerPlayerId;
     }
 
     public UUID getMatchId() { return matchId; }
     public UUID getGameId() { return gameId; }
-    public java.util.Set<UUID> getPlayers() { return players; }
+    public List<UUID> getPlayers() { return players; }
     public MatchStatus getStatus() { return status; }
     public LocalDateTime getStartedAt() { return startedAt; }
     public LocalDateTime getFinishedAt() { return finishedAt; }
     public UUID getWinnerPlayerId() { return winnerPlayerId; }
+
+    public int getTotalMoves() {
+        return totalMoves;
+    }
+
+    public String getEndReason() {
+        return endReason;
+    }
 }

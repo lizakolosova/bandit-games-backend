@@ -1,9 +1,13 @@
 package be.kdg;
 
 import be.kdg.common.valueobj.PlayerId;
+import be.kdg.gameplay.adapter.out.MatchJpaEntity;
+import be.kdg.gameplay.domain.valueobj.MatchStatus;
 import be.kdg.platform.adapter.out.AchievementDefinitionJpaRepository;
 import be.kdg.platform.adapter.out.GameJpaRepository;
+import be.kdg.player.adapter.out.GameProjectionJpaRepository;
 import be.kdg.player.adapter.out.PlayerJpaRepository;
+import be.kdg.player.domain.GameProjection;
 import be.kdg.player.domain.Player;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -24,6 +29,10 @@ public class TestHelper {
     @Autowired
     private PlayerJpaRepository players;
     @Autowired
+    private AchievementDefinitionJpaRepository achievementDefs;
+    @Autowired
+    private GameProjectionJpaRepository gameProjections;
+    @Autowired
     private  DataSource dataSource;
 
 
@@ -34,16 +43,20 @@ public class TestHelper {
 
             stmt.execute("CREATE SCHEMA IF NOT EXISTS kdg_platform");
             stmt.execute("CREATE SCHEMA IF NOT EXISTS kdg_player");
+            stmt.execute("CREATE SCHEMA IF NOT EXISTS kdg_gameplay");
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to create schemas", e);
         }
     }
 
+
     public void cleanUp() {
         games.deleteAll();
         achievements.deleteAll();
         players.deleteAll();
+        achievementDefs.deleteAll();
+        gameProjections.deleteAll();
     }
 
     public Player createDummyPlayer(UUID id) {
@@ -55,5 +68,24 @@ public class TestHelper {
                 LocalDateTime.now()
         );
     }
+
+    public MatchJpaEntity buildMatchEntityForPlayer(UUID playerId) {
+        UUID matchId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        UUID otherPlayer = UUID.randomUUID();
+
+        return new MatchJpaEntity(
+                matchId,
+                List.of(playerId, otherPlayer),
+                gameId,
+                MatchStatus.FINISHED,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                0,
+                "nothing",
+                null
+        );
+    }
+
 }
 

@@ -3,13 +3,12 @@ package be.kdg.player.adapter.in;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.adapter.in.request.AddGameToLibraryRequest;
 import be.kdg.player.adapter.in.request.SendFriendRequestDto;
-import be.kdg.player.adapter.in.response.FriendDto;
-import be.kdg.player.adapter.in.response.GameLibraryDto;
-import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
+import be.kdg.player.adapter.in.response.*;
 import be.kdg.player.adapter.in.request.RegisterPlayerRequest;
-import be.kdg.player.adapter.in.response.PlayerDto;
+import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.*;
+import be.kdg.player.port.in.command.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -31,8 +30,9 @@ public class PlayerController {
     private final SendFriendshipRequestUseCase sendFriendshipRequestUseCase;
     private final SearchPlayersUseCase searchPlayersUseCase;
     private final RemoveFriendUseCase removeFriendUseCase;
+    private final LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase, LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
@@ -42,6 +42,7 @@ public class PlayerController {
         this.sendFriendshipRequestUseCase = sendFriendshipRequestUseCase;
         this.searchPlayersUseCase = searchPlayersUseCase;
         this.removeFriendUseCase = removeFriendUseCase;
+        this.loadSingleGameLibraryUseCase = loadSingleGameLibraryUseCase;
     }
 
     @PostMapping("/register")
@@ -52,15 +53,8 @@ public class PlayerController {
 
         Player result = registerPlayerUseCase.register(command);
 
-        return ResponseEntity
-                .status(201)
-                .body(new PlayerDto(
-                        result.getPlayerId().uuid(),
-                        result.getUsername(),
-                        result.getEmail(),
-                        result.getPictureUrl(),
-                        result.getCreatedAt()
-                ));
+        return ResponseEntity.status(201).body(new PlayerDto(result.getPlayerId().uuid(), result.getUsername(),
+                result.getEmail(), result.getPictureUrl(), result.getCreatedAt()));
     }
 
 
@@ -71,13 +65,8 @@ public class PlayerController {
 
         List<GameLibraryDto> result = loadGameLibraryUseCase.loadLibrary(query)
                 .stream()
-                .map(gl -> new GameLibraryDto(
-                        gl.getGameId(),
-                        gl.getAddedAt(),
-                        gl.getLastPlayedAt(),
-                        gl.getTotalPlaytime() == null ? 0 : gl.getTotalPlaytime().toMinutes(),
-                        gl.isFavourite()
-                ))
+                .map(gl -> new GameLibraryDto(gl.getGameId(), gl.getAddedAt(), gl.getLastPlayedAt(),
+                        gl.getTotalPlaytime() == null ? 0 : gl.getTotalPlaytime().toMinutes(), gl.isFavourite()))
                 .toList();
 
         return ResponseEntity.ok(result);
@@ -107,11 +96,8 @@ public class PlayerController {
     }
 
     @PostMapping("/library/{gameId}/favourite")
-    public ResponseEntity<Void> toggleFavourite(
-            @PathVariable UUID gameId,
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestParam boolean favourite
-    ) {
+    public ResponseEntity<Void> toggleFavourite(@PathVariable UUID gameId, @AuthenticationPrincipal Jwt jwt,
+                                                @RequestParam boolean favourite) {
         UUID playerId = UUID.fromString(jwt.getSubject());
         MarkFavouriteCommand command = new MarkFavouriteCommand(playerId, gameId, favourite);
         markFavouriteUseCase.markFavourite(command);
@@ -140,11 +126,24 @@ public class PlayerController {
 
         return ResponseEntity.ok(result);
     }
+
     @DeleteMapping("/friends/{friendId}")
     public ResponseEntity<Void> removeFriend(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID friendId) {
         UUID playerId = UUID.fromString(jwt.getSubject());
         RemoveFriendCommand command = new RemoveFriendCommand(playerId, friendId);
         removeFriendUseCase.removeFriend(command);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{playerId}/library/{gameId}")
+    public ResponseEntity<GameLibraryDetailsDto> loadOtherPlayerGameDetails(@PathVariable UUID playerId, @PathVariable UUID gameId) {
+        LoadSingleGameLibraryCommand command = new LoadSingleGameLibraryCommand(playerId, gameId);
+
+        GameLibrary gl = loadSingleGameLibraryUseCase.loadGame(command);
+
+        GameLibraryDetailsDto result =  new GameLibraryDetailsDto(gl.getGameLibraryId().uuid(),
+                gl.getAddedAt(), gl.getLastPlayedAt(), gl.getTotalPlaytime().toMinutes(),
+                gl.isFavourite(),gl.getMatchesPlayed(), gl.getGamesWon(), gl.getGamesLost(), gl.getGamesDraw());
+        return ResponseEntity.ok(result);
     }
 }

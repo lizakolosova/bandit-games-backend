@@ -3,6 +3,7 @@ package be.kdg.platform.core;
 import be.kdg.platform.adapter.out.PlatformEventPublisher;
 import be.kdg.platform.domain.Game;
 import be.kdg.platform.port.in.*;
+import be.kdg.platform.port.in.command.AddGameWithAchievementsCommand;
 import be.kdg.platform.port.out.AddGamePort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,11 @@ public class AddGameWithAchievementsUseCaseImpl implements AddGameWithAchievemen
 
         if (command.achievements() != null) {
             command.achievements().forEach(a ->
-                    game.addAchievement(a.name(), a.description(), a.howToUnlock())
+                    game.addAchievement(a.name(), a.description())
             );
         }
-
-        eventPublisher.publishEvents(game.pullDomainEvents());
-        return addGamePort.add(game);
+        Game saved = addGamePort.add(game);
+        eventPublisher.publishEvents(saved.pullDomainEvents());
+        return saved;
     }
 }

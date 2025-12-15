@@ -10,10 +10,16 @@ public class GameLibrary {
 
     private GameLibraryId gameLibraryId;
     private UUID gameId;
-    private LocalDateTime addedAt;
+    private  LocalDateTime addedAt;
     private LocalDateTime lastPlayedAt;
     private Duration totalPlaytime;
     private boolean isFavourite;
+
+    private int matchesPlayed;
+    private int gamesWon;
+    private int gamesLost;
+    private int gamesDraw;
+
     private LocalDateTime purchasedAt;
     private String stripePaymentIntentId;
 
@@ -23,6 +29,12 @@ public class GameLibrary {
         this.addedAt = LocalDateTime.now();
         this.totalPlaytime = Duration.ZERO;
         this.isFavourite = false;
+        this.purchasedAt = purchasedAt;
+        this.stripePaymentIntentId = stripePaymentIntentId;
+        this.matchesPlayed = 0;
+        this.gamesWon = 0;
+        this.gamesLost = 0;
+        this.gamesDraw = 0;
     }
 
     public GameLibrary(GameLibraryId gameLibraryId,
@@ -39,29 +51,19 @@ public class GameLibrary {
         this.lastPlayedAt = lastPlayedAt;
         this.totalPlaytime = totalPlaytime != null ? totalPlaytime : Duration.ZERO;
         this.isFavourite = isFavourite;
-        this.purchasedAt = purchasedAt;
-        this.stripePaymentIntentId = stripePaymentIntentId;
     }
 
-    public GameLibrary(GameLibraryId gameLibraryId,
-                               UUID gameId,
-                       LocalDateTime addedAt,
-                       LocalDateTime lastPlayedAt,
-                       Duration totalPlaytime,
-                       boolean isFavourite) {
+    public GameLibrary(GameLibraryId gameLibraryId, UUID gameId, LocalDateTime addedAt, LocalDateTime lastPlayedAt, Duration totalPlaytime, boolean isFavourite, int matchesPlayed, int gamesWon, int gamesLost, int gamesDraw) {
         this.gameLibraryId = gameLibraryId;
         this.gameId = gameId;
         this.addedAt = addedAt;
         this.lastPlayedAt = lastPlayedAt;
-        this.totalPlaytime = totalPlaytime != null ? totalPlaytime : Duration.ZERO;
+        this.totalPlaytime = totalPlaytime;
         this.isFavourite = isFavourite;
-    }
-    public void markAsPurchased(String paymentIntentId) {
-        this.purchasedAt = LocalDateTime.now();
-        this.stripePaymentIntentId = paymentIntentId;
-    }
-    public boolean isPurchased() {  //
-        return purchasedAt != null;
+        this.matchesPlayed = matchesPlayed;
+        this.gamesWon = gamesWon;
+        this.gamesLost = gamesLost;
+        this.gamesDraw = gamesDraw;
     }
 
     public void markAsFavourite() {
@@ -79,6 +81,24 @@ public class GameLibrary {
     public void increasePlaytime(Duration duration) {
         this.totalPlaytime = this.totalPlaytime.plus(duration);
     }
+
+    public void recordMatchResult(UUID playerId, LocalDateTime startedAt, LocalDateTime finishedAt, UUID winnerPlayerId) {
+        this.updateLastPlayed(LocalDateTime.now());
+        this.matchesPlayed++;
+
+        if (startedAt != null && finishedAt != null) {
+            this.increasePlaytime(Duration.between(startedAt, finishedAt));
+        }
+
+        if (winnerPlayerId == null) {
+            this.gamesDraw++;
+        } else if (winnerPlayerId.equals(playerId)) {
+            this.gamesWon++;
+        } else {
+            this.gamesLost++;
+        }
+    }
+
 
     public UUID getGameId() {
         return gameId;
@@ -104,6 +124,22 @@ public class GameLibrary {
         return gameLibraryId;
     }
 
+    public int getMatchesPlayed() {
+        return matchesPlayed;
+    }
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    public int getGamesDraw() {
+        return gamesDraw;
+    }
+
+    public int getGamesLost() {
+        return gamesLost;
+    }
+
     public LocalDateTime getPurchasedAt() {
         return purchasedAt;
     }
@@ -111,5 +147,4 @@ public class GameLibrary {
     public String getStripePaymentIntentId() {
         return stripePaymentIntentId;
     }
-
 }

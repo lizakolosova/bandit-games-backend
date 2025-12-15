@@ -9,7 +9,7 @@ public record FinalizeRoomEvent(
         String opponentPlayerName,
         UUID hostPlayerId,
         UUID opponentPlayerId
-) implements DomainEvent{
+) implements DomainEvent {
 
     public FinalizeRoomEvent(String hostPlayerName, String opponentPlayerName, UUID hostPlayerId, UUID opponentPlayerId){
     this(LocalDateTime.now(), hostPlayerName, opponentPlayerName, hostPlayerId, opponentPlayerId);

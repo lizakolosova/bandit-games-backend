@@ -1,5 +1,6 @@
 package be.kdg.gameplay.adapter.out;
 
+import be.kdg.common.exception.NotFoundException;
 import be.kdg.gameplay.adapter.out.mapper.GameRoomJpaMapper;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.valueobj.GameRoomId;
@@ -7,6 +8,8 @@ import be.kdg.gameplay.port.out.AddGameRoomPort;
 import be.kdg.gameplay.port.out.LoadGameRoomPort;
 import be.kdg.gameplay.port.out.UpdateGameRoomPort;
 import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
 
 @Repository
 public class GameRoomJpaAdapter implements AddGameRoomPort, UpdateGameRoomPort, LoadGameRoomPort {
@@ -34,4 +37,13 @@ public class GameRoomJpaAdapter implements AddGameRoomPort, UpdateGameRoomPort, 
     public GameRoom update(GameRoom room) {
         return GameRoomJpaMapper.toDomain(games.save(GameRoomJpaMapper.toEntity(room)));
     }
+
+    @Override
+    public GameRoom findByPlayers(UUID hostPlayerId, UUID opponentPlayerId) {
+        return games.findByHostPlayerIdAndInvitedPlayerId(hostPlayerId, opponentPlayerId)
+                .or(() -> games.findByHostPlayerIdAndInvitedPlayerId(opponentPlayerId, hostPlayerId))
+                .map(GameRoomJpaMapper::toDomain)
+                .orElseThrow(() -> new NotFoundException("Game room not found for players"));
+    }
+
 }

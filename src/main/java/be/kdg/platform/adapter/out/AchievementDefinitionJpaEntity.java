@@ -18,8 +18,6 @@ public class AchievementDefinitionJpaEntity {
     @Column
     private String description;
 
-    @Column(name = "how_to_unlock")
-    private String howToUnlock;
 
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
@@ -31,12 +29,10 @@ public class AchievementDefinitionJpaEntity {
     public AchievementDefinitionJpaEntity(UUID uuid,
                                           String name,
                                           String description,
-                                          String howToUnlock,
                                           GameJpaEntity game) {
         this.uuid = uuid;
         this.name = name;
         this.description = description;
-        this.howToUnlock = howToUnlock;
         this.game = game;
 
     }
@@ -51,9 +47,5 @@ public class AchievementDefinitionJpaEntity {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getHowToUnlock() {
-        return howToUnlock;
     }
 }

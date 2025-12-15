@@ -3,7 +3,7 @@ package be.kdg.player.core;
 import be.kdg.player.adapter.out.PlayerEventPublisher;
 import be.kdg.player.domain.FriendshipRequest;
 import be.kdg.player.domain.valueobj.FriendshipRequestId;
-import be.kdg.player.port.in.AcceptFriendshipRequestCommand;
+import be.kdg.player.port.in.command.AcceptFriendshipRequestCommand;
 import be.kdg.player.port.in.AcceptFriendshipRequestUseCase;
 import be.kdg.player.port.out.LoadFriendshipRequestPort;
 import be.kdg.player.port.out.UpdateFriendshipRequestPort;

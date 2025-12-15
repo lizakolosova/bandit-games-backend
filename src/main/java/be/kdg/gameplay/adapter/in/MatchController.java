@@ -1,31 +1,40 @@
 package be.kdg.gameplay.adapter.in;
 
-import be.kdg.gameplay.adapter.in.request.MatchRequest;
-import be.kdg.gameplay.adapter.in.response.GameRoomDto;
-import be.kdg.gameplay.domain.GameRoom;
-import be.kdg.gameplay.port.in.StartMatchCommand;
-import be.kdg.gameplay.port.in.StartMatchUseCase;
+import be.kdg.common.valueobj.PlayerId;
+import be.kdg.gameplay.adapter.in.response.MatchHistoryDto;
+import be.kdg.gameplay.domain.Match;
+import be.kdg.gameplay.port.in.RetrieveLatestMatchUseCase;
+import be.kdg.gameplay.port.in.ShowMatchHistoryUseCase;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/gameplay")
+@RequestMapping("/api/matches")
 public class MatchController {
 
-    private final StartMatchUseCase startMatchUseCase;
+    private final RetrieveLatestMatchUseCase retrieveLatestMatchUseCase;
+    private final ShowMatchHistoryUseCase showMatchHistoryUseCase;
 
-    public MatchController(StartMatchUseCase startMatchUseCase) {
-        this.startMatchUseCase = startMatchUseCase;
+    public MatchController(RetrieveLatestMatchUseCase retrieveLatestMatchUseCase,  ShowMatchHistoryUseCase showMatchHistoryUseCase) {
+        this.retrieveLatestMatchUseCase = retrieveLatestMatchUseCase;
+        this.showMatchHistoryUseCase = showMatchHistoryUseCase;
     }
 
-    @PostMapping("/matches/start")//change the name later
-    public ResponseEntity<GameRoomDto> finalizeRoom(@RequestBody MatchRequest request) {
-        StartMatchCommand command = new StartMatchCommand(request.gameRoomId());
-        GameRoom gameRoom = startMatchUseCase.start(command);
+    @GetMapping("/{playerId}")
+    public ResponseEntity<UUID> getLatestMatchByPlayer(@PathVariable UUID playerId) {
+        Match latestMatch = retrieveLatestMatchUseCase.LoadLatestMatchByPlayer(PlayerId.of(playerId));
 
-        return ResponseEntity.ok(GameRoomDto.from(gameRoom));
+        return ResponseEntity.ok(latestMatch.getMatchId().uuid());
+    }
+
+    @GetMapping("/player/{playerId}")
+    public ResponseEntity<List<MatchHistoryDto>> getMatchHistory(@PathVariable UUID playerId) {
+
+        List<Match> matches = showMatchHistoryUseCase.showHistory(PlayerId.of(playerId));
+
+        return ResponseEntity.ok(matches.stream().map(MatchHistoryDto::from).toList());
     }
 }

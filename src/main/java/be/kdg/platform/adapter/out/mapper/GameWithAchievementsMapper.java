@@ -41,8 +41,7 @@ public class GameWithAchievementsMapper {
         return new AchievementDefinition(
                 AchievementId.of(entity.getUuid()),
                 entity.getName(),
-                entity.getDescription(),
-                entity.getHowToUnlock()
+                entity.getDescription()
         );
     }
 
@@ -57,7 +56,8 @@ public class GameWithAchievementsMapper {
                 game.getCategory(),
                 game.getDevelopedBy(),
                 game.getCreatedAt(),
-                game.getAverageMinutes()
+                game.getAverageMinutes(),
+                game.isApproved()
         );
 
         game.getAchievements().forEach(def -> {
@@ -78,7 +78,6 @@ public class GameWithAchievementsMapper {
                 def.getAchievementId().uuid(),
                 def.getName(),
                 def.getDescription(),
-                def.getHowToUnlock(),
                 game
         );
     }

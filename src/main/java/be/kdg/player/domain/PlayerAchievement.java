@@ -17,7 +17,6 @@ public class PlayerAchievement {
 
     public PlayerAchievement(PlayerId playerId, AchievementId achievementId, GameId gameId) {
         this(PlayerAchievementId.create(), playerId, achievementId, gameId, LocalDateTime.now());
-        // we'll have an event here
     }
 
     public PlayerAchievement(PlayerAchievementId playerAchievementId, PlayerId playerId, AchievementId achievementId, GameId gameId, LocalDateTime unlockedAt) {

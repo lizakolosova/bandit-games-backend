@@ -1,12 +1,9 @@
 package be.kdg.player.adapter.out;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "game_projection", schema = "kdg_player")
@@ -24,6 +21,9 @@ public class GameProjectionJpaEntity {
 
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
+
+    @OneToMany(mappedBy = "gameProjection", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AchievementProjectionJpaEntity> achievementProjections = new ArrayList<>();
 
     protected GameProjectionJpaEntity() { }
 

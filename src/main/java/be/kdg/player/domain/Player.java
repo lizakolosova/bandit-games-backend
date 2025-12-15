@@ -2,12 +2,15 @@ package be.kdg.player.domain;
 
 import be.kdg.common.events.DomainEvent;
 import be.kdg.common.events.FriendRemovedEvent;
+import be.kdg.common.valueobj.AchievementId;
+import be.kdg.common.valueobj.GameId;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.common.exception.NotFoundException;
 import be.kdg.player.domain.valueobj.ReceiverId;
 import be.kdg.player.domain.valueobj.SenderId;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -91,7 +94,7 @@ public class Player {
         return gameLibraries.stream()
                 .filter(g -> g.getGameId().equals(gameId))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(()-> NotFoundException.game(gameId));
     }
 
     public List<DomainEvent> pullDomainEvents() {
@@ -99,6 +102,22 @@ public class Player {
         domainEvents.clear();
         return copy;
     }
+
+    public void recordGameResult(UUID gameId, UUID playerId, LocalDateTime startedAt, LocalDateTime finishedAt, UUID winnerPlayerId) {
+        GameLibrary library = findGameInLibrary(gameId);
+        library.recordMatchResult(playerId, startedAt, finishedAt, winnerPlayerId);
+    }
+
+    public void unlockAchievement(AchievementId achievementId, GameId gameId) {
+    boolean alreadyUnlocked = achievements.stream()
+            .anyMatch(a -> a.getAchievementId().equals(achievementId));
+
+    if (alreadyUnlocked) {return;}
+
+    PlayerAchievement achievement = new PlayerAchievement(this.playerId, achievementId, gameId);
+
+    achievements.add(achievement);
+}
 
     public void registerEvent(DomainEvent event) {
         domainEvents.add(event);

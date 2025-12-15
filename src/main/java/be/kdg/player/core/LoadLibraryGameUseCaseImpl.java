@@ -7,8 +7,7 @@ import be.kdg.player.adapter.in.response.UnlockedAchievementDto;
 import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.Player;
 import be.kdg.player.domain.GameProjection;
-import be.kdg.player.domain.PlayerAchievement;
-import be.kdg.player.port.in.LoadLibraryGameCommand;
+import be.kdg.player.port.in.command.LoadLibraryGameCommand;
 import be.kdg.player.port.in.LoadLibraryGameUseCase;
 import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
 import be.kdg.player.port.out.LoadPlayerPort;
@@ -42,13 +41,10 @@ public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
 
         GameProjection projection =
                 loadGameProjectionPort.loadProjection(GameId.of(command.gameId()));
-
         List<UnlockedAchievementDto> unlockedAchievements = player.getAchievements().stream()
                 .filter(a -> a.getGameId().uuid().equals(command.gameId()))
                 .map(a -> new UnlockedAchievementDto(
-                        a.getAchievementId().toString(),   // TODO replace with real title
-                        "TODO description",
-                        0,                                  // TODO global percentage
+                        a.getAchievementId().toString(),
                         a.getUnlockedAt()
                 ))
                 .toList();

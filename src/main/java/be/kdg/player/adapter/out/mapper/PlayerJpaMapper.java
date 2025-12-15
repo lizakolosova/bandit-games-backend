@@ -14,6 +14,7 @@ import java.time.Duration;
 
 public class PlayerJpaMapper {
 
+
     public static Player toDomain(PlayerJpaEntity entity) {
 
         Player domain = new Player(
@@ -35,8 +36,10 @@ public class PlayerJpaMapper {
                             ? Duration.ZERO
                             : Duration.ofSeconds(gl.getTotalPlaytimeSeconds()),
                     gl.isFavourite(),
-                    gl.getPurchasedAt(),
-                    gl.getStripePaymentIntentId()
+                    gl.getMatchesPlayed(),
+                    gl.getGamesWon(),
+                    gl.getGamesLost(),
+                    gl.getGamesDraw()
             );
 
             domain.getGameLibraries().add(lib);
@@ -63,6 +66,7 @@ public class PlayerJpaMapper {
 
     public static PlayerJpaEntity toEntity(Player domain) {
 
+
         PlayerJpaEntity entity = new PlayerJpaEntity(
                 domain.getPlayerId().uuid(),
                 domain.getUsername(),
@@ -75,29 +79,23 @@ public class PlayerJpaMapper {
 
             GameLibraryJpaEntity jpa = new GameLibraryJpaEntity(
                     gl.getGameLibraryId().uuid(),
+                    gl.getGameId(),
+                    gl.getAddedAt(),
+                    gl.getTotalPlaytime() == null ? 0L : gl.getTotalPlaytime().getSeconds(),
+                    gl.getLastPlayedAt(),
+                    gl.isFavourite(),
                     entity,
-                    gl.getGameId()
+                    gl.getMatchesPlayed(),
+                    gl.getGamesWon(),
+                    gl.getGamesLost(),
+                    gl.getGamesDraw()
             );
-
-            jpa.setAddedAt(gl.getAddedAt());
-            jpa.setLastPlayedAt(gl.getLastPlayedAt());
-            jpa.setTotalPlaytimeSeconds(
-                    gl.getTotalPlaytime() == null
-                            ? 0L
-                            : gl.getTotalPlaytime().getSeconds()
-            );
-            jpa.setFavourite(gl.isFavourite());
-            jpa.setPurchasedAt(gl.getPurchasedAt());
-            jpa.setStripePaymentIntentId(gl.getStripePaymentIntentId());
 
             entity.getGameLibraries().add(jpa);
         });
 
         domain.getFriends().forEach(f ->
-                entity.getFriends().add(
-                        new FriendEmbeddable(f.friendId(), f.since())
-                )
-        );
+                entity.getFriends().add(new FriendEmbeddable(f.friendId(), f.since())));
 
         domain.getAchievements().forEach(a -> {
             PlayerAchievementJpaEntity achEntity =
@@ -112,5 +110,6 @@ public class PlayerJpaMapper {
         });
 
         return entity;
+
     }
 }

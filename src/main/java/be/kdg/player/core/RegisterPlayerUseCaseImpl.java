@@ -1,11 +1,8 @@
 package be.kdg.player.core;
 
-import be.kdg.common.valueobj.PlayerId;
-import be.kdg.player.adapter.in.response.PlayerDto;
 import be.kdg.player.domain.Player;
-import be.kdg.player.port.in.RegisterPlayerCommand;
+import be.kdg.player.port.in.command.RegisterPlayerCommand;
 import be.kdg.player.port.in.RegisterPlayerUseCase;
-import be.kdg.player.port.out.LoadPlayerPort;
 import be.kdg.player.port.out.UpdatePlayerPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
