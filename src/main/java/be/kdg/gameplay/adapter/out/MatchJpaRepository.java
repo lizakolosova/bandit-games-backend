@@ -12,4 +12,7 @@ import java.util.UUID;
 @Repository
 public interface MatchJpaRepository extends JpaRepository<MatchJpaEntity, UUID> {
     Optional<MatchJpaEntity> findFirstByPlayersContainingOrderByStartedAtDesc(UUID playerId);
+
+    @Query("select m from MatchJpaEntity m where :playerId member of m.players and m.status = 'FINISHED'")
+    List<MatchJpaEntity> findAllByPlayerId(UUID playerId);
 }

@@ -32,17 +32,22 @@ public class MatchJpaEntity {
     private LocalDateTime startedAt;
     private LocalDateTime finishedAt;
 
+    private int totalMoves;
+    private String endReason;
+
     private UUID winnerPlayerId;
 
     protected MatchJpaEntity() {}
 
-    public MatchJpaEntity(UUID matchId, UUID gameId, List<UUID> players, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, UUID winnerPlayerId) {
+    public MatchJpaEntity(UUID matchId, List<UUID> players, UUID gameId, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, int totalMoves, String endReason, UUID winnerPlayerId) {
         this.matchId = matchId;
-        this.gameId = gameId;
         this.players = players;
+        this.gameId = gameId;
         this.status = status;
         this.startedAt = startedAt;
         this.finishedAt = finishedAt;
+        this.totalMoves = totalMoves;
+        this.endReason = endReason;
         this.winnerPlayerId = winnerPlayerId;
     }
 
@@ -53,4 +58,12 @@ public class MatchJpaEntity {
     public LocalDateTime getStartedAt() { return startedAt; }
     public LocalDateTime getFinishedAt() { return finishedAt; }
     public UUID getWinnerPlayerId() { return winnerPlayerId; }
+
+    public int getTotalMoves() {
+        return totalMoves;
+    }
+
+    public String getEndReason() {
+        return endReason;
+    }
 }

@@ -24,10 +24,12 @@ public class Match {
 
     private PlayerId winnerPlayerId;
 
+    private int totalMoves;
+    private String endReason;
+
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
-
-    public Match(MatchId matchId, GameId gameId, List<PlayerId> players, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, PlayerId winnerPlayerId) {
+    public Match(MatchId matchId, GameId gameId, List<PlayerId> players, MatchStatus status, LocalDateTime startedAt, LocalDateTime finishedAt, PlayerId winnerPlayerId, int totalMoves, String endReason) {
         this.matchId = matchId;
         this.gameId = gameId;
         this.players = players;
@@ -35,7 +37,10 @@ public class Match {
         this.startedAt = startedAt;
         this.finishedAt = finishedAt;
         this.winnerPlayerId = winnerPlayerId;
+        this.totalMoves = totalMoves;
+        this.endReason = endReason;
     }
+
     public Match(MatchId matchId, GameId gameId, List<PlayerId> players, MatchStatus status, LocalDateTime startedAt) {
         this.matchId = matchId;
         this.gameId = gameId;
@@ -48,10 +53,12 @@ public class Match {
         this.players = List.of(white, black);
     }
 
-    public void finish(LocalDateTime finishedAt, PlayerId winner) {
+    public void finish(LocalDateTime finishedAt, PlayerId winner, String endReason, int totalMoves) {
         this.status = MatchStatus.FINISHED;
         this.finishedAt = finishedAt;
         this.winnerPlayerId = winner;
+        this.totalMoves = totalMoves;
+        this.endReason = endReason;
         registerEvent(new MatchStatisticsEvent(
                 this.matchId.uuid(),
                 this.gameId.uuid(),
@@ -97,6 +104,14 @@ public class Match {
 
     public PlayerId getWinnerPlayerId() {
         return winnerPlayerId;
+    }
+
+    public int getTotalMoves() {
+        return totalMoves;
+    }
+
+    public String getEndReason() {
+        return endReason;
     }
 }
 
