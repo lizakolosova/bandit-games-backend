@@ -1,5 +1,6 @@
 package be.kdg.gameplay.adapter.out;
 
+import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.adapter.out.mapper.MatchJpaMapper;
 import be.kdg.gameplay.domain.Match;
 import be.kdg.gameplay.domain.valueobj.MatchId;
@@ -10,7 +11,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
+import java.util.List;
 
 @Repository
 public class MatchJpaAdapter implements AddMatchPort, UpdateMatchPort, LoadMatchPort {
@@ -39,8 +40,14 @@ public class MatchJpaAdapter implements AddMatchPort, UpdateMatchPort, LoadMatch
         return match;
     }
     @Override
-    public Match loadByPlayerId(UUID playerId) {
-        return  matches.findFirstByPlayersContainingOrderByStartedAtDesc(playerId)
+    public Match loadByPlayerId(PlayerId playerId) {
+        return  matches.findFirstByPlayersContainingOrderByStartedAtDesc(playerId.uuid())
                 .map(MatchJpaMapper::toDomain).orElseThrow(NotFoundException::new);
     }
+
+    @Override
+    public List<Match> loadMatchesByPlayerId(PlayerId playerId) {
+        return matches.findAllByPlayerId(playerId.uuid()).stream().map(MatchJpaMapper::toDomain).toList();
+    }
+
 }

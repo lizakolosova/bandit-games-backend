@@ -72,7 +72,7 @@ public class UnifiedMatchProjectorImpl implements UnifiedMatchProjector {
         Match match = loadMatchPort.loadById(MatchId.of(command.matchId()));
 
         PlayerId winner = command.winnerId() != null ? PlayerId.of(command.winnerId()) : null;
-        match.finish(command.timestamp(), winner);
+        match.finish(command.timestamp(), winner, command.endReason(), command.totalMoves());
 
         updateMatchPort.update(match);
         eventPublisher.publishEvents(match.pullDomainEvents());

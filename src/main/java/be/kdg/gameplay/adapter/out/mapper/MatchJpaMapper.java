@@ -14,13 +14,15 @@ public class MatchJpaMapper {
     public static MatchJpaEntity toEntity(Match match) {
         return new MatchJpaEntity(
                 match.getMatchId().uuid(),
-                match.getGameId().uuid(),
                 match.getPlayers().stream()
                         .map(PlayerId::uuid)
                         .collect(Collectors.toList()),
+                match.getGameId().uuid(),
                 match.getStatus(),
                 match.getStartedAt(),
                 match.getFinishedAt(),
+                match.getTotalMoves(),
+                match.getEndReason(),
                 match.getWinnerPlayerId() == null ? null : match.getWinnerPlayerId().uuid()
         );
     }
@@ -35,7 +37,9 @@ public class MatchJpaMapper {
                 entity.getStatus(),
                 entity.getStartedAt(),
                 entity.getFinishedAt(),
-                entity.getWinnerPlayerId() == null ? null : PlayerId.of(entity.getWinnerPlayerId())
+                entity.getWinnerPlayerId() == null ? null : PlayerId.of(entity.getWinnerPlayerId()),
+                entity.getTotalMoves(),
+                entity.getEndReason()
         );
     }
 }

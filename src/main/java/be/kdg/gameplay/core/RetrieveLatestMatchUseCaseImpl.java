@@ -1,5 +1,6 @@
 package be.kdg.gameplay.core;
 
+import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.domain.Match;
 import be.kdg.gameplay.port.in.RetrieveLatestMatchUseCase;
 import be.kdg.gameplay.port.out.LoadMatchPort;
@@ -17,7 +18,7 @@ public class RetrieveLatestMatchUseCaseImpl implements RetrieveLatestMatchUseCas
     }
 
     @Override
-    public Match LoadLatestMatchByPlayer(UUID playerId) {
+    public Match LoadLatestMatchByPlayer(PlayerId playerId) {
         return loadMatchPort.loadByPlayerId(playerId);
     }
 }

@@ -40,7 +40,7 @@ public class TicTacToeEventTranslator implements EventTranslator {
                 tttEvent.playerId(),
                 tttEvent.messageType(),
                 tttEvent.timestamp()
-        ); //this one is not supported yet
+        );
     }
 
     @Override
