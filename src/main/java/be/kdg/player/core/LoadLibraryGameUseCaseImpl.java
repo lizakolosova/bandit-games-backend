@@ -44,7 +44,7 @@ public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
         List<UnlockedAchievementDto> unlockedAchievements = player.getAchievements().stream()
                 .filter(a -> a.getGameId().uuid().equals(command.gameId()))
                 .map(a -> new UnlockedAchievementDto(
-                        a.getAchievementId().toString(),
+                        a.getAchievementId().uuid(),
                         a.getUnlockedAt()
                 ))
                 .toList();
