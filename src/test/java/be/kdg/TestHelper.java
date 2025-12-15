@@ -1,6 +1,8 @@
 package be.kdg;
 
 import be.kdg.common.valueobj.PlayerId;
+import be.kdg.gameplay.adapter.out.MatchJpaEntity;
+import be.kdg.gameplay.domain.valueobj.MatchStatus;
 import be.kdg.platform.adapter.out.AchievementDefinitionJpaRepository;
 import be.kdg.platform.adapter.out.GameJpaRepository;
 import be.kdg.player.adapter.out.GameProjectionJpaRepository;
@@ -15,6 +17,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -65,5 +68,24 @@ public class TestHelper {
                 LocalDateTime.now()
         );
     }
+
+    public MatchJpaEntity buildMatchEntityForPlayer(UUID playerId) {
+        UUID matchId = UUID.randomUUID();
+        UUID gameId = UUID.randomUUID();
+        UUID otherPlayer = UUID.randomUUID();
+
+        return new MatchJpaEntity(
+                matchId,
+                List.of(playerId, otherPlayer),
+                gameId,
+                MatchStatus.FINISHED,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                0,
+                "nothing",
+                null
+        );
+    }
+
 }
 

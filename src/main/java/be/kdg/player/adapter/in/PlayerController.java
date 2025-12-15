@@ -96,11 +96,8 @@ public class PlayerController {
     }
 
     @PostMapping("/library/{gameId}/favourite")
-    public ResponseEntity<Void> toggleFavourite(
-            @PathVariable UUID gameId,
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestParam boolean favourite
-    ) {
+    public ResponseEntity<Void> toggleFavourite(@PathVariable UUID gameId, @AuthenticationPrincipal Jwt jwt,
+                                                @RequestParam boolean favourite) {
         UUID playerId = UUID.fromString(jwt.getSubject());
         MarkFavouriteCommand command = new MarkFavouriteCommand(playerId, gameId, favourite);
         markFavouriteUseCase.markFavourite(command);
@@ -129,6 +126,7 @@ public class PlayerController {
 
         return ResponseEntity.ok(result);
     }
+
     @DeleteMapping("/friends/{friendId}")
     public ResponseEntity<Void> removeFriend(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID friendId) {
         UUID playerId = UUID.fromString(jwt.getSubject());
