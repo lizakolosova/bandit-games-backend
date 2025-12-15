@@ -35,7 +35,9 @@ public class GameLibraryJpaEntity {
 
     protected GameLibraryJpaEntity() {}
 
-    public GameLibraryJpaEntity(UUID id, UUID gameId, LocalDateTime addedAt, Long totalPlaytimeSeconds, LocalDateTime lastPlayedAt, boolean favourite, PlayerJpaEntity player, int matchesPlayed, int gamesWon, int gamesLost, int gamesDraw) {
+    public GameLibraryJpaEntity(UUID id, UUID gameId, LocalDateTime addedAt, Long totalPlaytimeSeconds, LocalDateTime lastPlayedAt,
+                                boolean favourite, PlayerJpaEntity player, int matchesPlayed, int gamesWon, int gamesLost,
+                                int gamesDraw, String stripePaymentIntentId) {
         this.id = id;
         this.gameId = gameId;
         this.addedAt = addedAt;
@@ -47,6 +49,8 @@ public class GameLibraryJpaEntity {
         this.gamesWon = gamesWon;
         this.gamesLost = gamesLost;
         this.gamesDraw = gamesDraw;
+        this.stripePaymentIntentId = stripePaymentIntentId;
+
     }
 
     public GameLibraryJpaEntity(UUID id, UUID gameId, LocalDateTime addedAt, LocalDateTime lastPlayedAt, Long totalPlaytimeSeconds, boolean favourite, LocalDateTime purchasedAt, String stripePaymentIntentId, PlayerJpaEntity player) {

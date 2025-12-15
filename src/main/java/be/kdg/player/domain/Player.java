@@ -7,13 +7,9 @@ import be.kdg.common.valueobj.GameId;
 import be.kdg.player.domain.valueobj.Friend;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.common.exception.NotFoundException;
-import be.kdg.player.domain.valueobj.ReceiverId;
-import be.kdg.player.domain.valueobj.SenderId;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Player {
 
@@ -57,9 +53,7 @@ public class Player {
 
 
     public GameLibrary addGameToLibrary(UUID gameId) {
-        GameLibrary library = new GameLibrary(gameId);
-        gameLibraries.add(library);
-        return library;
+        return ensureGameInLibrary(gameId);
     }
 
     public GameLibrary purchaseGame(UUID gameId, String paymentIntentId) {
@@ -90,12 +84,53 @@ public class Player {
         entry.unmarkAsFavourite();
     }
 
+    public GameLibrary getGameInLibraryOrThrow(UUID gameId) {
+        return gameLibraries.stream()
+                .filter(g -> g.getGameId().equals(gameId))
+                .findFirst()
+                .orElseThrow(() -> NotFoundException.game(gameId));
+    }
+
     public GameLibrary findGameInLibrary(UUID gameId) {
         return gameLibraries.stream()
                 .filter(g -> g.getGameId().equals(gameId))
                 .findFirst()
-                .orElseThrow(()-> NotFoundException.game(gameId));
+                .orElse(null);
     }
+
+    public GameLibrary ensureGameInLibrary(UUID gameId) {
+        GameLibrary existing = findGameInLibrary(gameId);
+        if (existing != null) return existing;
+
+        GameLibrary library = new GameLibrary(gameId);
+        gameLibraries.add(library);
+        return library;
+    }
+
+    public void startPurchase(UUID gameId, String paymentIntentId) {
+        GameLibrary lib = ensureGameInLibrary(gameId);
+
+        if (lib.isPurchased()) {
+            throw new IllegalStateException("Game already purchased");
+        }
+
+        lib.startPurchase(paymentIntentId);
+    }
+
+    public void confirmPurchase(UUID gameId, String paymentIntentId) {
+        GameLibrary lib = ensureGameInLibrary(gameId);
+
+        if (lib.isPurchased()) return;
+        String existingIntentId = lib.getStripePaymentIntentId();
+        if (existingIntentId != null && !existingIntentId.equals(paymentIntentId)) {
+            throw new IllegalStateException(
+                    "PaymentIntent mismatch. Expected " + existingIntentId + " but got " + paymentIntentId
+            );
+        }
+
+        lib.markAsPurchased(paymentIntentId);
+    }
+
 
     public List<DomainEvent> pullDomainEvents() {
         var copy = List.copyOf(domainEvents);

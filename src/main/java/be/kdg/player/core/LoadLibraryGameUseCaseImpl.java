@@ -59,7 +59,7 @@ public class LoadLibraryGameUseCaseImpl implements LoadLibraryGameUseCase {
                 projection.getAverageMinutes(),
                 projection.getDevelopedBy(),
 
-                libraryEntry.getAddedAt(),
+                libraryEntry.getPurchasedAt(),
                 libraryEntry.getLastPlayedAt(),
                 libraryEntry.getTotalPlaytime().toMinutes(),
                 libraryEntry.isFavourite(),

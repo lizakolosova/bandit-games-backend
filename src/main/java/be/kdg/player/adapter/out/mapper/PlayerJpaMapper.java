@@ -39,7 +39,8 @@ public class PlayerJpaMapper {
                     gl.getMatchesPlayed(),
                     gl.getGamesWon(),
                     gl.getGamesLost(),
-                    gl.getGamesDraw()
+                    gl.getGamesDraw(),
+                    gl.getStripePaymentIntentId()
             );
 
             domain.getGameLibraries().add(lib);
@@ -80,7 +81,7 @@ public class PlayerJpaMapper {
             GameLibraryJpaEntity jpa = new GameLibraryJpaEntity(
                     gl.getGameLibraryId().uuid(),
                     gl.getGameId(),
-                    gl.getAddedAt(),
+                    gl.getPurchasedAt(),
                     gl.getTotalPlaytime() == null ? 0L : gl.getTotalPlaytime().getSeconds(),
                     gl.getLastPlayedAt(),
                     gl.isFavourite(),
@@ -88,7 +89,8 @@ public class PlayerJpaMapper {
                     gl.getMatchesPlayed(),
                     gl.getGamesWon(),
                     gl.getGamesLost(),
-                    gl.getGamesDraw()
+                    gl.getGamesDraw(),
+                    gl.getStripePaymentIntentId()
             );
 
             entity.getGameLibraries().add(jpa);

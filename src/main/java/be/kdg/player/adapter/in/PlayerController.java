@@ -1,7 +1,6 @@
 package be.kdg.player.adapter.in;
 
 import be.kdg.common.valueobj.PlayerId;
-import be.kdg.player.adapter.in.request.AddGameToLibraryRequest;
 import be.kdg.player.adapter.in.request.SendFriendRequestDto;
 import be.kdg.player.adapter.in.response.*;
 import be.kdg.player.adapter.in.request.RegisterPlayerRequest;
@@ -22,7 +21,6 @@ import java.util.UUID;
 public class PlayerController {
 
     private final LoadGameLibraryUseCase loadGameLibraryUseCase;
-    private final AddGameToLibraryUseCase addGameToLibraryUseCase;
     private final LoadLibraryGameUseCase loadLibraryGameUseCase;
     private final LoadFriendsUseCase loadFriendsUseCase;
     private final RegisterPlayerUseCase registerPlayerUseCase;
@@ -32,9 +30,8 @@ public class PlayerController {
     private final RemoveFriendUseCase removeFriendUseCase;
     private final LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase, LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase, LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
-        this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
         this.loadFriendsUseCase = loadFriendsUseCase;
         this.registerPlayerUseCase = registerPlayerUseCase;
@@ -65,19 +62,11 @@ public class PlayerController {
 
         List<GameLibraryDto> result = loadGameLibraryUseCase.loadLibrary(query)
                 .stream()
-                .map(gl -> new GameLibraryDto(gl.getGameId(), gl.getAddedAt(), gl.getLastPlayedAt(),
+                .map(gl -> new GameLibraryDto(gl.getGameId(), gl.getPurchasedAt(), gl.getLastPlayedAt(),
                         gl.getTotalPlaytime() == null ? 0 : gl.getTotalPlaytime().toMinutes(), gl.isFavourite()))
                 .toList();
 
         return ResponseEntity.ok(result);
-    }
-
-    @PostMapping("/library")
-    public ResponseEntity<Void> addGameToLibrary(@RequestBody AddGameToLibraryRequest request, @AuthenticationPrincipal Jwt jwt) {
-        UUID playerId = UUID.fromString(jwt.getSubject());
-        AddGameToLibraryCommand command = new AddGameToLibraryCommand(playerId, request.gameId());
-        addGameToLibraryUseCase.addGameToLibrary(command);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/library/{gameId}")
@@ -142,7 +131,7 @@ public class PlayerController {
         GameLibrary gl = loadSingleGameLibraryUseCase.loadGame(command);
 
         GameLibraryDetailsDto result =  new GameLibraryDetailsDto(gl.getGameLibraryId().uuid(),
-                gl.getAddedAt(), gl.getLastPlayedAt(), gl.getTotalPlaytime().toMinutes(),
+                gl.getPurchasedAt(), gl.getLastPlayedAt(), gl.getTotalPlaytime().toMinutes(),
                 gl.isFavourite(),gl.getMatchesPlayed(), gl.getGamesWon(), gl.getGamesLost(), gl.getGamesDraw());
         return ResponseEntity.ok(result);
     }

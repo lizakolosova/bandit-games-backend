@@ -4,13 +4,14 @@ import be.kdg.player.domain.valueobj.GameLibraryId;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class GameLibrary {
 
     private GameLibraryId gameLibraryId;
     private UUID gameId;
-    private  LocalDateTime addedAt;
+    private LocalDateTime purchasedAt;
     private LocalDateTime lastPlayedAt;
     private Duration totalPlaytime;
     private boolean isFavourite;
@@ -20,51 +21,51 @@ public class GameLibrary {
     private int gamesLost;
     private int gamesDraw;
 
-    private LocalDateTime purchasedAt;
     private String stripePaymentIntentId;
 
     public GameLibrary(UUID gameId) {
         this.gameLibraryId = GameLibraryId.create();
         this.gameId = gameId;
-        this.addedAt = LocalDateTime.now();
+        this.purchasedAt = null;
         this.totalPlaytime = Duration.ZERO;
         this.isFavourite = false;
-        this.purchasedAt = purchasedAt;
-        this.stripePaymentIntentId = stripePaymentIntentId;
+
+        this.stripePaymentIntentId = null;
+
         this.matchesPlayed = 0;
         this.gamesWon = 0;
         this.gamesLost = 0;
         this.gamesDraw = 0;
     }
 
-    public GameLibrary(GameLibraryId gameLibraryId,
-                       UUID gameId,
-                       LocalDateTime addedAt,
-                       LocalDateTime lastPlayedAt,
-                       Duration totalPlaytime,
-                       boolean isFavourite,
-                       LocalDateTime purchasedAt,
+    public GameLibrary(GameLibraryId gameLibraryId, UUID gameId, LocalDateTime purchasedAt,
+                       LocalDateTime lastPlayedAt, Duration totalPlaytime, boolean isFavourite,
                        String stripePaymentIntentId) {
         this.gameLibraryId = gameLibraryId;
         this.gameId = gameId;
-        this.addedAt = addedAt;
+        this.purchasedAt = purchasedAt;
         this.lastPlayedAt = lastPlayedAt;
         this.totalPlaytime = totalPlaytime != null ? totalPlaytime : Duration.ZERO;
         this.isFavourite = isFavourite;
+        this.stripePaymentIntentId = stripePaymentIntentId;
     }
 
-    public GameLibrary(GameLibraryId gameLibraryId, UUID gameId, LocalDateTime addedAt, LocalDateTime lastPlayedAt, Duration totalPlaytime, boolean isFavourite, int matchesPlayed, int gamesWon, int gamesLost, int gamesDraw) {
+    public GameLibrary(GameLibraryId gameLibraryId, UUID gameId, LocalDateTime purchasedAt, LocalDateTime lastPlayedAt,
+                       Duration totalPlaytime, boolean isFavourite, int matchesPlayed, int gamesWon, int gamesLost,
+                       int gamesDraw, String stripePaymentIntentId) {
         this.gameLibraryId = gameLibraryId;
         this.gameId = gameId;
-        this.addedAt = addedAt;
+        this.purchasedAt = purchasedAt;
         this.lastPlayedAt = lastPlayedAt;
-        this.totalPlaytime = totalPlaytime;
+        this.totalPlaytime = totalPlaytime != null ? totalPlaytime : Duration.ZERO;
         this.isFavourite = isFavourite;
         this.matchesPlayed = matchesPlayed;
         this.gamesWon = gamesWon;
         this.gamesLost = gamesLost;
         this.gamesDraw = gamesDraw;
+        this.stripePaymentIntentId = stripePaymentIntentId;
     }
+
 
     public void markAsFavourite() {
         this.isFavourite = true;
@@ -103,9 +104,25 @@ public class GameLibrary {
         return purchasedAt != null;
     }
 
+    public void startPurchase(String paymentIntentId) {
+        this.stripePaymentIntentId = paymentIntentId;
+    }
+
     public void markAsPurchased(String paymentIntentId) {
         this.purchasedAt = LocalDateTime.now();
         this.stripePaymentIntentId = paymentIntentId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GameLibrary other)) return false;
+        return Objects.equals(gameId, other.gameId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gameId);
     }
 
     public UUID getGameId() {
@@ -114,10 +131,6 @@ public class GameLibrary {
 
     public boolean isFavourite() {
         return isFavourite;
-    }
-
-    public LocalDateTime getAddedAt() {
-        return addedAt;
     }
 
     public LocalDateTime getLastPlayedAt() {
