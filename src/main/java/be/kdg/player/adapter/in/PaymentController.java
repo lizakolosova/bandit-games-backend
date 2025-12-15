@@ -32,12 +32,19 @@ public class PaymentController {
     public ResponseEntity<PurchaseGameResponse> initiatePurchase(
             @RequestBody InitiatePurchaseRequest request) {
 
+        System.out.println("=== INITIATE PURCHASE ===");
+        System.out.println("Player ID: " + request.playerId());
+        System.out.println("Game ID: " + request.gameId());
+
         try {
             PurchaseGameResponse response = purchaseGameUseCase
                     .initiateGamePurchase(request.playerId(), request.gameId());
 
+            System.out.println("Success! Payment Intent: " + response.paymentIntentId());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

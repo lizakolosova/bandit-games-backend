@@ -24,8 +24,8 @@ POST {{baseUrl}}/api/payments/initiate-purchase
 Content-Type: {{contentType}}
 
 {
-  "playerId": "{{casualGamer}}",
-  "gameId": "{{puzzleQuest}}"
+  "playerId": "{{chessMaster}}",
+  "gameId": "{{speedRacer}}"
 }
 
 ####
@@ -33,12 +33,12 @@ POST {{baseUrl}}/api/payments/webhook
 Content-Type: {{contentType}}
 
 {
-  "id": "evt_test_webhook_123",
+  "id": "evt_chessMaster_speedRacer",
   "object": "event",
   "type": "payment_intent.succeeded",
   "data": {
     "object": {
-      "id": "pi_3SeBKvE4TIKVK4RK0uBSLas0",
+      "id": "pi_3SeZTrE4TIKVK4RK0CvTeNwK",
       "object": "payment_intent",
       "amount": 999,
       "amount_capturable": 0,
@@ -48,9 +48,18 @@ Content-Type: {{contentType}}
       "livemode": false,
       "created": 1765655311,
       "metadata": {
-        "playerId": "750e8400-e29b-41d4-a716-446655440006",
-        "gameId": "550e8400-e29b-41d4-a716-446655440003"
+        "playerId": "750e8400-e29b-41d4-a716-446655440002",
+        "gameId": "550e8400-e29b-41d4-a716-446655440002"
       }
     }
   }
 }
+
+###
+
+- payment intent.succeeded only works with this :
+
+# curl https://api.stripe.com/v1/payment_intents/pi_3SeZTrE4TIKVK4RK0CvTeNwK/confirm
+#  -u sk_test_51SdsrVE4TIKVK4RKw97CEzYUR9KhwPpxNvDB44VqzDc7poc1bRpWRM66xn35tqCoVf90lSQjRQbFfc9qZXjaCL1u00LZEhRdQc:
+#  -d "payment_method=pm_card_visa"
+#  -d "return_url=https://talk-economic-rebates-stretch.trycloudflare.com/checkout/success"
