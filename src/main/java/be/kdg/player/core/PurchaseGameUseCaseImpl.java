@@ -14,7 +14,6 @@ import be.kdg.player.port.out.SaveGameLibraryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -70,7 +69,6 @@ public class PurchaseGameUseCaseImpl implements PurchaseGameUseCase {
         }
     }
 
-    // PurchaseGameUseCaseImpl.java
 
     @Override
     @Transactional
@@ -87,14 +85,12 @@ public class PurchaseGameUseCaseImpl implements PurchaseGameUseCase {
             UUID playerId = UUID.fromString(playerIdStr);
             UUID gameId = UUID.fromString(gameIdStr);
 
-            // 2. Persist to the library via the Port
             saveGameLibraryPort.addPurchasedGame(playerId, gameId, paymentIntentId);
 
             System.out.println("Game " + gameId + " added to library for player " + playerId);
 
         } catch (Exception e) {
             System.err.println("Error confirming purchase: " + e.getMessage());
-            // Since this is @Transactional, any exception will rollback DB changes
             throw new RuntimeException("Payment confirmation failed", e);
         }
     }

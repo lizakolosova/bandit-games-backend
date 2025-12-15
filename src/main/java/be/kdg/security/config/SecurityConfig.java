@@ -41,8 +41,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/payments/initiate-purchase").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/payments/webhook").permitAll()
+                        .requestMatchers("api/payments/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()   // 👈 WebSockets are open
                         .anyRequest().authenticated()
                 )
