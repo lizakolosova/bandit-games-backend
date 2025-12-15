@@ -7,36 +7,96 @@
 -- ============================================
 
 -- Insert sample games
-;
+INSERT INTO kdg_platform.games (uuid, name, rules, picture_url, category, game_url, average_minutes, developed_by, created_at, approved)
+VALUES
+    ('550e8400-e29b-41d4-a716-446655440001', 'Connect Four',
+     'Players take turns dropping colored discs into a seven-column, six-row grid. The objective is to be the first to form a horizontal, vertical, or diagonal line of four of one''s own discs.',
+     'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800',
+     'Strategy',
+     'http://localhost:3000/games/connect4',
+     15,
+     'Hasbro Gaming',
+     '1974-01-01',
+     true),
+
+    ('550e8400-e29b-41d4-a716-446655440002', 'Tic Tac Toe',
+     'Two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.',
+     'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800',
+     'Puzzle',
+     'http://localhost:5174/',
+     5,
+     'Classic Games Inc',
+     '1952-01-01',
+     true),
+
+    ('550e8400-e29b-41d4-a716-446655440003', 'Checkers',
+     'Players move their pieces diagonally on a checkered board. Capture opponent pieces by jumping over them. Win by capturing all opponent pieces or blocking their moves.',
+     'https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=800',
+     'Strategy',
+     'http://localhost:3000/games/checkers',
+     20,
+     'Traditional Games Ltd',
+     '1400-01-01',
+     true),
+
+    ('550e8400-e29b-41d4-a716-446655440004', 'Reversi',
+     'Place discs on an 8×8 board to outflank and flip opponent pieces. The player with the most pieces of their color at the end wins.',
+     'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800',
+     'Strategy',
+     'http://localhost:3000/games/reversi',
+     25,
+     'Board Game Masters',
+     '1883-01-01',
+     true),
+
+    ('550e8400-e29b-41d4-a716-446655440005', 'Dots and Boxes',
+     'Players take turns connecting dots on a grid. Complete a box to claim it and earn another turn. The player with the most boxes wins.',
+     'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800',
+     'Puzzle',
+     'http://localhost:3000/games/dotsandboxes',
+     10,
+     'Pen & Paper Games',
+     '1889-01-01',
+     true),
+
+    ('550e8400-e29b-41d4-a716-446655440006', 'Gomoku',
+     'Players alternate placing stones on a 15×15 or 19×19 grid. The first to get exactly five stones in a row (horizontally, vertically, or diagonally) wins.',
+     'https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=800',
+     'Strategy',
+     'http://localhost:3000/games/gomoku',
+     18,
+     'Asian Board Games Co',
+     '1899-01-01',
+     true)
+ON CONFLICT (uuid) DO NOTHING;
 
 -- Insert achievements for Connect Four
-INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description, how_to_unlock)
+INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description)
 VALUES
-    ('650e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', 'First Win', 'Win your first game', 'Win a game of Connect Four'),
-    ('650e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440001', 'Speed Demon', 'Win a game in under 2 minutes', 'Complete a victory in less than 2 minutes'),
-    ('650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', 'Strategist', 'Win without letting opponent connect 3', 'Prevent opponent from making 3 in a row'),
-    ('650e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440001', '10 Wins', 'Win 10 games', 'Achieve 10 victories'),
-    ('650e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440001', 'Unbeatable', 'Win 5 games in a row', 'Get a 5 win streak'),
-    ('650e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440001', 'On God fr fr', 'No Cap??', 'Dont lie')
+    ('650e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', 'First Win', 'Win your first game'),
+    ('650e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440001', 'Speed Demon', 'Win a game in under 2 minutes'),
+    ('650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', 'Strategist', 'Win without letting opponent connect 3'),
+    ('650e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440001', '10 Wins', 'Win 10 games'),
+    ('650e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440001', 'Unbeatable', 'Win 5 games in a row')
 ON CONFLICT (uuid) DO NOTHING;
 
 -- Insert achievements for Tic Tac Toe
-INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description, how_to_unlock)
+INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description)
 VALUES
-    ('650e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440002', 'First Victory', 'Win your first game', 'Win a game of Tic Tac Toe'),
-    ('650e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440002', 'Perfect Game', 'Win without opponent scoring', 'Win without letting opponent place 3 in a row'),
-    ('650e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440002', 'Lightning Fast', 'Win in 5 moves or less', 'Complete a quick victory')
+    ('650e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440002', 'First Victory', 'Win your first game'),
+    ('650e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440002', 'Perfect Game', 'Win without opponent scoring'),
+    ('650e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440002', 'Lightning Fast', 'Win in 5 moves or less')
 ON CONFLICT (uuid) DO NOTHING;
 
 -- Insert achievements for other games
-INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description, how_to_unlock)
+INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description)
 VALUES
-    ('650e8400-e29b-41d4-a716-446655440009', '550e8400-e29b-41d4-a716-446655440003', 'King Me', 'Get your first king piece', 'Reach the opposite end of the board'),
-    ('650e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440003', 'Sweep Victory', 'Capture all opponent pieces', 'Win by eliminating all opponent pieces'),
-    ('650e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440004', 'Corner Control', 'Capture all four corners', 'Control every corner of the board'),
-    ('650e8400-e29b-41d4-a716-446655440012', '550e8400-e29b-41d4-a716-446655440004', 'Flip Master', 'Flip 20+ pieces in one move', 'Execute a massive flip'),
-    ('650e8400-e29b-41d4-a716-446655440013', '550e8400-e29b-41d4-a716-446655440005', 'Box Hoarder', 'Claim 10 boxes in one game', 'Win with at least 10 boxes'),
-    ('650e8400-e29b-41d4-a716-446655440014', '550e8400-e29b-41d4-a716-446655440006', 'Five in a Row', 'Get your first five in a row', 'Win your first Gomoku game')
+    ('650e8400-e29b-41d4-a716-446655440009', '550e8400-e29b-41d4-a716-446655440003', 'King Me', 'Get your first king piece'),
+    ('650e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440003', 'Sweep Victory', 'Capture all opponent pieces'),
+    ('650e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440004', 'Corner Control', 'Capture all four corners'),
+    ('650e8400-e29b-41d4-a716-446655440012', '550e8400-e29b-41d4-a716-446655440004', 'Flip Master', 'Flip 20+ pieces in one move'),
+    ('650e8400-e29b-41d4-a716-446655440013', '550e8400-e29b-41d4-a716-446655440005', 'Box Hoarder', 'Claim 10 boxes in one game'),
+    ('650e8400-e29b-41d4-a716-446655440014', '550e8400-e29b-41d4-a716-446655440006', 'Five in a Row', 'Get your first five in a row')
 ON CONFLICT (uuid) DO NOTHING;
 
 -- ============================================
@@ -123,7 +183,6 @@ INSERT INTO kdg_player.player_friends (player_id, friend_id, since)
 VALUES
     ('57423a96-12fb-49d7-b2f3-78c3be67bdaa', '5c739cda-1d85-4c9c-ba9b-7da5518b25ae', '2025-01-01 10:00:00'),
     ('57423a96-12fb-49d7-b2f3-78c3be67bdaa', 'e6846a08-8808-420b-b23d-4f09698a2969', '2025-01-02 10:00:00'),
-    ('57423a96-12fb-49d7-b2f3-78c3be67bdaa', '49aee311-9a26-4315-ac85-3c971573af3f', '2025-01-01 10:00:00'),
     ('57423a96-12fb-49d7-b2f3-78c3be67bdaa', 'e7b0794b-a64a-4fd4-bd0d-a80186de2953', '2025-01-03 10:00:00');
 
 
@@ -152,5 +211,4 @@ INSERT INTO kdg_player.achievement_projection (achievement_id, description, name
                                                                                                ('77be0fa9-da6e-4229-bcac-6274ff534990', 'Move your rook for the first time', 'ROOKIE_MOVE', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
                                                                                                ('05b6c2f1-14d6-49bc-8841-71845cfc522e', 'Make 3 pawn moves in a row', 'PAWN_STORM', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca');
 
-INSERT INTO kdg_gameplay.game_room(uuid, created_at, game_id, game_room_type, host_player_id, invitation_status, invited_player_id, status, host_player_name, invited_player_name) VALUES
-    ('a50e8400-e29b-41d4-a716-446655440001', NOW(), '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', 'CLOSED', 'e7b0794b-a64a-4fd4-bd0d-a80186de2953', 'ACCEPTED', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca', 'FINALIZED', 'Tower2', 'Tower1' );
+

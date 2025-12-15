@@ -5,6 +5,7 @@ import be.kdg.player.adapter.in.request.AddGameToLibraryRequest;
 import be.kdg.player.adapter.in.request.SendFriendRequestDto;
 import be.kdg.player.adapter.in.response.*;
 import be.kdg.player.adapter.in.request.RegisterPlayerRequest;
+import be.kdg.player.domain.FriendshipRequest;
 import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.*;
@@ -30,9 +31,10 @@ public class PlayerController {
     private final SendFriendshipRequestUseCase sendFriendshipRequestUseCase;
     private final SearchPlayersUseCase searchPlayersUseCase;
     private final RemoveFriendUseCase removeFriendUseCase;
+    private final PendingFriendshipRequestUseCase pendingFriendshipRequestUseCase;
     private final LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase, LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase, PendingFriendshipRequestUseCase pendingFriendshipRequestUseCase, LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.addGameToLibraryUseCase = addGameToLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
@@ -42,19 +44,31 @@ public class PlayerController {
         this.sendFriendshipRequestUseCase = sendFriendshipRequestUseCase;
         this.searchPlayersUseCase = searchPlayersUseCase;
         this.removeFriendUseCase = removeFriendUseCase;
+        this.pendingFriendshipRequestUseCase = pendingFriendshipRequestUseCase;
         this.loadSingleGameLibraryUseCase = loadSingleGameLibraryUseCase;
     }
 
     @PostMapping("/register")
     public ResponseEntity<PlayerDto> registerPlayer(@RequestBody RegisterPlayerRequest request) {
 
-        RegisterPlayerCommand command =
-                new RegisterPlayerCommand(request.username(), request.email());
+        RegisterPlayerCommand command = new RegisterPlayerCommand(
+                request.username(),
+                request.email(),
+                request.password(),
+                request.pictureUrl()
+        );
 
         Player result = registerPlayerUseCase.register(command);
 
-        return ResponseEntity.status(201).body(new PlayerDto(result.getPlayerId().uuid(), result.getUsername(),
-                result.getEmail(), result.getPictureUrl(), result.getCreatedAt()));
+        return ResponseEntity
+                .status(201)
+                .body(new PlayerDto(
+                        result.getPlayerId().uuid(),
+                        result.getUsername(),
+                        result.getEmail(),
+                        result.getPictureUrl(),
+                        result.getCreatedAt()
+                ));
     }
 
 
@@ -65,8 +79,13 @@ public class PlayerController {
 
         List<GameLibraryDto> result = loadGameLibraryUseCase.loadLibrary(query)
                 .stream()
-                .map(gl -> new GameLibraryDto(gl.getGameId(), gl.getAddedAt(), gl.getLastPlayedAt(),
-                        gl.getTotalPlaytime() == null ? 0 : gl.getTotalPlaytime().toMinutes(), gl.isFavourite()))
+                .map(gl -> new GameLibraryDto(
+                        gl.getGameId(),
+                        gl.getAddedAt(),
+                        gl.getLastPlayedAt(),
+                        gl.getTotalPlaytime() == null ? 0 : gl.getTotalPlaytime().toMinutes(),
+                        gl.isFavourite()
+                ))
                 .toList();
 
         return ResponseEntity.ok(result);
@@ -96,8 +115,11 @@ public class PlayerController {
     }
 
     @PostMapping("/library/{gameId}/favourite")
-    public ResponseEntity<Void> toggleFavourite(@PathVariable UUID gameId, @AuthenticationPrincipal Jwt jwt,
-                                                @RequestParam boolean favourite) {
+    public ResponseEntity<Void> toggleFavourite(
+            @PathVariable UUID gameId,
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam boolean favourite
+    ) {
         UUID playerId = UUID.fromString(jwt.getSubject());
         MarkFavouriteCommand command = new MarkFavouriteCommand(playerId, gameId, favourite);
         markFavouriteUseCase.markFavourite(command);
@@ -126,7 +148,6 @@ public class PlayerController {
 
         return ResponseEntity.ok(result);
     }
-
     @DeleteMapping("/friends/{friendId}")
     public ResponseEntity<Void> removeFriend(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID friendId) {
         UUID playerId = UUID.fromString(jwt.getSubject());
@@ -145,5 +166,18 @@ public class PlayerController {
                 gl.getAddedAt(), gl.getLastPlayedAt(), gl.getTotalPlaytime().toMinutes(),
                 gl.isFavourite(),gl.getMatchesPlayed(), gl.getGamesWon(), gl.getGamesLost(), gl.getGamesDraw());
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/friends/requests/pending")
+    public ResponseEntity<List<FriendshipRequestDto>> getPendingRequests(@AuthenticationPrincipal Jwt jwt) {
+        UUID receiverId = UUID.fromString(jwt.getSubject());
+
+        List<FriendshipRequest> pendingRequests = pendingFriendshipRequestUseCase.getPendingRequests(receiverId);
+
+        List<FriendshipRequestDto> response = pendingRequests.stream()
+                .map(FriendshipRequestDto::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 }

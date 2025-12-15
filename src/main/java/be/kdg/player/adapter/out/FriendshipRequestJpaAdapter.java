@@ -11,6 +11,9 @@ import be.kdg.player.domain.valueobj.FriendshipStatus;
 import be.kdg.player.port.out.UpdateFriendshipRequestPort;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.UUID;
+
 @Repository
 public class FriendshipRequestJpaAdapter implements AddFriendshipRequestPort, LoadFriendshipRequestPort, UpdateFriendshipRequestPort {
 
@@ -44,6 +47,14 @@ public class FriendshipRequestJpaAdapter implements AddFriendshipRequestPort, Lo
     }
 
     @Override
+    public List<FriendshipRequest> findPendingByReceiverId(ReceiverId receiverId) {
+        return requests.findByReceiverIdAndStatus(receiverId.uuid(), FriendshipStatus.PENDING)
+                .stream()
+                .map(this::toDomain)
+                .toList();
+    }
+
+    @Override
     public FriendshipRequest update(FriendshipRequest request) {
         FriendshipRequestJpaEntity saved = requests.save(new FriendshipRequestJpaEntity(request.getFriendshipRequestId().uuid(),
                 request.getSenderId().uuid(), request.getReceiverId().uuid(), request.getStatus(), request.getCreatedAt()));
@@ -51,5 +62,16 @@ public class FriendshipRequestJpaAdapter implements AddFriendshipRequestPort, Lo
                 SenderId.of(saved.getSenderId()), ReceiverId.of(saved.getReceiverId()), saved.getStatus(),
                 saved.getCreatedAt());
     }
+
+    private FriendshipRequest toDomain(FriendshipRequestJpaEntity entity) {
+        return new FriendshipRequest(
+                FriendshipRequestId.of(entity.getUuid()),
+                SenderId.of(entity.getSenderId()),
+                ReceiverId.of(entity.getReceiverId()),
+                entity.getStatus(),
+                entity.getCreatedAt()
+        );
+    }
+
 }
 
