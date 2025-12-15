@@ -99,6 +99,14 @@ public class GameLibrary {
         }
     }
 
+    public boolean isPurchased() {
+        return purchasedAt != null;
+    }
+
+    public void markAsPurchased(String paymentIntentId) {
+        this.purchasedAt = LocalDateTime.now();
+        this.stripePaymentIntentId = paymentIntentId;
+    }
 
     public UUID getGameId() {
         return gameId;

@@ -26,10 +26,13 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/payments/initiate-purchase").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/payments/webhook").permitAll()
                         .requestMatchers(
                                 "/api/players/register",
                                 "/api/games/**",
                                 "/api/test/publish-match-started/**"
+
                         ).permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()

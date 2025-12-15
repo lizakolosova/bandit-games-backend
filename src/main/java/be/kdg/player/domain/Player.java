@@ -109,15 +109,15 @@ public class Player {
     }
 
     public void unlockAchievement(AchievementId achievementId, GameId gameId) {
-    boolean alreadyUnlocked = achievements.stream()
+        boolean alreadyUnlocked = achievements.stream()
             .anyMatch(a -> a.getAchievementId().equals(achievementId));
 
-    if (alreadyUnlocked) {return;}
+        if (alreadyUnlocked) {return;}
 
-    PlayerAchievement achievement = new PlayerAchievement(this.playerId, achievementId, gameId);
+        PlayerAchievement achievement = new PlayerAchievement(this.playerId, achievementId, gameId);
 
-    achievements.add(achievement);
-}
+        achievements.add(achievement);
+    }
 
     public void registerEvent(DomainEvent event) {
         domainEvents.add(event);
