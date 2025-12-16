@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ChessPlatformEventListener {
 
@@ -25,7 +27,7 @@ public class ChessPlatformEventListener {
     public void onGameRegistered(ChessGameRegisteredEvent event) {
         log.info("Received chess game registration: {}", event.registrationId());
 
-        var achievements = event.availableAchievements().stream()
+        List<AchievementEntry> achievements = event.availableAchievements().stream()
                 .map(a -> new AchievementEntry(
                         a.code(),
                         a.description()

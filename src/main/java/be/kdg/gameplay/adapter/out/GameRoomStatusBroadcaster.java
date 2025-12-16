@@ -15,6 +15,7 @@ public class GameRoomStatusBroadcaster {
         this.messaging = messaging;
     }
 
+    // better practice
     public void broadcastStatusUpdate(GameRoom gameRoom) {
         var update = Map.of(
                 "gameRoomId", gameRoom.getGameRoomId().uuid().toString(),
@@ -31,6 +32,7 @@ public class GameRoomStatusBroadcaster {
         );
     }
 
+    // better practice??
     public void broadcastMatchStarted(String gameRoomId, String matchId) {
         var event = Map.of(
                 "type", "MATCH_STARTED",

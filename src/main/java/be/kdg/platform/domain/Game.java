@@ -141,7 +141,7 @@ public class Game {
     }
 
     public List<DomainEvent> pullDomainEvents() {
-        var copy = List.copyOf(domainEvents);
+        List<DomainEvent> copy = List.copyOf(domainEvents);
         domainEvents.clear();
         return copy;
     }
