@@ -21,7 +21,7 @@ public class AchievementProjectionJpaAdapter implements AddAchievementProjection
 
     @Override
     public void add(AchievementProjection projection) {
-        var gameProjectionJpa = games.findById(projection.getGameId().uuid())
+        GameProjectionJpaEntity gameProjectionJpa = games.findById(projection.getGameId().uuid())
                 .orElseThrow(() -> new IllegalStateException("Game not found: " + projection.getGameId()));
 
         AchievementProjectionJpaEntity entity =

@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS kdg_platform.games (
                                                   category VARCHAR(100),
                                                   developed_by VARCHAR(255),
                                                   created_at DATE NOT NULL,
-                                                  average_minutes INTEGER
+                                                  average_minutes INTEGER,
+                                                  approved BOOLEAN NOT NULL DEFAULT false
 );
 
 -- Achievement Definitions table
@@ -20,7 +21,6 @@ CREATE TABLE IF NOT EXISTS kdg_platform.achievement_definitions (
                                                                     uuid UUID PRIMARY KEY,
                                                                     name VARCHAR(255) NOT NULL,
                                                                     description TEXT,
-                                                                    how_to_unlock TEXT,
                                                                     game_id UUID NOT NULL,
                                                                     CONSTRAINT fk_achievement_game FOREIGN KEY (game_id)
                                                                         REFERENCES kdg_platform.games(uuid)
@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS kdg_player.game_projection (
                                                           rules TEXT,
                                                           achievement_count INTEGER,
                                                           average_minutes INTEGER,
-                                                          developed_by VARCHAR(255)
+                                                          developed_by VARCHAR(255),
+                                                          price DECIMAL(10, 2)
 );
 
 -- Achievement Projection table
@@ -68,6 +69,12 @@ CREATE TABLE IF NOT EXISTS kdg_player.player_game_library (
                                                               last_played_at TIMESTAMP,
                                                               total_playtime_seconds BIGINT,
                                                               favourite BOOLEAN,
+                                                              purchased_at TIMESTAMP,
+                                                              stripe_payment_intent_id VARCHAR(255),
+                                                              matches_played INTEGER DEFAULT 0,
+                                                              games_won INTEGER DEFAULT 0,
+                                                              games_lost INTEGER DEFAULT 0,
+                                                              games_draw INTEGER DEFAULT 0,
                                                               CONSTRAINT fk_library_player FOREIGN KEY (player_id)
                                                                   REFERENCES kdg_player.player(uuid)
                                                                   ON DELETE CASCADE
@@ -89,7 +96,7 @@ CREATE TABLE IF NOT EXISTS kdg_player.player_achievement (
 CREATE TABLE IF NOT EXISTS kdg_player.player_friends (
                                                          player_id UUID NOT NULL,
                                                          friend_id UUID,
-                                                         friend_username VARCHAR(255),
+                                                         since TIMESTAMP,
                                                          CONSTRAINT fk_player_friends_player FOREIGN KEY (player_id)
                                                              REFERENCES kdg_player.player(uuid)
                                                              ON DELETE CASCADE
@@ -131,6 +138,8 @@ CREATE TABLE IF NOT EXISTS kdg_gameplay.match (
                                                   status VARCHAR(50),
                                                   started_at TIMESTAMP,
                                                   finished_at TIMESTAMP,
+                                                  total_moves INTEGER DEFAULT 0,
+                                                  end_reason VARCHAR(255),
                                                   winner_player_id UUID
 );
 
