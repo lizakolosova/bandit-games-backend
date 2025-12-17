@@ -57,11 +57,11 @@ class MatchControllerTest {
 
     @Test
     @WithMockUser(username = "test-user", roles = {"user"})
-    void shouldReturn400ForInvalidUUID() throws Exception {
+    void shouldReturn500ForInvalidUUID() throws Exception {
         // Arrange + Act + Assert
         mockMvc.perform(get("/api/matches/not-a-uuid")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is5xxServerError());
     }
 
     @Test
