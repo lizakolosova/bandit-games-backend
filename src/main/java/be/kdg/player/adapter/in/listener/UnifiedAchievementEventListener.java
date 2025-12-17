@@ -5,6 +5,7 @@ import be.kdg.acl.translator.TicTacToeEventTranslator;
 import be.kdg.common.config.RabbitMQTopology;
 import be.kdg.common.events.chess.AchievementAcquiredEvent;
 import be.kdg.common.events.tictactoe.TicTacToeAchievementAchievedEvent;
+import be.kdg.common.events.unified.UnifiedAchievementAchievedEvent;
 import be.kdg.player.port.in.UnifiedAchievementProjector;
 import be.kdg.player.port.in.command.UnifiedAchievementUnlockedProjectionCommand;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class UnifiedAchievementEventListener {
     public void onChessAchievementUnlocked(AchievementAcquiredEvent event) {
         logger.info("Chess achievement unlocked event received: {}", event);
 
-        var unifiedEvent = chessTranslator.translateToAchievementAchieved(event);
+        UnifiedAchievementAchievedEvent unifiedEvent = chessTranslator.translateToAchievementAchieved(event);
 
         projector.projectAchievementUnlocked(new UnifiedAchievementUnlockedProjectionCommand(
                 unifiedEvent.playerId(),
@@ -49,7 +50,7 @@ public class UnifiedAchievementEventListener {
     public void onTicTacToeAchievementUnlocked(TicTacToeAchievementAchievedEvent event) {
         logger.info("TicTacToe achievement unlocked event received: {}", event);
 
-        var unifiedEvent = tttTranslator.translateToAchievementAchieved(event);
+        UnifiedAchievementAchievedEvent unifiedEvent = tttTranslator.translateToAchievementAchieved(event);
 
         projector.projectAchievementUnlocked(new UnifiedAchievementUnlockedProjectionCommand(
                 unifiedEvent.playerId(),
