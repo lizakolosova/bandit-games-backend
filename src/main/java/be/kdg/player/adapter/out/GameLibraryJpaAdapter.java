@@ -38,7 +38,6 @@ public class GameLibraryJpaAdapter implements SaveGameLibraryPort {
         );
 
         gameLibraryRepository.save(libraryEntry);
-
         System.out.println(" Saved to DB - Player: " + playerId + ", Game: " + gameId + ", PaymentIntent: " + paymentIntentId);
     }
 }

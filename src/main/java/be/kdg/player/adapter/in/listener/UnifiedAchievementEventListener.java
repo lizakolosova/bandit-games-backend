@@ -29,7 +29,7 @@ public class UnifiedAchievementEventListener {
         this.tttTranslator = tttTranslator;
     }
 
-    @RabbitListener(queues = RabbitMQTopology.CHESS_ACHIEVEMENT_QUEUE, containerFactory = "externalRabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQTopology.CHESS_ACHIEVEMENT_QUEUE)
     public void onChessAchievementUnlocked(AchievementAcquiredEvent event) {
         logger.info("Chess achievement unlocked event received: {}", event);
 
@@ -45,7 +45,7 @@ public class UnifiedAchievementEventListener {
         ));
     }
 
-    @RabbitListener(queues = RabbitMQTopology.TTT_ACHIEVEMENT_QUEUE, containerFactory = "simpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQTopology.TTT_ACHIEVEMENT_QUEUE)
     public void onTicTacToeAchievementUnlocked(TicTacToeAchievementAchievedEvent event) {
         logger.info("TicTacToe achievement unlocked event received: {}", event);
 

@@ -1,65 +1,75 @@
 ### Variables
-@baseUrl = http://localhost:8080
+@baseUrl = http://localhost:8081
 @contentType = application/json
 
-### Player IDs from sample data
-@gamerPro123 = 750e8400-e29b-41d4-a716-446655440001
-@chessMaster = 750e8400-e29b-41d4-a716-446655440002
-@speedyGonzales = 750e8400-e29b-41d4-a716-446655440003
-@puzzleWizard = 750e8400-e29b-41d4-a716-446655440004
-@battleKnight = 750e8400-e29b-41d4-a716-446655440005
-@casualGamer = 750e8400-e29b-41d4-a716-446655440006
+### Player IDs (Matching SQL Data)
+# CoolGamer99
+@coolGamer = aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+# ProStrategist
+@proStrategist = bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
 
-### Game IDs from sample data
-@chessMasterGame = 550e8400-e29b-41d4-a716-446655440001
-@speedRacer = 550e8400-e29b-41d4-a716-446655440002
-@puzzleQuest = 550e8400-e29b-41d4-a716-446655440003
-@battleArena = 550e8400-e29b-41d4-a716-446655440004
-@memoryCards = 550e8400-e29b-41d4-a716-446655440005
+### Game IDs (Matching SQL Data)
+# Cosmic Odyssey (59.99)
+@cosmicOdyssey = 11111111-1111-1111-1111-111111111111
+# Speed Racer X (29.50)
+@speedRacer = 22222222-2222-2222-2222-222222222222
+# Block Puzzle (0.00)
+@blockPuzzle = 33333333-3333-3333-3333-333333333333
 
 ###############################################################################
-### 1. Successful Purchase - CasualGamer buys Puzzle Quest (9.99 EUR)
+### 1. Successful Purchase - CoolGamer buys Speed Racer X (29.50 EUR)
+### Note: CoolGamer does NOT own this game yet in the SQL data.
 ###############################################################################
+
+# Step 1: Client initiates the purchase
 POST {{baseUrl}}/api/payments/initiate-purchase
 Content-Type: {{contentType}}
 
 {
-  "playerId": "{{chessMaster}}",
+  "playerId": "{{coolGamer}}",
   "gameId": "{{speedRacer}}"
 }
 
-####
+###
+
+# Step 2: Stripe Webhook Simulation (Payment Succeeded)
+# Note: Amount is 2950 cents (29.50 EUR)
+# Note: Metadata IDs must match the Players/Games in your SQL
 POST {{baseUrl}}/api/payments/webhook
 Content-Type: {{contentType}}
 
 {
-  "id": "evt_chessMaster_speedRacer",
+  "id": "evt_test_webhook_001",
   "object": "event",
   "type": "payment_intent.succeeded",
   "data": {
     "object": {
-      "id": "pi_3SeZTrE4TIKVK4RK0CvTeNwK",
+      "id": "pi_3SfL3wE4TIKVK4RK1bS2eLFx",
       "object": "payment_intent",
-      "amount": 999,
+      "amount": 2950,
       "amount_capturable": 0,
-      "amount_received": 999,
+      "amount_received": 2950,
       "currency": "eur",
       "status": "succeeded",
       "livemode": false,
       "created": 1765655311,
       "metadata": {
-        "playerId": "750e8400-e29b-41d4-a716-446655440002",
-        "gameId": "550e8400-e29b-41d4-a716-446655440002"
+        "playerId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "gameId": "22222222-2222-2222-2222-222222222222"
       }
     }
   }
 }
 
 ###
+http://localhost:5173/payment?gameId=22222222-2222-2222-2222-222222222222&playerId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+
+
+###
 
 - payment intent.succeeded only works with this :
 
-# curl https://api.stripe.com/v1/payment_intents/pi_3SeZTrE4TIKVK4RK0CvTeNwK/confirm
+# curl https://api.stripe.com/v1/payment_intents/pi_3SedUcE4TIKVK4RK0DqVwq5P
 #  -u sk_test_51SdsrVE4TIKVK4RKw97CEzYUR9KhwPpxNvDB44VqzDc7poc1bRpWRM66xn35tqCoVf90lSQjRQbFfc9qZXjaCL1u00LZEhRdQc:
 #  -d "payment_method=pm_card_visa"
 #  -d "return_url=https://talk-economic-rebates-stretch.trycloudflare.com/checkout/success"

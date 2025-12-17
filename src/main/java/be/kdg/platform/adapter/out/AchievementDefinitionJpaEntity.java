@@ -18,7 +18,6 @@ public class AchievementDefinitionJpaEntity {
     @Column
     private String description;
 
-
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
     private GameJpaEntity game;

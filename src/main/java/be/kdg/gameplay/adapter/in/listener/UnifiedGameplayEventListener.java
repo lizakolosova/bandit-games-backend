@@ -44,7 +44,7 @@ public class UnifiedGameplayEventListener {
         this.loadGameRoomPort = loadGameRoomPort;
     }
 
-    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_CREATED_QUEUE, containerFactory = "externalRabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_CREATED_QUEUE)
     public void onChessMatchCreated(ChessMatchCreatedEvent event) {
         logger.info("Chess match created: {}", event.gameId());
         GameViewProjection game = loadGameViewProjectionPort.findByName("CHESS");
@@ -63,7 +63,7 @@ public class UnifiedGameplayEventListener {
         );
     }
 
-    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_UPDATED_QUEUE, containerFactory = "externalRabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_UPDATED_QUEUE)
     public void onChessMatchUpdated(ChessMatchUpdatedEvent event) {
         logger.info("Chess match updated: {}", event.gameId());
         var unifiedEvent = chessTranslator.translateToMatchUpdated(event);
@@ -75,7 +75,7 @@ public class UnifiedGameplayEventListener {
         ));
     }
 
-    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_ENDED_QUEUE, containerFactory = "externalRabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_ENDED_QUEUE)
     public void onChessMatchEnded(ChessMatchEndedEvent event) {
         logger.info("Chess match ended: {}", event.gameId());
         var unifiedEvent = chessTranslator.translateToMatchEnded(event);
@@ -87,7 +87,7 @@ public class UnifiedGameplayEventListener {
                 unifiedEvent.timestamp()
         ));
     }
-    @RabbitListener(queues = RabbitMQTopology.TTT_GAME_STARTED_QUEUE, containerFactory = "simpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQTopology.TTT_GAME_STARTED_QUEUE)
     public void onTicTacToeMatchCreated(TicTacToeMatchCreatedEvent event) {
         logger.info("TicTacToe match created: {}", event.matchId());
         var unifiedEvent = tttTranslator.translateToMatchCreated(event, GameId.of(TTT_GAME_ID));
@@ -108,7 +108,7 @@ public class UnifiedGameplayEventListener {
         );
     }
 
-    @RabbitListener(queues = RabbitMQTopology.TTT_MOVE_MADE_QUEUE, containerFactory = "simpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQTopology.TTT_MOVE_MADE_QUEUE)
     public void onTicTacToeMatchUpdated(TicTacToeMatchMoveMadeEvent event) {
         logger.info("TicTacToe match updated: {}", event.matchId());
         var unifiedEvent = tttTranslator.translateToMatchUpdated(event);
@@ -120,7 +120,7 @@ public class UnifiedGameplayEventListener {
         ));
     }
 
-    @RabbitListener(queues = RabbitMQTopology.TTT_GAME_ENDED_QUEUE, containerFactory = "simpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQTopology.TTT_GAME_ENDED_QUEUE)
     public void onTicTacToeMatchEnded(TicTacToeMatchEndedEvent event) {
         logger.info("TicTacToe match ended: {}", event.matchId());
         var unifiedEvent = tttTranslator.translateToMatchEnded(event);
