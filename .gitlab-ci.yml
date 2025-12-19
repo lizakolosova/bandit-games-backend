@@ -69,9 +69,9 @@ include:
   - template: Jobs/Dependency-Scanning.gitlab-ci.yml
 
 
-gemnasium-gradle-dependency_scanning:
-  variables:
-    DS_JAVA_VERSION: 21
+#gemnasium-gradle-dependency_scanning:
+#  variables:
+#    DS_JAVA_VERSION: 21
 
 
 owasp_dependency_check:
