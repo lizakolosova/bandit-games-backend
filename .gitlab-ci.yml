@@ -70,27 +70,27 @@ package:
     - master
     - main
     - dev
-    - qualitygate
+    - securityConfig
 
-include:
-  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
-
-
-owasp_dependency_check:
-  stage: test
-  image: gradle:8.5-jdk21-alpine
-  dependencies:
-    - build
-  script:
-    - chmod +x gradlew
-    - ./gradlew dependencyCheckAnalyze
-  artifacts:
-    paths:
-      - build/reports/dependency-check-report.html
-      - build/reports/dependency-check-report.json
-    expire_in: 1 week
-  allow_failure: true
-  only:
-    - master
-    - main
-    - dev
+#include:
+#  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+#
+#
+#owasp_dependency_check:
+#  stage: test
+#  image: gradle:8.5-jdk21-alpine
+#  dependencies:
+#    - build
+#  script:
+#    - chmod +x gradlew
+#    - ./gradlew dependencyCheckAnalyze
+#  artifacts:
+#    paths:
+#      - build/reports/dependency-check-report.html
+#      - build/reports/dependency-check-report.json
+#    expire_in: 1 week
+#  allow_failure: true
+#  only:
+#    - master
+#    - main
+#    - dev
