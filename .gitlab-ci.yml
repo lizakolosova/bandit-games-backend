@@ -20,6 +20,10 @@ build:
   artifacts:
     paths:
       - build/libs/*.jar
+      - gradle/           # Include Gradle wrapper
+      - gradlew
+      - gradlew.bat
+      - build.gradle.kts  # Include for dependency scanning
     expire_in: 1 hour
 
 test:
@@ -37,7 +41,6 @@ test:
   script:
     - gradle test --no-daemon
 
-
 package:
   stage: package
   image: docker:27
@@ -50,12 +53,41 @@ package:
     - build
   before_script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
-    - apk add --no-cache openjdk21  # Add Java for gradlew
+    - apk add --no-cache openjdk21
   script:
     - ./gradlew bootBuildImage --imageName=registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA}
     - docker tag registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA} registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:latest
     - docker push registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA}
     - docker push registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:latest
+  only:
+    - master
+    - main
+    - dev
+    - qualitygate
+
+include:
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+
+
+#gemnasium-gradle-dependency_scanning:
+#  variables:
+#    DS_JAVA_VERSION: 21
+
+
+owasp_dependency_check:
+  stage: test
+  image: gradle:8.5-jdk21-alpine
+  dependencies:
+    - build
+  script:
+    - chmod +x gradlew
+    - ./gradlew dependencyCheckAnalyze
+  artifacts:
+    paths:
+      - build/reports/dependency-check-report.html
+      - build/reports/dependency-check-report.json
+    expire_in: 1 week
+  allow_failure: true
   only:
     - master
     - main
