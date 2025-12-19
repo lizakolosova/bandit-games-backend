@@ -52,12 +52,19 @@ package:
   dependencies:
     - build
   before_script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - apk add --no-cache openjdk21
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
   script:
-    - ./gradlew bootBuildImage --imageName=registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA}
+    # Build and push with commit SHA
+    - |
+      ./gradlew bootBuildImage \
+        --imageName=registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA} \
+        --publishImage \
+        -Dspring.boot.build-image.publish=true \
+        -Dspring.boot.build-image.docker.publishRegistry.username=gitlab-ci-token \
+        -Dspring.boot.build-image.docker.publishRegistry.password=$CI_REGISTRY_PASSWORD
+    # Tag and push as latest
     - docker tag registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA} registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:latest
-    - docker push registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA}
     - docker push registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:latest
   only:
     - master
@@ -67,11 +74,6 @@ package:
 
 include:
   - template: Jobs/Dependency-Scanning.gitlab-ci.yml
-
-
-#gemnasium-gradle-dependency_scanning:
-#  variables:
-#    DS_JAVA_VERSION: 21
 
 
 owasp_dependency_check:
