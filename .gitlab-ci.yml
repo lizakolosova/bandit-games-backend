@@ -60,3 +60,8 @@ package:
     - master
     - main
     - dev
+    - qualitygate
+
+
+include:
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
