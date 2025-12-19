@@ -1,0 +1,63 @@
+package be.kdg.player.core.projector;
+
+import be.kdg.common.exception.NotFoundException;
+import be.kdg.common.valueobj.AchievementId;
+import be.kdg.common.valueobj.GameId;
+import be.kdg.common.valueobj.PlayerId;
+import be.kdg.player.domain.AchievementProjection;
+import be.kdg.player.domain.Player;
+import be.kdg.player.port.in.UnifiedAchievementProjector;
+import be.kdg.player.port.in.command.UnifiedAchievementUnlockedProjectionCommand;
+import be.kdg.player.port.out.LoadAchievementProjectionPort;
+import be.kdg.player.port.out.LoadPlayerPort;
+import be.kdg.player.port.out.UpdatePlayerPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+@Component
+public class UnifiedAchievementProjectorImpl implements UnifiedAchievementProjector {
+
+    private static final Logger logger = LoggerFactory.getLogger(UnifiedAchievementProjectorImpl.class);
+
+    private final UpdatePlayerPort updatePlayerPort;
+    private final LoadPlayerPort loadPlayerPort;
+    private final LoadAchievementProjectionPort loadAchievementProjectionPort;
+
+    public UnifiedAchievementProjectorImpl(UpdatePlayerPort updatePlayerPort,
+                                           LoadPlayerPort loadPlayerPort,
+                                           LoadAchievementProjectionPort loadAchievementProjectionPort) {
+        this.updatePlayerPort = updatePlayerPort;
+        this.loadPlayerPort = loadPlayerPort;
+        this.loadAchievementProjectionPort = loadAchievementProjectionPort;
+    }
+
+    @Override
+    public void projectAchievementUnlocked(UnifiedAchievementUnlockedProjectionCommand command) {
+        logger.info("Projecting unified achievement unlocked for player {} in game type {}",
+                command.playerId(), command.gameType());
+
+        Player player = loadPlayerPort.loadById(PlayerId.of(command.playerId()))
+                .orElseThrow(() -> NotFoundException.player(command.playerId()));
+
+        UUID achievementId = resolveAchievementId(command);
+
+        player.unlockAchievement(AchievementId.of(achievementId), GameId.of(command.gameId()));
+
+        updatePlayerPort.update(player);
+    }
+
+    private UUID resolveAchievementId(UnifiedAchievementUnlockedProjectionCommand command) {
+        if (command.achievementId() != null) {
+            return command.achievementId();
+        }
+
+        AchievementProjection projection = loadAchievementProjectionPort
+                .loadByGameIdAndType(GameId.of(command.gameId()), command.achievementType())
+                .orElseThrow(() -> NotFoundException.game(command.gameId()));
+
+        return projection.getAchievementId().uuid();
+    }
+}

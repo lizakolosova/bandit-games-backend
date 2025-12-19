@@ -45,3 +45,7 @@ bin/
 /infrastructure/idp_mysql_data/
 /infrastructure/pg_hba.conf/
 /infrastructure/rabbitmq/
+/chessgame/rabbitmq/
+/chessgame/idp_mysql_data/
+/chessgame/pg_hba.conf/
+/src/main/resources/sql/data.sql

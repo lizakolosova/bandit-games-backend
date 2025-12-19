@@ -1,10 +1,12 @@
 package be.kdg.platform.domain;
 
+import be.kdg.common.events.AchievementAddedEvent;
 import be.kdg.common.events.DomainEvent;
-import be.kdg.common.events.GameAddedEvent;
+import be.kdg.common.events.GameApprovedEvent;
 import be.kdg.common.valueobj.AchievementId;
 import be.kdg.common.valueobj.GameId;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 public class Game {
@@ -18,34 +20,23 @@ public class Game {
     private String developedBy;
     private LocalDate createdAt;
     private int averageMinutes;
+    private boolean approved;
+
     private List<AchievementDefinition> achievements;
+    private BigDecimal price;
     private final List<DomainEvent> domainEvents = new ArrayList<>();
-    public Game(String name, String rules, String pictureUrl, String gameUrl, String category, String developedBy,
+    public Game(GameId gameId, String name, String rules, String pictureUrl, String gameUrl, String category, String developedBy,
                 LocalDate createdAt, int averageMinutes) {
-        this(GameId.create(), Objects.requireNonNull(name), rules, pictureUrl, gameUrl, category, developedBy, createdAt, averageMinutes);
-        registerEvent(new GameAddedEvent(
-                gameId.uuid(),
-                name,
-                rules,
-                pictureUrl,
-                category,
-                developedBy,
-                createdAt,
-                averageMinutes,
-                achievements == null ? 0 : achievements.size()
-        ));
+        this(gameId, Objects.requireNonNull(name), rules, pictureUrl, gameUrl, category, developedBy, createdAt, averageMinutes, false);
     }
 
-    public Game(GameId gameId,
-                String name,
-                String rules,
-                String pictureUrl,
-                String gameUrl,
-                String category,
-                String developedBy,
-                LocalDate createdAt,
-                int averageMinutes) {
+    public Game(String name, String rules, String pictureUrl, String gameUrl, String category, String developedBy,
+                LocalDate createdAt, int averageMinutes) {
+        this(GameId.create(), Objects.requireNonNull(name), rules, pictureUrl, gameUrl, category, developedBy, createdAt, averageMinutes, false);
+    }
 
+    public Game(GameId gameId, String name, String rules, String pictureUrl, String gameUrl, String category, String developedBy,
+                LocalDate createdAt, int averageMinutes, boolean approved) {
         this.gameId = gameId;
         this.name = Objects.requireNonNull(name);
         this.rules = rules;
@@ -55,21 +46,28 @@ public class Game {
         this.developedBy = developedBy;
         this.createdAt = createdAt;
         this.averageMinutes = averageMinutes;
+        this.approved = approved;
         this.achievements = new ArrayList<>();
     }
 
     public AchievementDefinition addAchievement(String name,
-                                                String description,
-                                                String howToUnlock) {
+                                                String description) {
 
         AchievementId id = AchievementId.create();
-        AchievementDefinition def = new AchievementDefinition(id, name, description, howToUnlock);
+        AchievementDefinition def = new AchievementDefinition(id, name, description);
         achievements.add(def);
+        registerEvent(new AchievementAddedEvent(id.uuid(), this.gameId.uuid(), name, description));
         return def;
     }
 
     public void removeAchievement(AchievementId id) {
         achievements.remove(id);
+    }
+    public void approve() {
+        if (!approved) {
+            this.approved = true;
+            registerEvent(new GameApprovedEvent(gameId.uuid(), name, rules, pictureUrl, category, developedBy, createdAt, averageMinutes, achievements == null ? 0 : achievements.size()));
+        }
     }
 
     public GameId getGameId() {
@@ -145,7 +143,7 @@ public class Game {
     }
 
     public List<DomainEvent> pullDomainEvents() {
-        var copy = List.copyOf(domainEvents);
+        List<DomainEvent> copy = List.copyOf(domainEvents);
         domainEvents.clear();
         return copy;
     }
@@ -153,5 +151,10 @@ public class Game {
     public void registerEvent(DomainEvent event) {
         domainEvents.add(event);
     }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
 }
 

@@ -1,10 +1,9 @@
 package be.kdg.player.adapter.out;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Entity
 @Table(name = "game_projection", schema = "kdg_player")
@@ -20,6 +19,12 @@ public class GameProjectionJpaEntity {
     private int averageMinutes;
     private String developedBy;
 
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @OneToMany(mappedBy = "gameProjection", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AchievementProjectionJpaEntity> achievementProjections = new ArrayList<>();
+
     protected GameProjectionJpaEntity() { }
 
     public GameProjectionJpaEntity(UUID gameId,
@@ -29,7 +34,8 @@ public class GameProjectionJpaEntity {
                                    String rules,
                                    int achievementCount,
                                    int averageMinutes,
-                                   String developedBy) {
+                                   String developedBy,
+                                   BigDecimal price) {
         this.gameId = gameId;
         this.name = name;
         this.pictureUrl = pictureUrl;
@@ -38,6 +44,7 @@ public class GameProjectionJpaEntity {
         this.achievementCount = achievementCount;
         this.averageMinutes = averageMinutes;
         this.developedBy = developedBy;
+        this.price = price;
     }
 
     public UUID getGameId() {
@@ -70,5 +77,13 @@ public class GameProjectionJpaEntity {
 
     public String getRules() {
         return rules;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

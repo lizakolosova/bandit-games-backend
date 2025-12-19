@@ -10,7 +10,7 @@ import be.kdg.gameplay.adapter.out.GameRoomJpaRepository;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.valueobj.GameRoomStatus;
 import be.kdg.gameplay.domain.valueobj.GameRoomType;
-import be.kdg.gameplay.port.in.AcceptInvitationCommand;
+import be.kdg.gameplay.port.in.command.AcceptInvitationCommand;
 import be.kdg.gameplay.port.out.AddGameRoomPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -51,9 +51,13 @@ class AcceptInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
                 GameId.of(gameId),
+                hostName,
+                invitedName,
                 PlayerId.of(hostId),
                 PlayerId.of(invitedId),
                 GameRoomType.CLOSED
@@ -85,9 +89,13 @@ class AcceptInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
                 GameId.of(gameId),
+                hostName,
+                invitedName,
                 PlayerId.of(hostId),
                 PlayerId.of(invitedId),
                 GameRoomType.CLOSED
@@ -117,9 +125,13 @@ class AcceptInvitationUseCaseImplIntegrationTest {
         UUID gameId = UUID.randomUUID();
         UUID hostId = UUID.randomUUID();
         UUID invitedId = UUID.randomUUID();
+        String invitedName = UUID.randomUUID().toString();
+        String hostName = UUID.randomUUID().toString();
 
         GameRoom room = new GameRoom(
                 GameId.of(gameId),
+                hostName,
+                invitedName,
                 PlayerId.of(hostId),
                 PlayerId.of(invitedId),
                 GameRoomType.CLOSED

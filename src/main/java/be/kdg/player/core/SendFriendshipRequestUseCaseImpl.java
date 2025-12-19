@@ -5,7 +5,7 @@ import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.domain.FriendshipRequest;
 import be.kdg.player.domain.valueobj.ReceiverId;
 import be.kdg.player.domain.valueobj.SenderId;
-import be.kdg.player.port.in.SendFriendshipRequestCommand;
+import be.kdg.player.port.in.command.SendFriendshipRequestCommand;
 import be.kdg.player.port.in.SendFriendshipRequestUseCase;
 import be.kdg.player.port.out.LoadFriendshipRequestPort;
 import be.kdg.player.port.out.LoadPlayerPort;

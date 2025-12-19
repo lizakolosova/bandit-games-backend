@@ -3,7 +3,7 @@ package be.kdg.gameplay.core;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.valueobj.GameRoomId;
-import be.kdg.gameplay.port.in.RejectInvitationCommand;
+import be.kdg.gameplay.port.in.command.RejectInvitationCommand;
 import be.kdg.gameplay.port.in.RejectInvitationUseCase;
 import be.kdg.gameplay.port.out.LoadGameRoomPort;
 import be.kdg.gameplay.port.out.UpdateGameRoomPort;

@@ -2,11 +2,12 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.owasp.dependencycheck") version "12.1.9"
+
 }
 
 group = "banditGame"
 version = "0.0.1-SNAPSHOT"
-
 
 java {
     toolchain {
@@ -49,10 +50,15 @@ dependencies {
 
     runtimeOnly("org.postgresql:postgresql")
 
+    implementation("com.stripe:stripe-java:24.16.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
     implementation("org.springframework.modulith:spring-modulith-starter-core")
     implementation("org.springframework.modulith:spring-modulith-core")
 
-    implementation("org.keycloak:keycloak-admin-client:26.0.0")
+    // Updated Keycloak version to address CVE-2024-47554
+    implementation("org.keycloak:keycloak-admin-client:26.0.7")
+
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.springframework:spring-messaging")
@@ -63,7 +69,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.12.0")
 }
 
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-

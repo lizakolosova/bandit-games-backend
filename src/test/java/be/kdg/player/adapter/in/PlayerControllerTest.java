@@ -8,6 +8,7 @@ import be.kdg.player.adapter.in.response.*;
 import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.*;
+import be.kdg.player.port.in.command.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,9 +35,6 @@ class PlayerControllerTest {
 
     @Mock
     private LoadGameLibraryUseCase loadGameLibraryUseCase;
-
-    @Mock
-    private AddGameToLibraryUseCase addGameToLibraryUseCase;
 
     @Mock
     private LoadLibraryGameUseCase loadLibraryGameUseCase;
@@ -142,7 +140,7 @@ class PlayerControllerTest {
         // Arrange
         GameLibrary mockGameLibrary = mock(GameLibrary.class);
         when(mockGameLibrary.getGameId()).thenReturn(testGameId);
-        when(mockGameLibrary.getAddedAt()).thenReturn(LocalDateTime.now());
+        when(mockGameLibrary.getPurchasedAt()).thenReturn(LocalDateTime.now());
         when(mockGameLibrary.getLastPlayedAt()).thenReturn(LocalDateTime.now());
         when(mockGameLibrary.getTotalPlaytime()).thenReturn(Duration.ofMinutes(120));
         when(mockGameLibrary.isFavourite()).thenReturn(true);
@@ -186,7 +184,7 @@ class PlayerControllerTest {
         // Arrange
         GameLibrary mockGameLibrary = mock(GameLibrary.class);
         when(mockGameLibrary.getGameId()).thenReturn(testGameId);
-        when(mockGameLibrary.getAddedAt()).thenReturn(LocalDateTime.now());
+        when(mockGameLibrary.getPurchasedAt()).thenReturn(LocalDateTime.now());
         when(mockGameLibrary.getLastPlayedAt()).thenReturn(null);
         when(mockGameLibrary.getTotalPlaytime()).thenReturn(null);
         when(mockGameLibrary.isFavourite()).thenReturn(false);
@@ -201,49 +199,6 @@ class PlayerControllerTest {
         assertNotNull(response);
         assertEquals(0, response.getBody().get(0).totalPlaytimeMinutes());
         verify(loadGameLibraryUseCase, times(1)).loadLibrary(any(LoadGameLibraryCommand.class));
-    }
-
-    @Test
-    void shouldAddGameToLibrary() {
-        // Arrange
-        AddGameToLibraryRequest request = new AddGameToLibraryRequest(testGameId);
-        when((addGameToLibraryUseCase).addGameToLibrary(any(AddGameToLibraryCommand.class))).thenReturn(null);
-
-        // Act
-        ResponseEntity<Void> response = playerController.addGameToLibrary(request, mockJwt);
-
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(addGameToLibraryUseCase, times(1)).addGameToLibrary(any(AddGameToLibraryCommand.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenAddingDuplicateGame() {
-        // Arrange
-        AddGameToLibraryRequest request = new AddGameToLibraryRequest(testGameId);
-        doThrow(new RuntimeException("Game already in library"))
-                .when(addGameToLibraryUseCase).addGameToLibrary(any(AddGameToLibraryCommand.class));
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            playerController.addGameToLibrary(request, mockJwt);
-        });
-        verify(addGameToLibraryUseCase, times(1)).addGameToLibrary(any(AddGameToLibraryCommand.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenGameDoesNotExist() {
-        // Arrange
-        AddGameToLibraryRequest request = new AddGameToLibraryRequest(UUID.randomUUID());
-        doThrow(new RuntimeException("Game not found"))
-                .when(addGameToLibraryUseCase).addGameToLibrary(any(AddGameToLibraryCommand.class));
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            playerController.addGameToLibrary(request, mockJwt);
-        });
-        verify(addGameToLibraryUseCase, times(1)).addGameToLibrary(any(AddGameToLibraryCommand.class));
     }
 
     @Test

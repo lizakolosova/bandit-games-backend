@@ -8,12 +8,8 @@ public class AchievementDefinition {
     private AchievementId achievementId;
     private String name;
     private String description;
-    private String howToUnlock;
 
-    public AchievementDefinition(AchievementId achievementId,
-                                 String name,
-                                 String description,
-                                 String howToUnlock) {
+    public AchievementDefinition(AchievementId achievementId, String name, String description) {
 
         if (name == null || name.isBlank())
             throw new InvalidRowException("Achievement name cannot be empty");
@@ -21,7 +17,6 @@ public class AchievementDefinition {
         this.achievementId = achievementId;
         this.name = name;
         this.description = description;
-        this.howToUnlock = howToUnlock;
     }
 
     public AchievementId getAchievementId() {
@@ -34,10 +29,6 @@ public class AchievementDefinition {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getHowToUnlock() {
-        return howToUnlock;
     }
 }
 

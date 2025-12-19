@@ -8,8 +8,8 @@ import be.kdg.player.port.out.UpdatePlayerPort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class PlayerJpaAdapter implements LoadPlayerPort, UpdatePlayerPort {
@@ -46,5 +46,12 @@ public class PlayerJpaAdapter implements LoadPlayerPort, UpdatePlayerPort {
     public void update(Player player) {
         PlayerJpaEntity entity = PlayerJpaMapper.toEntity(player);
         players.save(entity);
+    }
+    @Override
+    public Map<PlayerId, Player> loadByIds(Set<PlayerId> ids) {
+        Set<UUID> uuids = ids.stream().map(PlayerId::uuid).collect(Collectors.toSet());
+
+        return players.findAllById(uuids).stream().map(PlayerJpaMapper::toDomain)
+                .collect(Collectors.toMap(player -> PlayerId.of(player.getPlayerId().uuid()), player -> player));
     }
 }

@@ -6,7 +6,7 @@ import be.kdg.player.adapter.in.response.LibraryGameDetailsDto;
 import be.kdg.player.domain.GameLibrary;
 import be.kdg.player.domain.GameProjection;
 import be.kdg.player.domain.Player;
-import be.kdg.player.port.in.LoadLibraryGameCommand;
+import be.kdg.player.port.in.command.LoadLibraryGameCommand;
 import be.kdg.player.port.out.LoadGameProjectionPort;
 import be.kdg.player.port.out.LoadPlayerPort;
 import org.junit.jupiter.api.Test;
@@ -69,7 +69,7 @@ class LoadLibraryGameUseCaseImplTest {
         when(loadGameProjectionPort.loadProjection(GameId.of(gameId))).thenReturn(projection);
 
         Duration totalPlaytime = Duration.ofMinutes(90);
-        when(libraryEntry.getAddedAt()).thenReturn(null);
+        when(libraryEntry.getPurchasedAt()).thenReturn(null);
         when(libraryEntry.getLastPlayedAt()).thenReturn(null);
         when(libraryEntry.getTotalPlaytime()).thenReturn(totalPlaytime);
         when(libraryEntry.isFavourite()).thenReturn(true);

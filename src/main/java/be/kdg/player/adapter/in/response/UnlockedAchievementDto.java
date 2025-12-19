@@ -1,11 +1,10 @@
 package be.kdg.player.adapter.in.response;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record UnlockedAchievementDto(
-        String title,
-        String description,
-        int percentage,
+        UUID achievementId,
         LocalDateTime unlockedAt
 ) {}
 
