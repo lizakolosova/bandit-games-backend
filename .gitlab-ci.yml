@@ -67,9 +67,9 @@ package:
     - docker tag registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:${CI_COMMIT_SHORT_SHA} registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:latest
     - docker push registry.gitlab.com/kdg-ti/inf-curriculum/domain-integration/integration-5/2025-2026/team8/backend:latest
   only:
-    - master
-    - main
-    - dev
+#    - master
+#    - main
+#    - dev
     - securityConfig
 
 #include:
