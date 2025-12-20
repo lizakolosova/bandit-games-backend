@@ -25,16 +25,14 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
+                        // CORS preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("api/payments/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/payments/webhook").permitAll()
-                        .requestMatchers(
-                                "/api/players/register",
-                                "/api/games/**",
-                                "/api/test/publish-match-started/**"
 
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/games").permitAll()
+                        .requestMatchers("/api/players/register").permitAll()
+                        .requestMatchers("/api/test/publish-match-started/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sm ->
@@ -52,7 +50,6 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowedOrigins(List.of("http://localhost:5173"));
         config.setAllowedOrigins(List.of("http://localhost:5555"));
         config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
