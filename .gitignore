@@ -49,3 +49,5 @@ bin/
 /chessgame/idp_mysql_data/
 /chessgame/pg_hba.conf/
 /src/main/resources/sql/data.sql
+/src/main/resources/application.properties
+/infrastructure/compose.yaml
