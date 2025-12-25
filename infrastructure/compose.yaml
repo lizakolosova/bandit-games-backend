@@ -6,11 +6,19 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://kdg-db:5432/kdg
       SPRING_DATASOURCE_USERNAME: kdg
       SPRING_DATASOURCE_PASSWORD: kdg
+      # Spring Boot default rabbit (if you use it anywhere)
       SPRING_RABBITMQ_HOST: app_rabbitmq
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: user
       SPRING_RABBITMQ_PASSWORD: password
+
+      # IMPORTANT: your custom ExternalRabbitConfig reads these:
+      EXTERNAL_RABBITMQ_HOST: app_rabbitmq
+      EXTERNAL_RABBITMQ_PORT: 5672
+      EXTERNAL_RABBITMQ_USERNAME: user
+      EXTERNAL_RABBITMQ_PASSWORD: password
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://idp_keycloak:8080/realms/og-realm
+
     ports:
       - "9090:8081"
     depends_on:
