@@ -9,11 +9,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.scheduling.annotation.Async;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
+@Transactional
 public class KeycloakUserSyncService {
     private static final Logger logger = LoggerFactory.getLogger(KeycloakUserSyncService.class);
 
@@ -26,65 +29,80 @@ public class KeycloakUserSyncService {
     @Value("${keycloak.realm}")
     private String realm;
 
-
     public KeycloakUserSyncService(PlayerJpaRepository playerRepository) {
         this.playerRepository = playerRepository;
     }
 
     @PostConstruct
+    @Async
     public void syncUsers() {
-        try {
-            logger.info("=== Starting Keycloak user sync ===");
+        int maxRetries = 10;
+        int retryDelayMs = 6000;
 
-            // Get admin token
-            String token = getAdminToken();
-            logger.info("Admin token acquired");
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                logger.info("=== Starting Keycloak user sync (attempt {}/{}) ===", attempt, maxRetries);
 
-            // Fetch users from Keycloak
-            String url = keycloakUrl + "/admin/realms/" + realm + "/users";
-            HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth(token);
+                String token = getAdminToken();
+                logger.info("Admin token acquired");
 
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<List> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    List.class
-            );
+                String url = keycloakUrl + "/admin/realms/" + realm + "/users";
+                HttpHeaders headers = new HttpHeaders();
+                headers.setBearerAuth(token);
 
-            List<Map<String, Object>> users = response.getBody();
-            logger.info("Found {} users in Keycloak", users != null ? users.size() : 0);
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+                ResponseEntity<List> response = restTemplate.exchange(
+                        url,
+                        HttpMethod.GET,
+                        entity,
+                        List.class
+                );
 
-            if (users != null) {
-                for (Map<String, Object> user : users) {
-                    String id = (String) user.get("id");
-                    String username = (String) user.get("username");
-                    String email = (String) user.get("email");
+                List<Map<String, Object>> users = response.getBody();
+                logger.info("Found {} users in Keycloak", users != null ? users.size() : 0);
 
-                    UUID uuid = UUID.fromString(id);
+                if (users != null) {
+                    for (Map<String, Object> user : users) {
+                        String id = (String) user.get("id");
+                        String username = (String) user.get("username");
+                        String email = (String) user.get("email");
 
-                    // Check if player already exists
-                    if (!playerRepository.existsById(uuid)) {
-                        PlayerJpaEntity player = new PlayerJpaEntity(
-                                uuid,
-                                username,
-                                email != null ? email : username + "@example.com",
-                                null, // pictureUrl
-                                LocalDateTime.now()
-                        );
-                        playerRepository.save(player);
-                        logger.info("Synced player: {} ({})", username, uuid);
-                    } else {
-                        logger.debug("Player already exists: {}", username);
+                        UUID uuid = UUID.fromString(id);
+
+                        if (!playerRepository.existsById(uuid)) {
+                            PlayerJpaEntity player = new PlayerJpaEntity(
+                                    uuid,
+                                    username,
+                                    email != null ? email : username + "@example.com",
+                                    null,
+                                    LocalDateTime.now()
+                            );
+                            playerRepository.save(player);
+                            logger.info("Synced player: {} ({})", username, uuid);
+                        } else {
+                            logger.debug("Player already exists: {}", username);
+                        }
                     }
                 }
+
+                logger.info("=== User sync completed successfully ===");
+                return;
+
+            } catch (Exception e) {
+                if (attempt < maxRetries) {
+                    logger.warn("Keycloak sync failed (attempt {}/{}), retrying in {}ms... Error: {}",
+                            attempt, maxRetries, retryDelayMs, e.getMessage());
+                    try {
+                        Thread.sleep(retryDelayMs);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        logger.error("Retry sleep interrupted", ie);
+                        break;
+                    }
+                } else {
+                    logger.error("Failed to sync users from Keycloak after {} attempts", maxRetries, e);
+                }
             }
-
-            logger.info("=== User sync completed ===");
-
-        } catch (Exception e) {
-            logger.error("Failed to sync users from Keycloak", e);
         }
     }
 
