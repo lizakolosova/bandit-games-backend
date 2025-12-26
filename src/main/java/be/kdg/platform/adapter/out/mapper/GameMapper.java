@@ -17,7 +17,8 @@ public class GameMapper {
                 entity.getCategory(),
                 entity.getDevelopedBy(),
                 entity.getCreatedAt(),
-                entity.getAverageMinutes()
+                entity.getAverageMinutes(),
+                entity.isApproved()
         );
     }
     public static GameJpaEntity toEntity(Game game) {
