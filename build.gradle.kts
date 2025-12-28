@@ -73,3 +73,8 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imagePlatform.set("linux/amd64")
+}
