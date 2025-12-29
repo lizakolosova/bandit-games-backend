@@ -74,6 +74,22 @@ public class GameRoomController {
         return ResponseEntity.ok(GameRoomDto.from(gameRoom));
     }
 
+    @PostMapping("/{roomId}/accept-ai")
+    public ResponseEntity<Void> acceptAsAI(@PathVariable UUID roomId, @AuthenticationPrincipal Jwt jwt) {
+        UUID hostPlayerId = UUID.fromString(jwt.getSubject());
+        UUID AI_PLAYER_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
+
+        // Verify caller is the host
+        GameRoom room = loadGameRoomPort.loadById(GameRoomId.of(roomId));
+        if (!room.getHostPlayerId().uuid().equals(hostPlayerId)) {
+            return ResponseEntity.status(403).build();
+        }
+
+        // Accept as AI player
+        acceptInvitationUseCase.accept(new AcceptInvitationCommand(roomId, AI_PLAYER_ID));
+        return ResponseEntity.ok().build();
+    }
+
 
 }
 
