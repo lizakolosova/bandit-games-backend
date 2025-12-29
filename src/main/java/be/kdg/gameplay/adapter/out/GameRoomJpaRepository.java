@@ -8,5 +8,4 @@ import java.util.UUID;
 
 @Repository
 public interface GameRoomJpaRepository extends JpaRepository<GameRoomJpaEntity, UUID> {
-    Optional<GameRoomJpaEntity> findByHostPlayerIdAndInvitedPlayerId(UUID hostPlayerId, UUID invitedPlayerId);
-}
+    Optional<GameRoomJpaEntity> findFirstByHostPlayerIdAndInvitedPlayerIdOrderByCreatedAtDesc(UUID hostPlayerId, UUID invitedPlayerId);}
