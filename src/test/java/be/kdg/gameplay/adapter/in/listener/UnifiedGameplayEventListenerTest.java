@@ -33,12 +33,18 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UnifiedGameplayEventListenerTest {
 
-    @Mock UnifiedMatchProjector projector;
-    @Mock ChessEventTranslator chessTranslator;
-    @Mock TicTacToeEventTranslator tttTranslator;
-    @Mock LoadGameViewProjectionPort loadGameViewProjectionPort;
-    @Mock GameRoomStatusBroadcaster broadcaster;
-    @Mock LoadGameRoomPort loadGameRoomPort;
+    @Mock
+    UnifiedMatchProjector projector;
+    @Mock
+    ChessEventTranslator chessTranslator;
+    @Mock
+    TicTacToeEventTranslator tttTranslator;
+    @Mock
+    LoadGameViewProjectionPort loadGameViewProjectionPort;
+    @Mock
+    GameRoomStatusBroadcaster broadcaster;
+    @Mock
+    LoadGameRoomPort loadGameRoomPort;
 
     UUID matchId = UUID.randomUUID();
     UUID gameId = UUID.randomUUID();
@@ -90,8 +96,8 @@ class UnifiedGameplayEventListenerTest {
         // ASSERT
         verify(projector).project(any(UnifiedMatchCreatedProjectionCommand.class));
         verify(broadcaster).broadcastMatchStarted(
-                room.getGameRoomId().uuid().toString(),
-                matchId.toString()
+                room.getGameRoomId().uuid(),
+                matchId
         );
     }
 
@@ -161,8 +167,8 @@ class UnifiedGameplayEventListenerTest {
 
         verify(projector).project(any(UnifiedMatchCreatedProjectionCommand.class));
         verify(broadcaster).broadcastMatchStarted(
-                room.getGameRoomId().uuid().toString(),
-                matchId.toString()
+                room.getGameRoomId().uuid(),
+                matchId
         );
     }
 

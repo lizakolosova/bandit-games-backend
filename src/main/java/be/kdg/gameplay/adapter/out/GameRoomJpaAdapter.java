@@ -45,5 +45,4 @@ public class GameRoomJpaAdapter implements AddGameRoomPort, UpdateGameRoomPort, 
                 .map(GameRoomJpaMapper::toDomain)
                 .orElseThrow(() -> new NotFoundException("Game room not found for players"));
     }
-
 }

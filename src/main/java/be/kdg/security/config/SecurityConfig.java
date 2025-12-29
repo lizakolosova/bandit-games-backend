@@ -30,8 +30,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "api/payments/webhook").permitAll()
                         .requestMatchers(
                                 "/api/players/register",
-                                "/api/games/**",
-                                "/api/test/publish-match-started/**"
+                                "/api/games/**"
 
                         ).permitAll()
                         .requestMatchers("/ws/**").permitAll()

@@ -12,8 +12,6 @@ public record MatchStatisticsEvent(
         UUID winnerId,
         LocalDateTime startedAt,
         LocalDateTime finishedAt,
-//        String endReason,
-//        int totalMoves,
         String messageType,
         LocalDateTime timestamp
 ) implements DomainEvent {
