@@ -18,7 +18,6 @@ class TicTacToeEventTranslatorTest {
     private TicTacToeEventTranslator translator;
 
     UUID matchId = UUID.randomUUID();
-    UUID gameIdUuid = UUID.randomUUID();
     UUID p1 = UUID.randomUUID();
     UUID p2 = UUID.randomUUID();
     UUID achievementId = UUID.randomUUID();
@@ -33,7 +32,7 @@ class TicTacToeEventTranslatorTest {
     @Test
     void shouldTranslateMatchCreatedCorrectly() {
         TicTacToeMatchCreatedEvent event = new TicTacToeMatchCreatedEvent(
-                matchId, gameIdUuid, p1, p2, List.of("", "", "", "", "", "", "", "", ""),
+                matchId, gameId.uuid(), p1, p2, List.of("", "", "", "", "", "", "", "", ""),
                 "ACTIVE", "message type", now
         );
 
@@ -51,7 +50,7 @@ class TicTacToeEventTranslatorTest {
     @Test
     void translateMatchCreatedShouldFailForWrongEvent() {
         DomainEvent wrong = new TicTacToeMatchEndedEvent(
-                matchId, gameIdUuid, p1, p2, List.of("X", "O", "X", "", "", "", "", "", ""),
+                matchId, gameId.uuid(), p1, p2, List.of("X", "O", "X", "", "", "", "", "", ""),
                 "WIN", p1, 3, "endType", now
         );
 
@@ -62,7 +61,7 @@ class TicTacToeEventTranslatorTest {
     @Test
     void shouldTranslateMatchUpdatedCorrectly() {
         TicTacToeMatchMoveMadeEvent event = new TicTacToeMatchMoveMadeEvent(
-                matchId, gameIdUuid, p1, 4, "X", 1,
+                matchId, gameId.uuid(), p1, 4, "X", 1,
                 List.of("", "", "", "", "X", "", "", "", ""),
                 p1, p2, now, "message type", now
         );
@@ -80,7 +79,7 @@ class TicTacToeEventTranslatorTest {
     @Test
     void translateMatchUpdatedShouldFailForWrongEvent() {
         DomainEvent wrong = new TicTacToeMatchCreatedEvent(
-                matchId, gameIdUuid, p1, p2, List.of("", "", "", "", "", "", "", "", ""),
+                matchId, gameId.uuid(), p1, p2, List.of("", "", "", "", "", "", "", "", ""),
                 "ACTIVE", "message", now
         );
 
@@ -91,7 +90,7 @@ class TicTacToeEventTranslatorTest {
     @Test
     void shouldTranslateMatchEndedCorrectly() {
         TicTacToeMatchEndedEvent event = new TicTacToeMatchEndedEvent(
-                matchId, gameIdUuid, p1, p2,
+                matchId, gameId.uuid(), p1, p2,
                 List.of("X", "X", "X", "O", "O", "", "", "", ""),
                 "WIN", p1, 5, "message type", now
         );
@@ -109,7 +108,7 @@ class TicTacToeEventTranslatorTest {
     @Test
     void translateMatchEndedShouldFailForWrongEvent() {
         DomainEvent wrong = new TicTacToeMatchMoveMadeEvent(
-                matchId, gameIdUuid, p1, 0, "X", 1,
+                matchId, gameId.uuid(), p1, 0, "X", 1,
                 List.of("X", "", "", "", "", "", "", "", ""),
                 p1, p2, now, "msg", now
         );
@@ -129,7 +128,7 @@ class TicTacToeEventTranslatorTest {
         assertEquals(p1, unified.playerId());
         assertEquals(achievementId, unified.achievementId());
         assertEquals("ACH_TYPE", unified.achievementType());
-        assertEquals(matchId, unified.matchId());
+        assertEquals(gameId.uuid(), unified.gameId());
         assertEquals("TICTACTOE", unified.gameType());
         assertEquals("msg", unified.messageType());
         assertEquals(now, unified.timestamp());
@@ -138,7 +137,7 @@ class TicTacToeEventTranslatorTest {
     @Test
     void translateToAchievementShouldFailForWrongEvent() {
         DomainEvent wrong = new TicTacToeMatchCreatedEvent(
-                matchId, gameIdUuid, p1, p2, List.of("", "", "", "", "", "", "", "", ""),
+                matchId, gameId.uuid(), p1, p2, List.of("", "", "", "", "", "", "", "", ""),
                 "ACTIVE", "msg", now
         );
 
@@ -149,13 +148,13 @@ class TicTacToeEventTranslatorTest {
     @Test
     void shouldReturnTrueForSupportedEvents() {
         assertTrue(translator.canTranslate(
-                new TicTacToeMatchCreatedEvent(matchId, gameIdUuid, p1, p2,
+                new TicTacToeMatchCreatedEvent(matchId, gameId.uuid(), p1, p2,
                         List.of("", "", "", "", "", "", "", "", ""), "ACTIVE", "msg", now)));
         assertTrue(translator.canTranslate(
-                new TicTacToeMatchMoveMadeEvent(matchId, gameIdUuid, p1, 0, "X", 1,
+                new TicTacToeMatchMoveMadeEvent(matchId, gameId.uuid(), p1, 0, "X", 1,
                         List.of("X", "", "", "", "", "", "", "", ""), p1, p2, now, "msg", now)));
         assertTrue(translator.canTranslate(
-                new TicTacToeMatchEndedEvent(matchId, gameIdUuid, p1, p2,
+                new TicTacToeMatchEndedEvent(matchId, gameId.uuid(), p1, p2,
                         List.of("X", "X", "X", "O", "O", "", "", "", ""), "WIN", p1, 4, "msg", now)));
         assertTrue(translator.canTranslate(
                 new TicTacToeAchievementAchievedEvent(p1, achievementId, "TYPE", matchId,

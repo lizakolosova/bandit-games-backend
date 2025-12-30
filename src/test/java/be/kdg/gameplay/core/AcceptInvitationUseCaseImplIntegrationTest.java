@@ -78,7 +78,6 @@ class AcceptInvitationUseCaseImplIntegrationTest {
         // Assert
         GameRoomJpaEntity saved = rooms.findById(roomId).orElseThrow();
 
-        // Domain expectation — adjust if your domain uses another accepted status
         assertEquals(GameRoomStatus.READY, saved.getStatus());
         assertEquals(saved.getInvitedPlayerId(), invitedId);
     }

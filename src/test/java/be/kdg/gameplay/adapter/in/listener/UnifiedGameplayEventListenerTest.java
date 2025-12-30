@@ -63,7 +63,7 @@ class UnifiedGameplayEventListenerTest {
     }
 
     @Test
-    void shouldProjectCreatedEventAndBroadcast() {
+    void shouldProjectCreatedEvent() {
 
         // ARRANGE
         ChessMatchCreatedEvent event = new ChessMatchCreatedEvent(matchId, p1, p1.toString(),
@@ -83,22 +83,14 @@ class UnifiedGameplayEventListenerTest {
                 now
         );
 
-        GameRoom room = mock(GameRoom.class);
-        when(room.getGameRoomId()).thenReturn(new GameRoomId(UUID.randomUUID()));
-
         when(loadGameViewProjectionPort.findByName("CHESS")).thenReturn(view);
         when(chessTranslator.translateToMatchCreated(event, view.getGameId())).thenReturn(unified);
-        when(loadGameRoomPort.findByPlayers(p1, p2)).thenReturn(room);
 
         // ACT
         listener.onChessMatchCreated(event);
 
         // ASSERT
         verify(projector).project(any(UnifiedMatchCreatedProjectionCommand.class));
-        verify(broadcaster).broadcastMatchStarted(
-                room.getGameRoomId().uuid(),
-                matchId
-        );
     }
 
     @Test

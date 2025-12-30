@@ -39,7 +39,7 @@ public class UnifiedAchievementEventListener {
         projector.projectAchievementUnlocked(new UnifiedAchievementUnlockedProjectionCommand(
                 unifiedEvent.playerId(),
                 unifiedEvent.achievementId(),
-                unifiedEvent.matchId(),
+                unifiedEvent.gameId(),
                 unifiedEvent.achievementType(),
                 unifiedEvent.gameType(),
                 unifiedEvent.timestamp()
@@ -55,7 +55,7 @@ public class UnifiedAchievementEventListener {
         projector.projectAchievementUnlocked(new UnifiedAchievementUnlockedProjectionCommand(
                 unifiedEvent.playerId(),
                 unifiedEvent.achievementId(),
-                unifiedEvent.matchId(),
+                unifiedEvent.gameId(),
                 unifiedEvent.achievementType(),
                 unifiedEvent.gameType(),
                 unifiedEvent.timestamp()
