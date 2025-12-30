@@ -146,7 +146,7 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO kdg_player.game_projection (game_id, name, picture_url, category, rules, achievement_count, average_minutes, developed_by)
 VALUES
     ('550e8400-e29b-41d4-a716-446655440001', 'Connect Four', 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800', 'Strategy', 'Players take turns dropping colored discs into a seven-column, six-row grid. The objective is to be the first to form a horizontal, vertical, or diagonal line of four of one''s own discs.', 5, 15, 'Hasbro Gaming'),
-    ('550e8400-e29b-41d4-a716-446655440002', 'Tic Tac Toe', 'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800', 'Puzzle', 'Two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.', 3, 5, 'Classic Games Inc'),
+    ('b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Tic Tac Toe', 'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800', 'Puzzle', 'Two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.', 3, 5, 'Classic Games Inc'),
     ('550e8400-e29b-41d4-a716-446655440003', 'Checkers', 'https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=800', 'Strategy', 'Players move their pieces diagonally on a checkered board. Capture opponent pieces by jumping over them. Win by capturing all opponent pieces or blocking their moves.', 2, 20, 'Traditional Games Ltd'),
     ('550e8400-e29b-41d4-a716-446655440004', 'Reversi', 'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800', 'Strategy', 'Place discs on an 8×8 board to outflank and flip opponent pieces. The player with the most pieces of their color at the end wins.', 2, 25, 'Board Game Masters'),
     ('550e8400-e29b-41d4-a716-446655440005', 'Dots and Boxes', 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800', 'Puzzle', 'Players take turns connecting dots on a grid. Complete a box to claim it and earn another turn. The player with the most boxes wins.', 1, 10, 'Pen & Paper Games'),
@@ -213,6 +213,93 @@ INSERT INTO kdg_player.achievement_projection (achievement_id, description, name
                                                                                                ('c2c6fc7d-a6e7-402d-bcb0-e925237a4532', 'Castle kingside or queenside', 'CASTLE_TIME', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
                                                                                                ('77be0fa9-da6e-4229-bcac-6274ff534990', 'Move your rook for the first time', 'ROOKIE_MOVE', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
                                                                                                ('05b6c2f1-14d6-49bc-8841-71845cfc522e', 'Make 3 pawn moves in a row', 'PAWN_STORM', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca');
+
+
+
+-- MATCH 1: YOU WIN
+INSERT INTO kdg_gameplay.match (
+    match_id,
+    game_id,
+    status,
+    started_at,
+    finished_at,
+    total_moves,
+    end_reason,
+    winner_player_id
+) VALUES (
+             '11111111-1111-1111-1111-111111111111',
+             'b90a72ac-b27b-428d-b99e-51a8c2abfccb',
+             'FINISHED',
+             '2025-12-20 18:00:00',
+             '2025-12-20 18:08:00',
+             17,
+             'WIN',
+             '57423a96-12fb-49d7-b2f3-78c3be67bdaa'
+         );
+
+-- MATCH 2: YOU LOSE
+INSERT INTO kdg_gameplay.match (
+    match_id,
+    game_id,
+    status,
+    started_at,
+    finished_at,
+    total_moves,
+    end_reason,
+    winner_player_id
+) VALUES (
+             '22222222-2222-2222-2222-222222222222',
+             'b90a72ac-b27b-428d-b99e-51a8c2abfccb',
+             'FINISHED',
+             '2025-12-22 19:30:00',
+             '2025-12-22 19:40:00',
+             21,
+             'WIN',
+             'a9f1c6b2-7e1d-4a51-9d32-6a8b8e6c3a11'
+         );
+
+-- MATCH 3: DRAW
+INSERT INTO kdg_gameplay.match (
+    match_id,
+    game_id,
+    status,
+    started_at,
+    finished_at,
+    total_moves,
+    end_reason,
+    winner_player_id
+) VALUES (
+             '33333333-3333-3333-3333-333333333333',
+             'b90a72ac-b27b-428d-b99e-51a8c2abfccb',
+             'FINISHED',
+             '2025-12-26 20:00:00',
+             '2025-12-26 20:10:00',
+             25,
+             'DRAW',
+             NULL
+         );
+
+
+-- MATCH 1 players
+INSERT INTO kdg_gameplay.match_players (match_id, player_order, player_id) VALUES
+                                                                               ('11111111-1111-1111-1111-111111111111', 0, '5ca11011-39d0-49cd-a665-46dc21f5b1df'),
+                                                                               ('11111111-1111-1111-1111-111111111111', 1, '99c75730-d0ef-45ef-8389-d3d975b99557');
+
+-- MATCH 2 players
+INSERT INTO kdg_gameplay.match_players (match_id, player_order, player_id) VALUES
+                                                                               ('22222222-2222-2222-2222-222222222222', 0, '5ca11011-39d0-49cd-a665-46dc21f5b1df'),
+                                                                               ('22222222-2222-2222-2222-222222222222', 1, '99c75730-d0ef-45ef-8389-d3d975b99557');
+
+-- MATCH 3 players
+INSERT INTO kdg_gameplay.match_players (match_id, player_order, player_id) VALUES
+                                                                               ('33333333-3333-3333-3333-333333333333', 0, '5ca11011-39d0-49cd-a665-46dc21f5b1df'),
+                                                                               ('33333333-3333-3333-3333-333333333333', 1, '99c75730-d0ef-45ef-8389-d3d975b99557');
+
+
+
+
+
+
 
 
 

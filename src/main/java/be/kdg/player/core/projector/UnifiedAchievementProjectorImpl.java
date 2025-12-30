@@ -36,13 +36,15 @@ public class UnifiedAchievementProjectorImpl implements UnifiedAchievementProjec
 
     @Override
     public void projectAchievementUnlocked(UnifiedAchievementUnlockedProjectionCommand command) {
-        logger.info("Projecting unified achievement unlocked for player {} in game type {}",
-                command.playerId(), command.gameType());
+        logger.info("Projecting unified achievement unlocked for player {} in game type {} this {} and this {}",
+                command.playerId(), command.gameType(), command.gameId(), command.achievementId()) ;
 
         Player player = loadPlayerPort.loadById(PlayerId.of(command.playerId()))
                 .orElseThrow(() -> NotFoundException.player(command.playerId()));
 
         UUID achievementId = resolveAchievementId(command);
+
+        logger.info("Lepic {} ", command.gameId());
 
         player.unlockAchievement(AchievementId.of(achievementId), GameId.of(command.gameId()));
 

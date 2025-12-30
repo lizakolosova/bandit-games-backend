@@ -1,6 +1,8 @@
 package be.kdg.gameplay.adapter.in;
 
+import be.kdg.common.events.GameRoomInvitationSentEvent;
 import be.kdg.gameplay.adapter.in.request.CreateGameRoomRequest;
+import be.kdg.gameplay.adapter.in.request.InviteFriendRequest;
 import be.kdg.gameplay.adapter.in.response.GameRoomDto;
 import be.kdg.gameplay.domain.GameRoom;
 import be.kdg.gameplay.domain.valueobj.GameRoomId;
@@ -10,6 +12,7 @@ import be.kdg.gameplay.port.in.command.AcceptInvitationCommand;
 import be.kdg.gameplay.port.in.command.CreateGameRoomCommand;
 import be.kdg.gameplay.port.in.command.RejectInvitationCommand;
 import be.kdg.gameplay.port.out.LoadGameRoomPort;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -26,13 +29,15 @@ public class GameRoomController {
     private final RejectInvitationUseCase rejectInvitationUseCase;
     private final FinalizeRoomUseCase finalizeRoomUseCase;
     private final LoadGameRoomPort loadGameRoomPort;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public GameRoomController(FinalizeRoomUseCase finalizeRoomUseCase, RejectInvitationUseCase rejectInvitationUseCase, AcceptInvitationUseCase acceptInvitationUseCase, CreateGameRoomUseCase createGameRoomUseCase, LoadGameRoomPort loadGameRoomPort) {
+    public GameRoomController(FinalizeRoomUseCase finalizeRoomUseCase, RejectInvitationUseCase rejectInvitationUseCase, AcceptInvitationUseCase acceptInvitationUseCase, CreateGameRoomUseCase createGameRoomUseCase, LoadGameRoomPort loadGameRoomPort, ApplicationEventPublisher applicationEventPublisher) {
         this.finalizeRoomUseCase = finalizeRoomUseCase;
         this.rejectInvitationUseCase = rejectInvitationUseCase;
         this.acceptInvitationUseCase = acceptInvitationUseCase;
         this.createGameRoomUseCase = createGameRoomUseCase;
         this.loadGameRoomPort = loadGameRoomPort;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @PostMapping
@@ -87,6 +92,26 @@ public class GameRoomController {
 
         // Accept as AI player
         acceptInvitationUseCase.accept(new AcceptInvitationCommand(roomId, AI_PLAYER_ID));
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{roomId}/invite")
+    public ResponseEntity<Void> inviteFriend(
+            @PathVariable UUID roomId,
+            @RequestBody InviteFriendRequest request,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID hostPlayerId = UUID.fromString(jwt.getSubject());
+
+
+        GameRoomInvitationSentEvent event = new GameRoomInvitationSentEvent(
+                roomId,
+                hostPlayerId,
+                request.friendId()
+        );
+
+        applicationEventPublisher.publishEvent(event);
+
         return ResponseEntity.ok().build();
     }
 

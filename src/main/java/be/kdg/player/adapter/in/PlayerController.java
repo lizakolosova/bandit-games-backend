@@ -1,6 +1,7 @@
 package be.kdg.player.adapter.in;
 
 import be.kdg.common.valueobj.PlayerId;
+import be.kdg.player.adapter.in.request.AddGameToLibraryRequest;
 import be.kdg.player.adapter.in.request.SendFriendRequestDto;
 import be.kdg.player.adapter.in.response.*;
 import be.kdg.player.adapter.in.request.RegisterPlayerRequest;
@@ -30,8 +31,9 @@ public class PlayerController {
     private final RemoveFriendUseCase removeFriendUseCase;
     private final LoadPendingFriendshipRequestUseCase loadPendingFriendshipRequestUseCase;
     private final LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase;
+    private final AddGameToLibraryUseCase addGameToLibraryUseCase;
 
-    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase, LoadPendingFriendshipRequestUseCase loadPendingFriendshipRequestUseCase, LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase) {
+    public PlayerController(LoadGameLibraryUseCase loadGameLibraryUseCase, LoadLibraryGameUseCase loadLibraryGameUseCase, LoadFriendsUseCase loadFriendsUseCase, RegisterPlayerUseCase registerPlayerUseCase, MarkFavouriteUseCase markFavouriteUseCase, SendFriendshipRequestUseCase sendFriendshipRequestUseCase, SearchPlayersUseCase searchPlayersUseCase, RemoveFriendUseCase removeFriendUseCase, LoadPendingFriendshipRequestUseCase loadPendingFriendshipRequestUseCase, LoadSingleGameLibraryUseCase loadSingleGameLibraryUseCase, AddGameToLibraryUseCase addGameToLibraryUseCase) {
         this.loadGameLibraryUseCase = loadGameLibraryUseCase;
         this.loadLibraryGameUseCase = loadLibraryGameUseCase;
         this.loadFriendsUseCase = loadFriendsUseCase;
@@ -42,6 +44,7 @@ public class PlayerController {
         this.removeFriendUseCase = removeFriendUseCase;
         this.loadPendingFriendshipRequestUseCase = loadPendingFriendshipRequestUseCase;
         this.loadSingleGameLibraryUseCase = loadSingleGameLibraryUseCase;
+        this.addGameToLibraryUseCase = addGameToLibraryUseCase;
     }
 
     @PostMapping("/register")
@@ -93,6 +96,15 @@ public class PlayerController {
         LoadLibraryGameCommand command = new LoadLibraryGameCommand(playerId, gameId);
         return ResponseEntity.ok(loadLibraryGameUseCase.loadGame(command));
     }
+
+    @PostMapping("/library")
+    public ResponseEntity<Void> addGameToLibrary(@RequestBody AddGameToLibraryRequest request, @AuthenticationPrincipal Jwt jwt) {
+        UUID playerId = UUID.fromString(jwt.getSubject());
+        AddGameToLibraryCommand command = new AddGameToLibraryCommand(playerId, request.gameId());
+        addGameToLibraryUseCase.addGameToLibrary(command);
+        return ResponseEntity.ok().build();
+    }
+
 
     @GetMapping("/friends")
     public ResponseEntity<List<FriendDto>> loadFriends(@AuthenticationPrincipal Jwt jwt) {
