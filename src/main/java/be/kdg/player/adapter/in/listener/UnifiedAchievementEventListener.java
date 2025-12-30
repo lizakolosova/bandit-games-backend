@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class UnifiedAchievementEventListener {
 
@@ -55,7 +57,7 @@ public class UnifiedAchievementEventListener {
         projector.projectAchievementUnlocked(new UnifiedAchievementUnlockedProjectionCommand(
                 unifiedEvent.playerId(),
                 unifiedEvent.achievementId(),
-                unifiedEvent.matchId(),
+                UUID.fromString("b90a72ac-b27b-428d-b99e-51a8c2abfccb"),
                 unifiedEvent.achievementType(),
                 unifiedEvent.gameType(),
                 unifiedEvent.timestamp()

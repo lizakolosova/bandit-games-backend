@@ -19,7 +19,7 @@ VALUES
      '1974-01-01',
      true),
 
-    ('550e8400-e29b-41d4-a716-446655440002', 'Tic Tac Toe',
+    ('b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Tic Tac Toe',
      'Two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.',
      'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800',
      'Puzzle',
@@ -83,9 +83,12 @@ ON CONFLICT (uuid) DO NOTHING;
 -- Insert achievements for Tic Tac Toe
 INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description)
 VALUES
-    ('650e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440002', 'First Victory', 'Win your first game'),
-    ('650e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440002', 'Perfect Game', 'Win without opponent scoring'),
-    ('650e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440002', 'Lightning Fast', 'Win in 5 moves or less')
+    ('11111111-1111-1111-1111-111111111111', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'First Win', 'Win your first game'),
+    ('22222222-2222-2222-2222-222222222222', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Fast Win', 'Win in 5 moves or less'),
+    ('33333333-3333-3333-3333-333333333333', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Win Streak', 'Win 3 games in a row'),
+    ('44444444-4444-4444-4444-444444444444', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Beat Easy AI', 'Defeat the AI on Easy difficulty'),
+    ('55555555-5555-5555-5555-555555555555', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Beat Medium AI', 'Defeat the AI on Medium difficulty'),
+    ('66666666-6666-6666-6666-666666666666', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Beat Hard AI', 'Defeat the AI on Hard difficulty')
 ON CONFLICT (uuid) DO NOTHING;
 
 -- Insert achievements for other games
