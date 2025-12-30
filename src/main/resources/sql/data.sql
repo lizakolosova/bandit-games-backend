@@ -1,3 +1,4 @@
+
 -- Sample data for testing frontend with backend
 -- Based on actual JPA entities
 
@@ -18,7 +19,7 @@ VALUES
      '1974-01-01',
      true),
 
-    ('550e8400-e29b-41d4-a716-446655440002', 'Tic Tac Toe',
+    ('b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Tic Tac Toe',
      'Two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.',
      'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800',
      'Puzzle',
@@ -67,7 +68,7 @@ VALUES
      'Asian Board Games Co',
      '1899-01-01',
      true)
-    ON CONFLICT (uuid) DO NOTHING;
+ON CONFLICT (uuid) DO NOTHING;
 
 -- Insert achievements for Connect Four
 INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description)
@@ -77,15 +78,18 @@ VALUES
     ('650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', 'Strategist', 'Win without letting opponent connect 3'),
     ('650e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440001', '10 Wins', 'Win 10 games'),
     ('650e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440001', 'Unbeatable', 'Win 5 games in a row')
-    ON CONFLICT (uuid) DO NOTHING;
+ON CONFLICT (uuid) DO NOTHING;
 
 -- Insert achievements for Tic Tac Toe
 INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description)
 VALUES
-    ('650e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440002', 'First Victory', 'Win your first game'),
-    ('650e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440002', 'Perfect Game', 'Win without opponent scoring'),
-    ('650e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440002', 'Lightning Fast', 'Win in 5 moves or less')
-    ON CONFLICT (uuid) DO NOTHING;
+    ('11111111-1111-1111-1111-111111111111', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'First Win', 'Win your first game'),
+    ('22222222-2222-2222-2222-222222222222', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Fast Win', 'Win in 5 moves or less'),
+    ('33333333-3333-3333-3333-333333333333', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Win Streak', 'Win 3 games in a row'),
+    ('44444444-4444-4444-4444-444444444444', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Beat Easy AI', 'Defeat the AI on Easy difficulty'),
+    ('55555555-5555-5555-5555-555555555555', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Beat Medium AI', 'Defeat the AI on Medium difficulty'),
+    ('66666666-6666-6666-6666-666666666666', 'b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Beat Hard AI', 'Defeat the AI on Hard difficulty')
+ON CONFLICT (uuid) DO NOTHING;
 
 -- Insert achievements for other games
 INSERT INTO kdg_platform.achievement_definitions (uuid, game_id, name, description)
@@ -96,7 +100,7 @@ VALUES
     ('650e8400-e29b-41d4-a716-446655440012', '550e8400-e29b-41d4-a716-446655440004', 'Flip Master', 'Flip 20+ pieces in one move'),
     ('650e8400-e29b-41d4-a716-446655440013', '550e8400-e29b-41d4-a716-446655440005', 'Box Hoarder', 'Claim 10 boxes in one game'),
     ('650e8400-e29b-41d4-a716-446655440014', '550e8400-e29b-41d4-a716-446655440006', 'Five in a Row', 'Get your first five in a row')
-    ON CONFLICT (uuid) DO NOTHING;
+ON CONFLICT (uuid) DO NOTHING;
 
 -- ============================================
 -- PLAYER SCHEMA - Sample Players
@@ -116,7 +120,7 @@ VALUES
     ('e6846a08-8808-420b-b23d-4f09698a2969', 'HogCranker', 'friendB@example.com', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP),
     ('49aee311-9a26-4315-ac85-3c971573af3f', 'Tower1', 'friendC@example.com', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP),
     ('e7b0794b-a64a-4fd4-bd0d-a80186de2953', 'Tower2', 'friendD@example.com', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP)
-    ON CONFLICT (uuid) DO NOTHING;
+ON CONFLICT (uuid) DO NOTHING;
 -- ============================================
 -- PLAYER SCHEMA - Game Library
 -- ============================================
@@ -125,14 +129,14 @@ VALUES
 INSERT INTO kdg_player.player_game_library (id, player_id, game_id, added_at, last_played_at, total_playtime_seconds, favourite, games_lost, games_won, games_draw, matches_played)
 VALUES
     -- HogCranker's library
-    ('850e8400-e29b-41d4-a716-446655440001', '750e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '30 days', CURRENT_TIMESTAMP - INTERVAL '2 days', 7200, true,0,0,0,0),
-    ('850e8400-e29b-41d4-a716-446655440002', '750e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP - INTERVAL '20 days', CURRENT_TIMESTAMP - INTERVAL '1 day', 2700, true,0,0,0,0),
-    ('850e8400-e29b-41d4-a716-446655440003', '750e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440003', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '5 days', 4800, false,0,0,0,0),
+    ('850e8400-e29b-41d4-a716-446655440001', 'e6846a08-8808-420b-b23d-4f09698a2969', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '30 days', CURRENT_TIMESTAMP - INTERVAL '2 days', 7200, true,0,0,0,0),
+    ('850e8400-e29b-41d4-a716-446655440002', 'e6846a08-8808-420b-b23d-4f09698a2969', '550e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP - INTERVAL '20 days', CURRENT_TIMESTAMP - INTERVAL '1 day', 2700, true,1,5,7,13),
+    ('850e8400-e29b-41d4-a716-446655440003', 'e6846a08-8808-420b-b23d-4f09698a2969', '550e8400-e29b-41d4-a716-446655440003', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '5 days', 4800, false,0,0,0,0),
 
     -- Player123's library
     ('850e8400-e29b-41d4-a716-446655440004', '57423a96-12fb-49d7-b2f3-78c3be67bdaa', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '1 hour', 5400, true,0,0,0,0),
     ('850e8400-e29b-41d4-a716-446655440005', '57423a96-12fb-49d7-b2f3-78c3be67bdaa', '550e8400-e29b-41d4-a716-446655440004', CURRENT_TIMESTAMP - INTERVAL '5 days', CURRENT_TIMESTAMP - INTERVAL '3 hours', 3600, false,0,0,0,0)
-    ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO NOTHING;
 
 -- ============================================
 -- PLAYER SCHEMA - Game Projections
@@ -142,12 +146,12 @@ VALUES
 INSERT INTO kdg_player.game_projection (game_id, name, picture_url, category, rules, achievement_count, average_minutes, developed_by)
 VALUES
     ('550e8400-e29b-41d4-a716-446655440001', 'Connect Four', 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800', 'Strategy', 'Players take turns dropping colored discs into a seven-column, six-row grid. The objective is to be the first to form a horizontal, vertical, or diagonal line of four of one''s own discs.', 5, 15, 'Hasbro Gaming'),
-    ('550e8400-e29b-41d4-a716-446655440002', 'Tic Tac Toe', 'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800', 'Puzzle', 'Two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.', 3, 5, 'Classic Games Inc'),
+    ('b90a72ac-b27b-428d-b99e-51a8c2abfccb', 'Tic Tac Toe', 'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800', 'Puzzle', 'Two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.', 3, 5, 'Classic Games Inc'),
     ('550e8400-e29b-41d4-a716-446655440003', 'Checkers', 'https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=800', 'Strategy', 'Players move their pieces diagonally on a checkered board. Capture opponent pieces by jumping over them. Win by capturing all opponent pieces or blocking their moves.', 2, 20, 'Traditional Games Ltd'),
     ('550e8400-e29b-41d4-a716-446655440004', 'Reversi', 'https://images.unsplash.com/photo-1566694271453-390536dd1f0d?w=800', 'Strategy', 'Place discs on an 8×8 board to outflank and flip opponent pieces. The player with the most pieces of their color at the end wins.', 2, 25, 'Board Game Masters'),
     ('550e8400-e29b-41d4-a716-446655440005', 'Dots and Boxes', 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800', 'Puzzle', 'Players take turns connecting dots on a grid. Complete a box to claim it and earn another turn. The player with the most boxes wins.', 1, 10, 'Pen & Paper Games'),
     ('550e8400-e29b-41d4-a716-446655440006', 'Gomoku', 'https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=800', 'Strategy', 'Players alternate placing stones on a 15×15 or 19×19 grid. The first to get exactly five stones in a row (horizontally, vertically, or diagonally) wins.', 1, 18, 'Asian Board Games Co')
-    ON CONFLICT (game_id) DO NOTHING;
+ON CONFLICT (game_id) DO NOTHING;
 
 INSERT INTO kdg_player.game_projection (game_id, name, picture_url, category, rules, achievement_count, average_minutes, developed_by)
 VALUES
@@ -161,17 +165,17 @@ VALUES
 -- Unlock some achievements for HogCranker
 INSERT INTO kdg_player.player_achievement (uuid, player_id, achievement_id, game_id, unlocked_at)
 VALUES
-    ('950e8400-e29b-41d4-a716-446655440001', '750e8400-e29b-41d4-a716-446655440001', '650e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '25 days'),
-    ('950e8400-e29b-41d4-a716-446655440002', '750e8400-e29b-41d4-a716-446655440001', '650e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '20 days'),
-    ('950e8400-e29b-41d4-a716-446655440003', '750e8400-e29b-41d4-a716-446655440001', '650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '15 days')
-    ON CONFLICT (uuid) DO NOTHING;
+    ('950e8400-e29b-41d4-a716-446655440001', 'e6846a08-8808-420b-b23d-4f09698a2969', '650e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '25 days'),
+    ('950e8400-e29b-41d4-a716-446655440002', 'e6846a08-8808-420b-b23d-4f09698a2969', '650e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '20 days'),
+    ('950e8400-e29b-41d4-a716-446655440003', 'e6846a08-8808-420b-b23d-4f09698a2969', '650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '15 days')
+ON CONFLICT (uuid) DO NOTHING;
 
 -- Unlock achievements for Player123
 INSERT INTO kdg_player.player_achievement (uuid, player_id, achievement_id, game_id, unlocked_at)
 VALUES
     ('950e8400-e29b-41d4-a716-446655440004', '57423a96-12fb-49d7-b2f3-78c3be67bdaa', '650e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP - INTERVAL '8 days'),
     ('950e8400-e29b-41d4-a716-446655440005', '57423a96-12fb-49d7-b2f3-78c3be67bdaa', '650e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440004', CURRENT_TIMESTAMP - INTERVAL '4 days')
-    ON CONFLICT (uuid) DO NOTHING;
+ON CONFLICT (uuid) DO NOTHING;
 
 -- ============================================
 -- PLAYER SCHEMA - Friends (ElementCollection)
@@ -194,7 +198,7 @@ INSERT INTO kdg_player.friendship_request (uuid, sender_id, receiver_id, status,
 VALUES
     ('a50e8400-e29b-41d4-a716-446655440001', '750e8400-e29b-41d4-a716-446655440004', '750e8400-e29b-41d4-a716-446655440001', 'PENDING', CURRENT_TIMESTAMP - INTERVAL '2 days'),
     ('a50e8400-e29b-41d4-a716-446655440002', '750e8400-e29b-41d4-a716-446655440003', '750e8400-e29b-41d4-a716-446655440002', 'PENDING', CURRENT_TIMESTAMP - INTERVAL '1 day')
-    ON CONFLICT (uuid) DO NOTHING;
+ON CONFLICT (uuid) DO NOTHING;
 
 -- ============================================
 -- GAMEPLAY SCHEMA - Sample Matches
@@ -209,3 +213,96 @@ INSERT INTO kdg_player.achievement_projection (achievement_id, description, name
                                                                                                ('c2c6fc7d-a6e7-402d-bcb0-e925237a4532', 'Castle kingside or queenside', 'CASTLE_TIME', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
                                                                                                ('77be0fa9-da6e-4229-bcac-6274ff534990', 'Move your rook for the first time', 'ROOKIE_MOVE', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca'),
                                                                                                ('05b6c2f1-14d6-49bc-8841-71845cfc522e', 'Make 3 pawn moves in a row', 'PAWN_STORM', '8496c496-a884-48ed-9bb3-7c3aa50fb8ca');
+
+
+
+-- MATCH 1: YOU WIN
+INSERT INTO kdg_gameplay.match (
+    match_id,
+    game_id,
+    status,
+    started_at,
+    finished_at,
+    total_moves,
+    end_reason,
+    winner_player_id
+) VALUES (
+             '11111111-1111-1111-1111-111111111111',
+             'b90a72ac-b27b-428d-b99e-51a8c2abfccb',
+             'FINISHED',
+             '2025-12-20 18:00:00',
+             '2025-12-20 18:08:00',
+             17,
+             'WIN',
+             '57423a96-12fb-49d7-b2f3-78c3be67bdaa'
+         );
+
+-- MATCH 2: YOU LOSE
+INSERT INTO kdg_gameplay.match (
+    match_id,
+    game_id,
+    status,
+    started_at,
+    finished_at,
+    total_moves,
+    end_reason,
+    winner_player_id
+) VALUES (
+             '22222222-2222-2222-2222-222222222222',
+             'b90a72ac-b27b-428d-b99e-51a8c2abfccb',
+             'FINISHED',
+             '2025-12-22 19:30:00',
+             '2025-12-22 19:40:00',
+             21,
+             'WIN',
+             'a9f1c6b2-7e1d-4a51-9d32-6a8b8e6c3a11'
+         );
+
+-- MATCH 3: DRAW
+INSERT INTO kdg_gameplay.match (
+    match_id,
+    game_id,
+    status,
+    started_at,
+    finished_at,
+    total_moves,
+    end_reason,
+    winner_player_id
+) VALUES (
+             '33333333-3333-3333-3333-333333333333',
+             'b90a72ac-b27b-428d-b99e-51a8c2abfccb',
+             'FINISHED',
+             '2025-12-26 20:00:00',
+             '2025-12-26 20:10:00',
+             25,
+             'DRAW',
+             NULL
+         );
+
+
+-- MATCH 1 players
+INSERT INTO kdg_gameplay.match_players (match_id, player_order, player_id) VALUES
+                                                                               ('11111111-1111-1111-1111-111111111111', 0, '5ca11011-39d0-49cd-a665-46dc21f5b1df'),
+                                                                               ('11111111-1111-1111-1111-111111111111', 1, '99c75730-d0ef-45ef-8389-d3d975b99557');
+
+-- MATCH 2 players
+INSERT INTO kdg_gameplay.match_players (match_id, player_order, player_id) VALUES
+                                                                               ('22222222-2222-2222-2222-222222222222', 0, '5ca11011-39d0-49cd-a665-46dc21f5b1df'),
+                                                                               ('22222222-2222-2222-2222-222222222222', 1, '99c75730-d0ef-45ef-8389-d3d975b99557');
+
+-- MATCH 3 players
+INSERT INTO kdg_gameplay.match_players (match_id, player_order, player_id) VALUES
+                                                                               ('33333333-3333-3333-3333-333333333333', 0, '5ca11011-39d0-49cd-a665-46dc21f5b1df'),
+                                                                               ('33333333-3333-3333-3333-333333333333', 1, '99c75730-d0ef-45ef-8389-d3d975b99557');
+
+
+
+
+
+
+
+
+
+
+
+

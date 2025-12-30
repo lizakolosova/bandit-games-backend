@@ -9,7 +9,8 @@ public record GameDto(
         String pictureUrl,
         String category,
         String gameUrl,
-        int averageMinutes
+        int averageMinutes,
+        boolean approved
 ) {
     public static GameDto toDto(Game game) {
         return new GameDto(
@@ -19,7 +20,8 @@ public record GameDto(
                 game.getPictureUrl(),
                 game.getCategory(),
                 game.getGameUrl(),
-                game.getAverageMinutes()
+                game.getAverageMinutes(),
+                game.isApproved()
         );
     }
 }

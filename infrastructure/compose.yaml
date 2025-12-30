@@ -48,7 +48,7 @@ services:
       - "15673:15672"
     networks:
       - backend
-      - chessgame-backend  # IMPORTANT: Connects both systems
+      - chessgame-backend
     volumes:
       - ./rabbitmq/data/:/var/lib/rabbitmq/
       - ./rabbitmq/log/:/var/log/rabbitmq/
@@ -66,6 +66,11 @@ services:
       - '3307:3306'
     networks:
       - kc
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   idp_keycloak:
     image: quay.io/keycloak/keycloak:26.3
@@ -77,13 +82,19 @@ services:
       KC_DB_URL_DATABASE: 'keycloak'
       KC_DB_USERNAME: 'keycloak'
       KC_DB_PASSWORD: 'password'
+      KC_HTTP_ENABLED: 'true'
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HOSTNAME_STRICT_HTTPS: 'false'
     command: start-dev --import-realm
     ports:
       - "8180:8080"
     depends_on:
-      - idp_mysql
+      idp_mysql:
+        condition: service_healthy
     networks:
       - kc
+    volumes:
+      - ./keycloak/og-realm.json:/opt/keycloak/data/import/og-realm.json
 
   # --- CHESS GAME SERVICES  ---
 
@@ -97,7 +108,6 @@ services:
       - app_chessgame_back
       - app_rabbitmq
       - app_postgres
-
 
   app_chessgame_back:
     image: registry.gitlab.com/kdg-ti/integration-5/chessgame/back:latest

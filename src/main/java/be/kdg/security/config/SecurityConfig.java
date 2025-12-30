@@ -1,5 +1,6 @@
 package be.kdg.security.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,20 +21,24 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    // This reads the variable from application.properties or Docker environment
+    // If not found, it defaults to localhost:5555
+    @Value("${app.cors.allowed-origins:http://localhost:5555}")
+    private List<String> allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
+                        // CORS preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("api/payments/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/payments/webhook").permitAll()
-                        .requestMatchers(
-                                "/api/players/register",
-                                "/api/games/**"
 
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/games").permitAll()
+                        .requestMatchers("/api/players/register").permitAll()
+                        .requestMatchers("/api/test/publish-match-started/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sm ->
@@ -51,7 +56,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+
+        // Use the injected variable instead of the hardcoded string
+        config.setAllowedOrigins(allowedOrigins);
+
         config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
