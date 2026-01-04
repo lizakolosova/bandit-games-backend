@@ -118,8 +118,8 @@ VALUES
     -- >> ADD THE NEW KEYCLOAK IDS HERE <<
     ('5c739cda-1d85-4c9c-ba9b-7da5518b25ae', 'HotMinionPics', 'friendA@example.com', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP),
     ('e6846a08-8808-420b-b23d-4f09698a2969', 'HogCranker', 'friendB@example.com', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP),
-    ('49aee311-9a26-4315-ac85-3c971573af3f', 'Tower1', 'friendC@example.com', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP),
-    ('e7b0794b-a64a-4fd4-bd0d-a80186de2953', 'Tower2', 'friendD@example.com', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP)
+    ('f9a1631c-38aa-4850-94c3-a8bfa9b22172', 'Lepic2', 'lepic2@lepic.lepic', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP),
+    ('d7fc30b4-2056-4314-a2f3-00d9cc74f059', 'Lepic', 'lepic@lepic.lepic', 'https://wallpapers.com/images/hd/funny-profile-picture-1l2l3tmmbobjqd53.jpg', CURRENT_TIMESTAMP)
 ON CONFLICT (uuid) DO NOTHING;
 -- ============================================
 -- PLAYER SCHEMA - Game Library
