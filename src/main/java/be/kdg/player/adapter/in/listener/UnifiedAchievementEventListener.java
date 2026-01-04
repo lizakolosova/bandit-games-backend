@@ -36,6 +36,7 @@ public class UnifiedAchievementEventListener {
 
         UnifiedAchievementAchievedEvent unifiedEvent = chessTranslator.translateToAchievementAchieved(event);
 
+
         projector.projectAchievementUnlocked(new UnifiedAchievementUnlockedProjectionCommand(
                 unifiedEvent.playerId(),
                 unifiedEvent.achievementId(),

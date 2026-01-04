@@ -5,10 +5,12 @@ import be.kdg.common.valueobj.AchievementId;
 import be.kdg.common.valueobj.GameId;
 import be.kdg.common.valueobj.PlayerId;
 import be.kdg.player.domain.AchievementProjection;
+import be.kdg.player.domain.GameProjection;
 import be.kdg.player.domain.Player;
 import be.kdg.player.port.in.UnifiedAchievementProjector;
 import be.kdg.player.port.in.command.UnifiedAchievementUnlockedProjectionCommand;
 import be.kdg.player.port.out.LoadAchievementProjectionPort;
+import be.kdg.player.port.out.LoadGameProjectionPort;
 import be.kdg.player.port.out.LoadPlayerPort;
 import be.kdg.player.port.out.UpdatePlayerPort;
 import org.slf4j.Logger;
@@ -26,9 +28,9 @@ public class UnifiedAchievementProjectorImpl implements UnifiedAchievementProjec
     private final LoadPlayerPort loadPlayerPort;
     private final LoadAchievementProjectionPort loadAchievementProjectionPort;
 
-    public UnifiedAchievementProjectorImpl(UpdatePlayerPort updatePlayerPort,
-                                           LoadPlayerPort loadPlayerPort,
-                                           LoadAchievementProjectionPort loadAchievementProjectionPort) {
+    public UnifiedAchievementProjectorImpl(UpdatePlayerPort updatePlayerPort, LoadPlayerPort loadPlayerPort,
+                                           LoadAchievementProjectionPort loadAchievementProjectionPort,
+                                           LoadGameProjectionPort loadGameProjectionPort) {
         this.updatePlayerPort = updatePlayerPort;
         this.loadPlayerPort = loadPlayerPort;
         this.loadAchievementProjectionPort = loadAchievementProjectionPort;
@@ -36,30 +38,32 @@ public class UnifiedAchievementProjectorImpl implements UnifiedAchievementProjec
 
     @Override
     public void projectAchievementUnlocked(UnifiedAchievementUnlockedProjectionCommand command) {
+
+
         logger.info("Projecting unified achievement unlocked for player {} in game type {} this {} and this {}",
-                command.playerId(), command.gameType(), command.gameId(), command.achievementId()) ;
+                command.playerId(), command.gameType(), command.gameId(), command.achievementId());
 
         Player player = loadPlayerPort.loadById(PlayerId.of(command.playerId()))
                 .orElseThrow(() -> NotFoundException.player(command.playerId()));
 
-        UUID achievementId = resolveAchievementId(command);
+        AchievementProjectionDto achievementProjectionDto = resolveAchievementId(command);
 
         logger.info("Lepic {} ", command.gameId());
 
-        player.unlockAchievement(AchievementId.of(achievementId), GameId.of(command.gameId()));
+
+        player.unlockAchievement(AchievementId.of(achievementProjectionDto.achievementId()), GameId.of(achievementProjectionDto.gameId()));
 
         updatePlayerPort.update(player);
     }
 
-    private UUID resolveAchievementId(UnifiedAchievementUnlockedProjectionCommand command) {
+    private AchievementProjectionDto resolveAchievementId(UnifiedAchievementUnlockedProjectionCommand command) {
         if (command.achievementId() != null) {
-            return command.achievementId();
+            return new AchievementProjectionDto(command.achievementId(), command.gameId());
         }
 
         AchievementProjection projection = loadAchievementProjectionPort
-                .loadByGameIdAndType(GameId.of(command.gameId()), command.achievementType())
-                .orElseThrow(() -> NotFoundException.game(command.gameId()));
+                .loadByGameIdAndType(command.achievementType()).orElseThrow();
 
-        return projection.getAchievementId().uuid();
+        return new AchievementProjectionDto(projection.getAchievementId().uuid(), projection.getGameId().uuid());
     }
 }

@@ -6,5 +6,5 @@ import be.kdg.player.domain.AchievementProjection;
 import java.util.Optional;
 
 public interface LoadAchievementProjectionPort {
-    Optional<AchievementProjection> loadByGameIdAndType(GameId gameId, String achievementType);
+    Optional<AchievementProjection> loadByGameIdAndType(String achievementType);
 }
