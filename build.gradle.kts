@@ -71,5 +71,11 @@ dependencies {
 
 
 tasks.withType<Test> {
+    systemProperty("user.timezone", "UTC")
     useJUnitPlatform()
+}
+
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imagePlatform.set("linux/amd64")
 }

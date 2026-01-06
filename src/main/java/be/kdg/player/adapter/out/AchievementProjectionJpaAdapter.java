@@ -36,13 +36,13 @@ public class AchievementProjectionJpaAdapter implements AddAchievementProjection
     }
 
     @Override
-    public Optional<AchievementProjection> loadByGameIdAndType(GameId gameId, String achievementType) {
+    public Optional<AchievementProjection> loadByGameIdAndType(String achievementType) {
         return achievements.findByName(achievementType)
                 .map(entity -> new AchievementProjection(
                         AchievementId.of(entity.getAchievementId()),
                         entity.getName(),
                         entity.getDescription(),
-                        gameId
+                        GameId.of(entity.getGameProjection().getGameId())
                 ));
     }
 }

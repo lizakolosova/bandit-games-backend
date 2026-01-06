@@ -40,10 +40,9 @@ public class GameRoomJpaAdapter implements AddGameRoomPort, UpdateGameRoomPort, 
 
     @Override
     public GameRoom findByPlayers(UUID hostPlayerId, UUID opponentPlayerId) {
-        return games.findByHostPlayerIdAndInvitedPlayerId(hostPlayerId, opponentPlayerId)
-                .or(() -> games.findByHostPlayerIdAndInvitedPlayerId(opponentPlayerId, hostPlayerId))
+        return games.findFirstByHostPlayerIdAndInvitedPlayerIdOrderByCreatedAtDesc(hostPlayerId, opponentPlayerId)
+                .or(() -> games.findFirstByHostPlayerIdAndInvitedPlayerIdOrderByCreatedAtDesc(opponentPlayerId, hostPlayerId))
                 .map(GameRoomJpaMapper::toDomain)
                 .orElseThrow(() -> new NotFoundException("Game room not found for players"));
     }
-
 }

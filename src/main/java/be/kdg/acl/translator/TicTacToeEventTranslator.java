@@ -69,7 +69,7 @@ public class TicTacToeEventTranslator implements EventTranslator {
                 tttEvent.playerId(),
                 tttEvent.achievementId(),
                 tttEvent.achievementType(),
-                tttEvent.matchId(),
+                tttEvent.gameId(),
                 "TICTACTOE",
                 tttEvent.messageType(),
                 tttEvent.timestamp()

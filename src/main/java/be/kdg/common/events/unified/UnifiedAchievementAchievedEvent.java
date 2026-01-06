@@ -9,15 +9,15 @@ public record UnifiedAchievementAchievedEvent(
         UUID playerId,
         UUID achievementId,
         String achievementType,
-        UUID matchId,
+        UUID gameId,
         String gameType,
         String messageType,
         LocalDateTime timestamp
 ) implements DomainEvent {
 
     public UnifiedAchievementAchievedEvent(UUID playerId, UUID achievementId, String achievementType,
-                                           UUID matchId, String gameType, String messageType, LocalDateTime timestamp) {
-        this(LocalDateTime.now(), playerId, achievementId, achievementType, matchId, gameType, messageType, timestamp);
+                                           UUID gameId, String gameType, String messageType, LocalDateTime timestamp) {
+        this(LocalDateTime.now(), playerId, achievementId, achievementType, gameId, gameType, messageType, timestamp);
     }
 
     @Override

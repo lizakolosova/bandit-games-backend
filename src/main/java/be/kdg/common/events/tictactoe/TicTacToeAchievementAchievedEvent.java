@@ -20,4 +20,3 @@ public record TicTacToeAchievementAchievedEvent(
         return timestamp;
     }
 }
-

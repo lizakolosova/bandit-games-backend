@@ -10,6 +10,8 @@ import be.kdg.player.port.out.UpdatePlayerPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class PlayerStatisticsProjectorImpl implements PlayerStatisticsProjector {
 
@@ -25,6 +27,7 @@ public class PlayerStatisticsProjectorImpl implements PlayerStatisticsProjector 
     @Override
     @Transactional
     public void project(UpdatePlayerStatisticsCommand command) {
+        if(command.playerId().equals(UUID.fromString("00000000-0000-0000-0000-000000000001")))return;
         Player player = loadPlayerPort.loadById(PlayerId.of(command.playerId())).orElseThrow(()->
                 NotFoundException.player(command.playerId()));
 

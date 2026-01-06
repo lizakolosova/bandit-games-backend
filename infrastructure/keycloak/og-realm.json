@@ -1,6 +1,6 @@
 {
   "id" : "4180fb9c-0f6c-4dab-956a-52c05477032c",
-  "realm" : "og-realm",
+  "realm" : "og",
   "notBefore" : 0,
   "defaultSignatureAlgorithm" : "RS256",
   "revokeRefreshToken" : false,
@@ -48,7 +48,7 @@
   "roles" : {
     "realm" : [ {
       "id" : "5bfaae22-48b4-456b-8128-847e6a39ea2d",
-      "name" : "default-roles-kdg-team8",
+      "name" : "default-roles-og-realm",
       "description" : "${role_default-roles}",
       "composite" : true,
       "composites" : {
@@ -247,7 +247,7 @@
         "attributes" : { }
       } ],
       "security-admin-console" : [ ],
-      "player-service" : [ {
+      "kdg-frontend" : [ {
         "id" : "02241617-7378-4ca7-b076-7c3db57a4c39",
         "name" : "PLAYER",
         "description" : "",
@@ -353,9 +353,62 @@
     }
   },
   "groups" : [ ],
+  "users" : [
+    {
+      "username" : "admin",
+      "enabled" : true,
+      "email" : "admin@example.com",
+      "firstName" : "Admin",
+      "lastName" : "User",
+      "emailVerified" : true,
+      "credentials" : [ {
+        "type" : "password",
+        "value" : "admin123",
+        "temporary" : false
+      } ],
+      "realmRoles" : [ "default-roles-og-realm" ],
+      "clientRoles" : {
+        "kdg-frontend" : [ "ADMIN" ]
+      }
+    },
+    {
+      "username" : "player1",
+      "enabled" : true,
+      "email" : "player1@example.com",
+      "firstName" : "Player",
+      "lastName" : "One",
+      "emailVerified" : true,
+      "credentials" : [ {
+        "type" : "password",
+        "value" : "player123",
+        "temporary" : false
+      } ],
+      "realmRoles" : [ "default-roles-og-realm" ],
+      "clientRoles" : {
+        "kdg-frontend" : [ "PLAYER" ]
+      }
+    },
+    {
+      "username" : "player2",
+      "enabled" : true,
+      "email" : "player2@example.com",
+      "firstName" : "Player",
+      "lastName" : "Two",
+      "emailVerified" : true,
+      "credentials" : [ {
+        "type" : "password",
+        "value" : "player456",
+        "temporary" : false
+      } ],
+      "realmRoles" : [ "default-roles-og-realm" ],
+      "clientRoles" : {
+        "kdg-frontend" : [ "PLAYER" ]
+      }
+    }
+  ],
   "defaultRole" : {
     "id" : "5bfaae22-48b4-456b-8128-847e6a39ea2d",
-    "name" : "default-roles-kdg-team8",
+    "name" : "default-roles-og-realm",
     "description" : "${role_default-roles}",
     "composite" : true,
     "clientRole" : false,
@@ -408,12 +461,12 @@
     "clientId" : "account",
     "name" : "${client_account}",
     "rootUrl" : "${authBaseUrl}",
-    "baseUrl" : "/realms/kdg-team8/account/",
+    "baseUrl" : "/realms/og-realm/account/",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "/realms/kdg-team8/account/*" ],
+    "redirectUris" : [ "/realms/og-realm/account/*" ],
     "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -439,12 +492,12 @@
     "clientId" : "account-console",
     "name" : "${client_account-console}",
     "rootUrl" : "${authBaseUrl}",
-    "baseUrl" : "/realms/kdg-team8/account/",
+    "baseUrl" : "/realms/og-realm/account/",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "/realms/kdg-team8/account/*" ],
+    "redirectUris" : [ "/realms/og-realm/account/*" ],
     "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -533,18 +586,28 @@
     "optionalClientScopes" : [ "address", "phone", "organization", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "f79ec278-6336-4f83-ab24-f2e4b8a7342f",
-    "clientId" : "player-service",
-    "name" : "player-service",
+    "clientId" : "kdg-frontend",
+    "name" : "kdg-frontend",
     "description" : "",
-    "rootUrl" : "http://localhost:5173",
-    "adminUrl" : "http://localhost:5173",
-    "baseUrl" : "http://localhost:5173",
+    "rootUrl": "http://localhost:5173",
+    "adminUrl": "http://localhost:5173",
+    "baseUrl": "http://localhost:5173",
+    "redirectUris": [
+      "http://localhost:5173/*",
+      "http://localhost:3333/*",
+      "http://localhost:4444/*",
+      "http://localhost:9090/*"
+    ],
+    "webOrigins": [
+      "http://localhost:5173",
+      "http://localhost:3333",
+      "http://localhost:4444",
+      "http://localhost:9090"
+    ],
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "http://localhost:5173/*" ],
-    "webOrigins" : [ "http://localhost:5173" ],
     "notBefore" : 0,
     "bearerOnly" : false,
     "consentRequired" : false,
@@ -560,7 +623,7 @@
       "oidc.ciba.grant.enabled" : "false",
       "backchannel.logout.session.required" : "true",
       "standard.token.exchange.enabled" : "false",
-      "post.logout.redirect.uris" : "http://localhost:5173",
+      "post.logout.redirect.uris": "http://og-platform.localhost+##http://tictactoe.localhost+##http://chess.localhost",
       "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.revoke.offline.tokens" : "false"
     },
@@ -602,12 +665,12 @@
     "clientId" : "security-admin-console",
     "name" : "${client_security-admin-console}",
     "rootUrl" : "${authAdminUrl}",
-    "baseUrl" : "/admin/kdg-team8/console/",
+    "baseUrl" : "/admin/og-realm/console/",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "/admin/kdg-team8/console/*" ],
+    "redirectUris" : [ "/admin/og-realm/console/*" ],
     "webOrigins" : [ "+" ],
     "notBefore" : 0,
     "bearerOnly" : false,

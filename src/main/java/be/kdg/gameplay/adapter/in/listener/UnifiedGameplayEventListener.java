@@ -59,11 +59,7 @@ public class UnifiedGameplayEventListener {
                 unifiedEvent.gameId(),
                 unifiedEvent.gameType(),
                 unifiedEvent.playerIds(),
-                unifiedEvent.timestamp()
-        ));
-        GameRoom gameRoom = loadGameRoomPort.findByPlayers(event.whitePlayerId(), event.blackPlayerId());
-        broadcaster.broadcastMatchStarted(gameRoom.getGameRoomId().uuid().toString(), event.gameId().toString()
-        );
+                unifiedEvent.timestamp()));
     }
 
     @RabbitListener(queues = RabbitMQTopology.CHESS_GAME_UPDATED_QUEUE)
@@ -101,14 +97,8 @@ public class UnifiedGameplayEventListener {
                 unifiedEvent.playerIds(),
                 unifiedEvent.timestamp()
         ));
-        GameRoom gameRoom = loadGameRoomPort.findByPlayers(
-                event.hostPlayerId(),
-                event.opponentPlayerId()
-        );
-        broadcaster.broadcastMatchStarted(
-                gameRoom.getGameRoomId().uuid().toString(),
-                event.matchId().toString()
-        );
+        GameRoom gameRoom = loadGameRoomPort.findByPlayers(event.hostPlayerId(), event.opponentPlayerId());
+        broadcaster.broadcastMatchStarted(gameRoom.getGameRoomId().uuid(), event.matchId());
     }
 
     @RabbitListener(queues = RabbitMQTopology.TTT_MOVE_MADE_QUEUE)
